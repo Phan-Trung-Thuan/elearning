@@ -1,6 +1,4 @@
-window.onload = function () {
-    addEnrollmentClasses();
-}
+window.onload = addEnrollmentClasses;
 
 async function addEnrollmentClasses(student_id) {
     let response = await sendGetClassRequest(student_id);

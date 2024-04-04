@@ -22,8 +22,7 @@
                 <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>                
             </form>            
         </div>        
-    </div>
-    
+    </div>    
     
     <script src="http://localhost/elearning/topnav/topnav.js"></script>
 </body>
