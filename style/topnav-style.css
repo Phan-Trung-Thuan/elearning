@@ -1,0 +1,92 @@
+#topnav-container {
+    margin-top: 0;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    background-color: inherit;
+}
+
+#topnav {
+    overflow: hidden;
+    background-color: orange;
+}
+
+#topnav > a{
+    float: left;
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    padding: 14px 16px;
+    color: black;
+}
+
+
+#topnav > a:hover, .dropdown:hover .dropbtn {
+    background-color: rgb(248, 200, 110);
+}
+
+.dropdown {
+    float: left;
+    overflow: hidden;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown .dropbtn {
+    border: none;
+    outline: none;
+    background-color: orange;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 15px;
+    padding: 14px 15px;
+}
+
+.dropdown-content {
+    display: none;
+    background-color: whitesmoke;
+    position: absolute;
+    z-index: 1;
+    max-height: 200px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.dropdown-content a {
+    float: none;
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+    min-width: 200px;
+    border-bottom: 1px solid black;
+}
+
+#search-bar {
+    float: right;
+    overflow: hidden;
+    background-color: blue;
+}
+
+#search-bar > * {
+    float: inline-start;
+    padding: 15.5px 16px;
+}
+
+#search-bar > input {
+    outline: none;
+    border: none;
+    background-color: rgb(234, 189, 105);
+    font-style: italic;
+}
+
+#search-bar > button {
+    border: none;
+    outline: none;
+    background-color: rgb(6, 55, 229);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
