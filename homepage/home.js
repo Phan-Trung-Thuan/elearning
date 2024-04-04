@@ -9,4 +9,4 @@ function loadComponentFromFile(filepath, location) {
 }
 
 var topnav_container = document.getElementById("topnav-container");
-var content = loadComponentFromFile('http://localhost/elearning/topnav/topnav.php', topnav_container);
+var content = loadComponentFromFile('../topnav/topnav.php', topnav_container);
