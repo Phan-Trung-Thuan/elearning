@@ -9,7 +9,7 @@
 </head>
 <body>
     <?php
-        include __DIR__ . '/../topnav/topnav.html';
+        include '../topnav/topnav.html';
     ?>
     <script src="home.js"></script>
     <script src="https://kit.fontawesome.com/694106e21d.js" crossorigin="anonymous"></script>
