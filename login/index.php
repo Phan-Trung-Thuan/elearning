@@ -8,7 +8,7 @@
 </head>
 <body>
     <?php
-        include "../utils/warning-box.html";
+        include __DIR__ . "/../utils/warning-box.html";
     ?>
     <div class="login-box">
         <header>Login</header>
@@ -32,6 +32,6 @@
             </div> -->
         </form>
     </div>
-    <script src="send_message.js"></script>
+    <script src="/elearning/login/send_message.js"></script>
 </body>
 </html>
