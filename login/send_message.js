@@ -1,7 +1,7 @@
 let login_form = document.getElementById("login-form");
 
 async function sendLoginRequest(uname, pass) {
-    let url = "login.php";
+    let url = "/elearning/login/login.php";
     let data = { 'username': uname, 'password': pass };
 
     const response = await fetch(url, {
