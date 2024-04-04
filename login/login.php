@@ -1,5 +1,5 @@
 <?php
-    include "http://localhost/elearning/utils/config.php";
+    include "../utils/config.php";
     
     $conn = @new mysqli($servername, $username, $password, $database);
     //check connection
