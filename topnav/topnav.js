@@ -4,6 +4,7 @@ window.onload = function () {
 
 async function addEnrollmentClasses(student_id) {
     let response = await sendGetClassRequest(student_id);
+    console.log(response);
     let data = JSON.parse(response);
     // alert(data);
     console.log(data);
@@ -18,7 +19,7 @@ async function addEnrollmentClasses(student_id) {
 }
 
 async function sendGetClassRequest(student_id) {
-    let url = "http://localhost/elearning/topnav/getclass.php";
+    let url = "getclass.php";
     let data = { 'student_id' : student_id };
 
     const response = await fetch(url, {
