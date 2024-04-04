@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../style/login-style.css">
-    <!-- <link rel="stylesheet" href="/style/home-style.css"> -->
+    <link rel="stylesheet" href="/elearning/style/login-style.css">
     <title>Login</title>
 </head>
 <body>
@@ -33,6 +32,6 @@
             </div> -->
         </form>
     </div>
-    <script src="./send_message.js"></script>
+    <script src="/elearning/login/send_message.js"></script>
 </body>
 </html>
