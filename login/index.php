@@ -8,7 +8,7 @@
 </head>
 <body>
     <?php
-        include "../utils/warning-box.php";
+        include "../utils/warning-box.html";
     ?>
     <div class="login-box">
         <header>Login</header>

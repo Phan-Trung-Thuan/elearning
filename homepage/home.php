@@ -8,7 +8,9 @@
     
 </head>
 <body>
-    <div id="topnav-container"></div>
+    <?php
+        include '../topnav/topnav.html';
+    ?>
     <script src="home.js"></script>
     <script src="https://kit.fontawesome.com/694106e21d.js" crossorigin="anonymous"></script>
     <script src="http://localhost/elearning/topnav/topnav.js"></script>
