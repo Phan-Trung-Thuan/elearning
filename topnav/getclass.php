@@ -1,7 +1,7 @@
 <?php    
     header('Content-type: application/json; charset=utf-8');
 
-    require "../utils/config.php";  
+    require __DIR__ . "/../utils/config.php";  
     $student_id = isset($_REQUEST["student_id"]) ? $_REQUEST["student_id"] : null;
     
     $conn = @new mysqli($servername, $username, $password, $database) or die 

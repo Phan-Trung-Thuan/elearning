@@ -9,7 +9,7 @@
 </head>
 <body>
     <?php
-        include "../utils/warning-box.php";
+        include __DIR__ . "/../utils/warning-box.php";
     ?>
     <div class="login-box">
         <header>Login</header>

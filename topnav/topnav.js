@@ -16,7 +16,7 @@ async function addEnrollmentClasses(student_id) {
 }
 
 async function sendGetClassRequest(student_id) {
-    let url = "http://localhost/elearning/topnav/getclass.php";
+    let url = "/elearning/topnav/getclass.php";
     let data = { 'student_id' : student_id };
 
     const response = await fetch(url, {
