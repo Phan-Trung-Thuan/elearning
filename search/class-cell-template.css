@@ -1,0 +1,22 @@
+.cell-class {
+    width: 100%;
+    border: 1px solid black;
+}
+
+.cell-class .id {
+    font-weight: bold;
+    color: blue;
+}
+
+.cell-class .class-name {
+    font-weight: bold;
+}
+
+.cell-class .instructor-name {
+
+}
+
+#join-button {
+    padding: 5px;
+    margin-top: 10px;
+}
