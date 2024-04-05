@@ -5,13 +5,8 @@
     $student_id = isset($_REQUEST["student_id"]) ? $_REQUEST["student_id"] : null;
     
     $conn = @new mysqli($servername, $username, $password, $database) or die 
-    ('connection failed: ' . $conn->connect_error);
-    //check connection
-    if ($conn->connect_error) {
-        die("Connection failed : " . $conn->connect_error);
-    }
-
-    $conn->query($query_charset);
+    ('connection failed: ' . $conn->connect_error);   
+    mysqli_set_charset($conn,"utf8mb4");
     
     $filter = "";
     if ($student_id != null) {
