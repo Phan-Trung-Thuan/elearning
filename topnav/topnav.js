@@ -4,10 +4,9 @@ window.onload = function () {
 
 async function addEnrollmentClasses(student_id) {
     let response = await sendGetClassRequest(student_id);
-    console.log(response);
-    let data = JSON.parse(response);
-    // alert(data);
-    console.log(data);
+    let data = JSON.parse(response); 
+    
+    // console.log(data);
 
     let dropdown = document.getElementById("dropdown-content-class");
     for (let enroll_class of data) {
@@ -19,7 +18,7 @@ async function addEnrollmentClasses(student_id) {
 }
 
 async function sendGetClassRequest(student_id) {
-    let url = "getclass.php";
+    let url = "/elearning/topnav/getclass.php";
     let data = { 'student_id' : student_id };
 
     const response = await fetch(url, {
