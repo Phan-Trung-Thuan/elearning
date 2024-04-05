@@ -20,11 +20,11 @@ async function callBack() {
 
     if (response === "STUDENT LOGIN SUCCESSFULLY") {
         // Go to homepage for student
-        window.location.href = '../homepage/home.php';
+        window.location.href = '/elearning/homepage/home.php';
     }
     else if (response === "INSTRUCTOR LOGIN SUCCESSFULLY") {
         // Go to homepage for instructor
-        window.location.href = '../homepage/home.php';
+        window.location.href = '/elearning/homepage/home.php';
     }
     else if (response === "LOGIN FAILED") {
         // Show warning message

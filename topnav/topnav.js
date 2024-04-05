@@ -6,8 +6,8 @@ async function addEnrollmentClasses(student_id) {
     let response = await sendGetClassRequest(student_id);
     console.log(response);
     let data = JSON.parse(response);
-    // alert(data);
-    console.log(data);
+ 
+    // console.log(data);
 
     let dropdown = document.getElementById("dropdown-content-class");
     for (let enroll_class of data) {

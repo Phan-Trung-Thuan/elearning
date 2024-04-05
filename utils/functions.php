@@ -4,38 +4,11 @@
     //global variables
     $record_per_page = 5;
 
-    //Get all classes that joined by a student
-    //If not specify the student, get all classes instead.
-    function get_class_by($student_id=null) {
-        require "config.php";        
-        $conn = @new mysqli($servername, $username, $password, $database) or die 
-        ('connection failed: ' . $conn->connect_error);
-        //check connection
-        if ($conn->connect_error) {
-            die("Connection failed : " . $conn->connect_error);
-        }
-        
-        $filter = "";
-        if ($student_id != null) {
-            $filter = "inner join enrollment on class.class_id = enrollment.class_id where student_id = $student_id";
-        }
-
-        $sql = "SELECT class_id, class_name FROM class" . " " . $filter;
-        $result = $conn->query($sql);
-        $classroom_list = array();
-        while ($row = $result->fetch_assoc()) {
-            array_push($classroom_list, $row);                
-        }
-
-        $conn->close();
-        return $classroom_list;           
-    }
-
     //For pagination
     function compute_paging($search_kw) {        
         global $record_per_page;
 
-        require "config.php";
+        require "/elearning/utils/config.php";
         $conn = @new mysqli($servername, $username, $password, $database) or die 
         ('connection failed: ' . $conn->connect_error);        
 
@@ -56,7 +29,7 @@
     //Search class title by keywords
     function class_title_search($keyword) {
         global $record_per_page;
-        require "config.php";
+        require "/elearning/utils/config.php";
         $conn = @new mysqli($servername, $username, $password, $database) or die 
         ('connection failed: ' . $conn->connect_error);
         $search_kw = str_replace(" ", "%' OR class_name LIKE %'", trim($keyword));
