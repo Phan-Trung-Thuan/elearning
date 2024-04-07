@@ -16,9 +16,9 @@
         $search_kw = isset($_REQUEST['class-title-keyword']) ? $_REQUEST['class-title-keyword'] : null;
 
         $class_list = array();
-        if ($search_kw != null) {            
-            $class_list = class_title_search_by($search_kw, $record_ppage);
-            $paging = compute_paging($search_kw, $record_ppage);
+        if ($search_kw != null) {
+            $paging = array();            
+            $class_list = class_title_search_by($search_kw, $record_ppage, $paging);            
             
             if ($class_list != null) {                
                 foreach ($class_list as $class) {
@@ -42,15 +42,20 @@
             $keywords = $search_kw;
             $keywords = str_replace(" ", "+", $keywords);   
 
-            echo "Page $paging[p_no]/$paging[p_total]&nbsp&nbsp&nbsp";
+            if ($paging['p_total'] != 0) {
+                echo "Page $paging[p_no]/$paging[p_total]&nbsp&nbsp&nbsp";
 
-            if ($paging['p_prev'] > 0) {
-                echo "<a href=$self_file_path?class-title-keyword=$keywords&page=$paging[p_prev]>Previous</a>&nbsp&nbsp&nbsp";
-            }
+                if ($paging['p_prev'] > 0) {
+                    echo "<a href=$self_file_path?class-title-keyword=$keywords&page=$paging[p_prev]>Previous</a>&nbsp&nbsp&nbsp";
+                }
 
-            if ($paging['p_next'] > 0) {
-                echo "<a href=$self_file_path?class-title-keyword=$keywords&page=$paging[p_next]>Next</a>&nbsp&nbsp&nbsp";
+                if ($paging['p_next'] > 0) {
+                    echo "<a href=$self_file_path?class-title-keyword=$keywords&page=$paging[p_next]>Next</a>&nbsp&nbsp&nbsp";
+                }
+            } else {
+                echo "<h2>Not Found</h2>";
             }
+            
         } 
         
         
@@ -72,8 +77,7 @@
 
         $query = "SELECT count(*) FROM class WHERE class_name LIKE '%$search_kw%'";
         $result = $conn->query($query);
-        $row = $result->fetch_row();
-
+        $row = $result->fetch_row(); 
         $p_total = ceil($row[0]/$record_per_page);
         $page = (isset($_REQUEST["page"])) ? $_REQUEST["page"] : 1;
         $p_start = ($page-1)*$record_per_page;
@@ -86,7 +90,7 @@
 
 
     //Search class title by keywords
-    function class_title_search_by($keyword, $record_ppage) {        
+    function class_title_search_by($keyword, $record_ppage, &$paging) {        
         require __DIR__ . "/../utils/config.php";
         $record_per_page = $record_ppage;
 
@@ -98,6 +102,7 @@
         $paging = compute_paging($search_kw, $record_ppage);
         $test = $paging['p_start'];
         $query = "SELECT class_id, class_name, instructor_name FROM class C INNER JOIN instructor I on C.instructor_id = I.instructor_id where class_name LIKE '%$search_kw%' LIMIT ". $paging['p_start'] . ", $record_per_page";
+
         $result = $conn->query($query);
 
         $class_list = array();
