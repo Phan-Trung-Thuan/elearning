@@ -32,9 +32,16 @@
                     $template_body = file_get_contents($template_file_path);
                     foreach ($template_data as $key => $value) {
                         $template_body = str_replace("[\$$key]", $value, $template_body);
-                    }
+                    }                    
                     echo $template_body;                    
                 }
+
+                //Add css + js
+                echo "<head>" . "\n" .
+                    "<link rel='stylesheet' href='/elearning/style/class-cell-template.css'>" . "\n" .
+                    "<script src='/elearning/search/class-cell-template.js'></script>" . "\n" .
+                "</head>\n";
+                
             }
 
             //Navigation
@@ -73,7 +80,8 @@
 
         $conn = @new mysqli($servername, $username, $password, $database) or die 
         ('connection failed: ' . $conn->connect_error);
-        mysqli_set_charset($conn,"utf8mb4");        
+        $conn->set_charset($charset);
+        // mysqli_set_charset($conn,"utf8mb4");        
 
         $query = "SELECT count(*) FROM class WHERE class_name LIKE '%$search_kw%'";
         $result = $conn->query($query);
