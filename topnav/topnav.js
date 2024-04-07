@@ -2,6 +2,15 @@ window.onload = function () {
     addEnrollmentClasses();
 }
 
+document.getElementById("logout-button").addEventListener("click", function() {
+    const confirm = window.confirm("Are you sure?");
+    if (confirm) {
+        window.location.href = "http://localhost/elearning/login/index.php";
+    } else {
+        window.location.href = window.location.href;
+    }    
+});
+
 async function addEnrollmentClasses() {
     let response = await sendGetClassRequest();
     let data = JSON.parse(response); 

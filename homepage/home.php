@@ -11,7 +11,5 @@
     <?php
         include __DIR__ . '/../topnav/topnav.html';
     ?>
-    <script src="https://kit.fontawesome.com/694106e21d.js" crossorigin="anonymous"></script>
-    <script src="/elearning/topnav/topnav.js"></script>
 </body>
 </html>
