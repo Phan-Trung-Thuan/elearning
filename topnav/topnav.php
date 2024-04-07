@@ -1,8 +1,9 @@
 <?php    
-    header('Content-type: application/json; charset=utf-8');
+    // header('Content-type: application/json; charset=utf-8');
+    session_start();
 
     require __DIR__ . "/../utils/config.php";  
-    $student_id = isset($_REQUEST["student_id"]) ? $_REQUEST["student_id"] : null;
+    $student_id = isset($_SESSION["username"]) ? strtolower($_SESSION["username"]) : null;
     
     $conn = @new mysqli($servername, $username, $password, $database) or die 
     ('connection failed: ' . $conn->connect_error);   
@@ -10,10 +11,10 @@
     
     $filter = "";
     if ($student_id != null) {
-        $filter = "inner join enrollment on class.class_id = enrollment.class_id where student_id = $student_id";
+        $filter = "inner join enrollment on class.class_id = enrollment.class_id where student_id = '$student_id'";
     }
 
-    $sql = "SELECT class_id, class_name FROM class" . " " . $filter;
+    $sql = "SELECT class.class_id, class_name FROM class" . " " . $filter;
     $result = $conn->query($sql);   
     $data = array();    
     
@@ -23,6 +24,5 @@
         array_push($data, $class_info);
     }  
     
-    // $data = array(1,2,3);
     echo json_encode($data);   
     $conn->close();

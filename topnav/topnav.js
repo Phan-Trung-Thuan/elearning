@@ -2,11 +2,11 @@ window.onload = function () {
     addEnrollmentClasses();
 }
 
-async function addEnrollmentClasses(student_id) {
-    let response = await sendGetClassRequest(student_id);
+async function addEnrollmentClasses() {
+    let response = await sendGetClassRequest();
     let data = JSON.parse(response); 
     
-    // console.log(data);
+    console.log(data);
 
     let dropdown = document.getElementById("dropdown-content-class");
     for (let enroll_class of data) {
@@ -17,15 +17,14 @@ async function addEnrollmentClasses(student_id) {
     }
 }
 
-async function sendGetClassRequest(student_id) {
-    let url = "/elearning/topnav/getclass.php";
-    let data = { 'student_id' : student_id };
-
+async function sendGetClassRequest() {
+    let url = "/elearning/topnav/topnav.php";
+    
     const response = await fetch(url, {
         method: "POST",
-        body: JSON.stringify(data),
         dataType: "json"
     });
 
+    
     return response.text();
 }
