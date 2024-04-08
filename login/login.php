@@ -1,5 +1,6 @@
-<?php
+<?php    
     include __DIR__ . "/../utils/config.php";
+    session_start();
     
     $conn = @new mysqli($servername, $username, $password, $database);
     //check connection
@@ -24,6 +25,7 @@
             echo "STUDENT LOGIN SUCCESSFULLY";
             setcookie("username", $login_username, time() + 60 * 60 * 24 * 5); # 5 days
             setcookie("password", $login_password, time() + 60 * 60 * 24 * 5);
+            $_SESSION["username"] = $login_username;
         }
         else {
             # Check instructor login
@@ -38,6 +40,7 @@
                 echo "INSTRUCTOR LOGIN SUCCESSFULLY";
                 setcookie("username", $login_username, time() + 60 * 60 * 24 * 5); # 5 days
                 setcookie("password", $login_password, time() + 60 * 60 * 24 * 5);
+                $_SESSION["username"] = $login_username;
             }
             else {
                 # LOGIN FAILED

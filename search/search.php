@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,9 +16,9 @@
         $search_kw = isset($_REQUEST['class-title-keyword']) ? $_REQUEST['class-title-keyword'] : null;
 
         $class_list = array();
-        if ($search_kw != null) {            
-            $class_list = class_title_search_by($search_kw, $record_ppage);
-            $paging = compute_paging($search_kw, $record_ppage);
+        if ($search_kw != null) {
+            $paging = array();            
+            $class_list = class_title_search_by($search_kw, $record_ppage, $paging);            
             
             if ($class_list != null) {                
                 foreach ($class_list as $class) {
@@ -33,9 +32,16 @@
                     $template_body = file_get_contents($template_file_path);
                     foreach ($template_data as $key => $value) {
                         $template_body = str_replace("[\$$key]", $value, $template_body);
-                    }
+                    }                    
                     echo $template_body;                    
                 }
+
+                //Add css + js
+                echo "<head>" . "\n" .
+                    "<link rel='stylesheet' href='/elearning/style/class-cell-template.css'>" . "\n" .
+                    "<script src='/elearning/search/class-cell-template.js'></script>" . "\n" .
+                "</head>\n";
+                
             }
 
             //Navigation
@@ -43,15 +49,20 @@
             $keywords = $search_kw;
             $keywords = str_replace(" ", "+", $keywords);   
 
-            echo "Page $paging[p_no]/$paging[p_total]&nbsp&nbsp&nbsp";
+            if ($paging['p_total'] != 0) {
+                echo "Page $paging[p_no]/$paging[p_total]&nbsp&nbsp&nbsp";
 
-            if ($paging['p_prev'] > 0) {
-                echo "<a href=$self_file_path?class-title-keyword=$keywords&page=$paging[p_prev]>Previous</a>&nbsp&nbsp&nbsp";
-            }
+                if ($paging['p_prev'] > 0) {
+                    echo "<a href=$self_file_path?class-title-keyword=$keywords&page=$paging[p_prev]>Previous</a>&nbsp&nbsp&nbsp";
+                }
 
-            if ($paging['p_next'] > 0) {
-                echo "<a href=$self_file_path?class-title-keyword=$keywords&page=$paging[p_next]>Next</a>&nbsp&nbsp&nbsp";
+                if ($paging['p_next'] > 0) {
+                    echo "<a href=$self_file_path?class-title-keyword=$keywords&page=$paging[p_next]>Next</a>&nbsp&nbsp&nbsp";
+                }
+            } else {
+                echo "<h2>Not Found</h2>";
             }
+            
         } 
         
         
@@ -69,12 +80,12 @@
 
         $conn = @new mysqli($servername, $username, $password, $database) or die 
         ('connection failed: ' . $conn->connect_error);
-        mysqli_set_charset($conn,"utf8mb4");        
+        $conn->set_charset($charset);
+        // mysqli_set_charset($conn,"utf8mb4");        
 
         $query = "SELECT count(*) FROM class WHERE class_name LIKE '%$search_kw%'";
         $result = $conn->query($query);
-        $row = $result->fetch_row();
-
+        $row = $result->fetch_row(); 
         $p_total = ceil($row[0]/$record_per_page);
         $page = (isset($_REQUEST["page"])) ? $_REQUEST["page"] : 1;
         $p_start = ($page-1)*$record_per_page;
@@ -87,7 +98,7 @@
 
 
     //Search class title by keywords
-    function class_title_search_by($keyword, $record_ppage) {        
+    function class_title_search_by($keyword, $record_ppage, &$paging) {        
         require __DIR__ . "/../utils/config.php";
         $record_per_page = $record_ppage;
 
@@ -99,6 +110,7 @@
         $paging = compute_paging($search_kw, $record_ppage);
         $test = $paging['p_start'];
         $query = "SELECT class_id, class_name, instructor_name FROM class C INNER JOIN instructor I on C.instructor_id = I.instructor_id where class_name LIKE '%$search_kw%' LIMIT ". $paging['p_start'] . ", $record_per_page";
+
         $result = $conn->query($query);
 
         $class_list = array();
