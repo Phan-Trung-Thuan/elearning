@@ -38,9 +38,20 @@
 #topnav {
     overflow: hidden;
     display: flex;
+    justify-content: space-between;
     background-color: rgb(248, 172, 32);
     border-radius: 5px;
     height: 35px;
+}
+
+#left-div {
+    width: 80%;
+    display: flex;
+}
+
+#right-div {
+    width: 20%;
+    display: flex;
 }
 
 #home-link, #my-class, #searching{
@@ -63,12 +74,12 @@
     width: 234px;
 }
 
-#topnav > #home-link > a {
+#home-link > a {
     color: black;
     text-decoration: none;
 }
 
-#topnav > #home-link:hover, .dropdown:hover .dropbtn {
+#home-link:hover, .dropdown:hover .dropbtn {
     background-color: rgb(248, 200, 110);
 }
 

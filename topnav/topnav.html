@@ -10,21 +10,25 @@
         </div>
     </div>
     <div id="topnav">
-        <div id="home-link">
-            <a href="/elearning/homepage/home.php">Home</a> 
-        </div>   
-        <div id="my-class" class="dropdown" >
-            <button class="dropbtn">My Classroom</button>
-            <div class="dropdown-content" id="dropdown-content-class">
+        <div id="left-div">
+            <div id="home-link">
+                <a href="/elearning/homepage/home.php">Home</a> 
+            </div>   
+            <div id="my-class" class="dropdown" >
+                <button class="dropbtn">My Classroom</button>
+                <div class="dropdown-content" id="dropdown-content-class">
+                </div>
             </div>
         </div>
-        <div id="searching">
-            <form action="/elearning/search/search.php" method="get" id="search-bar">                
-                <input type="text" name="class-title-keyword" id="class-title-keyword" placeholder="Search Class Here">
-                <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>                
-            </form>
+        
+        <div id="right-div">
+            <div id="searching">
+                <form action="/elearning/search/search.php" method="get" id="search-bar">                
+                    <input type="text" name="class-title-keyword" id="class-title-keyword" placeholder="Search Class Here">
+                    <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>                
+                </form>
+            </div>
         </div>
-              
     </div>        
 </div>
 <script src="/elearning/topnav/topnav.js"></script>
