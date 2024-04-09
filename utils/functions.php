@@ -38,6 +38,8 @@
                 echo json_encode($notification_data);
                 return;
             }
+
+            
             
         }       
         
@@ -66,6 +68,8 @@
 
         return $data;
     }
+
+    
 
 
     

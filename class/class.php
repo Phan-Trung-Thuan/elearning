@@ -1,12 +1,15 @@
 <?php
     session_start();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Class</title>
+
+    <link rel="stylesheet" href="/elearning/style/notification-cell-template.css">
 </head>
 <body>
     <?php
@@ -18,8 +21,21 @@
         include __DIR__ . '/../topnav/topnav.html';
                         
     ?>
+
+    <div id="class-cell-container">
+        <template id="notification-cell-template">
+            <div class="notification-cell">
+                <div class="notification-cell-title">${cell_title}</div>
+
+                <div class="notification-cell-desc">${cell_description}</div>
+
+                <div class="notification-cell-note">${notification_note}</div>
+            </div>
+        </template>
+    </div>
+    
     <input type="hidden" id="class_id" name="<?php echo $_REQUEST['class_id']?>">
-    <script src="/elearning/class/class.js"></script>
+    <script src="/elearning/class/class.js" type="module"></script>
 </body>
 </html>
 

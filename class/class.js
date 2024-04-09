@@ -1,10 +1,23 @@
 getInitCell();
 
+import { interpolate } from '/elearning/utils/functions.js';
+
 async function getInitCell() {
     let response = await sendGetInitCellRequest();
-    // alert(response);
     let data = JSON.parse(response);
+
     console.log(data);
+
+    let container = document.getElementById("class-cell-container");
+    let template = document.getElementById("notification-cell-template");
+
+    let html = '';
+    for (let row of data) {        
+        let template_clone = template.cloneNode(true);
+        html += interpolate(template_clone.innerHTML, row);        
+    }
+
+    container.innerHTML = html;
 }
 
 async function sendGetInitCellRequest() {

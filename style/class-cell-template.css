@@ -1,18 +1,18 @@
-.cell-class {
+.class-cell {
     width: 100%;
     border: 1px solid black;
 }
 
-.cell-class .id {
+.class-cell .id {
     font-weight: bold;
     color: blue;
 }
 
-.cell-class .class-name {
+.class-cell .class-name {
     font-weight: bold;
 }
 
-.cell-class .instructor-name {
+.class-cell .instructor-name {
 
 }
 

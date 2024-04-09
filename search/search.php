@@ -9,7 +9,8 @@
 <body>
     <?php
         include __DIR__ . '/../topnav/topnav.html';
-    ?>
+    ?>    
+
     <?php
         $record_ppage = 3;
         
@@ -64,9 +65,9 @@
                 echo "<h2>Not Found</h2>";
             }            
         }
-
     ?>
 
+    <script src="/elearning/search/search.js"></script>
 </body>
 </html>
 
