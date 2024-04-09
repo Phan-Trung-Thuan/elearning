@@ -11,5 +11,9 @@
     <?php
         include __DIR__ . '/../topnav/topnav.html';
     ?>
+
+    <div id="homepage-container">
+        This is body
+    </div>
 </body>
 </html>
