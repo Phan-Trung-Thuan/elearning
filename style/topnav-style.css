@@ -2,26 +2,48 @@
     margin-top: 0;
     margin-left: auto;
     margin-right: auto;
-    width: 100%;
-    background-color: inherit;
+    width: 95%;
+    height: 80%;
+    background: rgb(247, 242, 234);
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+#header {
+    width: inherit;
+    height: 50px;
 }
 
 #topnav {
     overflow: hidden;
-    background-color: orange;
+    display: flex;
+    background-color: rgb(248, 172, 32);
+    border-radius: 5px;
+    height: 35px;
 }
 
-#topnav > a{
-    float: left;
-    display: block;
+#topnav > #home-link, #my-class, #searching{
+    width: 100px;
+    height: inherit;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     text-align: center;
-    text-decoration: none;
-    padding: 14px 16px;
-    color: black;
 }
 
+#searching {
+    right: 0;
+}
 
-#topnav > a:hover, .dropdown:hover .dropbtn {
+#topnav > #home-link > a {
+    /* margin: 25% 25%; */
+    color: black;
+    text-decoration: none;
+    font-size: medium;
+}
+
+#topnav > #home-link:hover, .dropdown:hover .dropbtn {
     background-color: rgb(248, 200, 110);
 }
 
@@ -65,7 +87,6 @@
 }
 
 #search-bar {
-    float: right;
     overflow: hidden;
     background-color: blue;
 }
