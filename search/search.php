@@ -20,7 +20,9 @@
             $paging = array();            
             $class_list = class_title_search_by($search_kw, $record_ppage, $paging);            
             
-            if ($class_list != null) {                
+            if ($class_list != null) {    
+                $seperator = "$$$"; //seperator between html and css/js in class-cell-template.html
+                $content = "";
                 foreach ($class_list as $class) {
                     $template_data = array(
                         "class_id" => $class['class_id'],
@@ -31,17 +33,16 @@
                     $template_file_path = __DIR__ . "/class-cell-template.html";
                     $template_body = file_get_contents($template_file_path);
                     foreach ($template_data as $key => $value) {
-                        $template_body = str_replace("[\$$key]", $value, $template_body);
-                    }                    
-                    echo $template_body;                    
+                        $template_body = str_replace("[\$$key]", $value, $template_body);                            
+                    }
+                    $content = $content . explode($seperator, $template_body)[0];   
                 }
+                //Add css + js for class-cell
+                $content = $content . explode($seperator, $template_body)[1];
 
-                //Add css + js
-                echo "<head>" . "\n" .
-                    "<link rel='stylesheet' href='/elearning/style/class-cell-template.css'>" . "\n" .
-                    "<script src='/elearning/search/class-cell-template.js'></script>" . "\n" .
-                "</head>\n";
-                
+                //Add class-cell to search
+                echo $content;                                                 
+                          
             }
 
             //Navigation
@@ -61,11 +62,9 @@
                 }
             } else {
                 echo "<h2>Not Found</h2>";
-            }
-            
-        } 
-        
-        
+            }            
+        }
+
     ?>
 
 </body>

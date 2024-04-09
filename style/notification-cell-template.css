@@ -1,0 +1,20 @@
+.notification-cell {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid black;
+}
+
+.notification-cell-title {
+    font-weight: bold;
+    color: rgb(202, 133, 4);
+    padding-top: 5px;
+    padding-bottom: 10px;
+}
+
+.notification-cell-note {
+    font-style: italic;
+    color: rgb(144, 136, 136);
+    font-size: 15px;
+    padding-top: 5px;
+}

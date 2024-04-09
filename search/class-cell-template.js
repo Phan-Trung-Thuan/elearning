@@ -1,5 +1,15 @@
 let forms = document.getElementsByClassName("join-class-form");
 
+async function callBack(class_id) {
+    let response = await sendJoinClassRequest(class_id);
+    if (response === "SUCCESS") {
+        window.location.href = `/elearning/class/class.php?class_id=${class_id}`;
+    } else if (response === "ERROR") {
+        alert("ERROR: Can't read join class request!");
+        return;
+    }
+}
+
 async function sendJoinClassRequest(class_id) {
     let url = "/elearning/utils/functions.php";
     let data = { 'do': "join_class", 'class_id': class_id };
@@ -10,11 +20,6 @@ async function sendJoinClassRequest(class_id) {
     });
 
     return response.text();
-}
-
-async function callBack(class_id) {
-    let response = await sendJoinClassRequest(class_id);
-    alert(response);
 }
 
 for (let i = 0; i < forms.length; i++) {
