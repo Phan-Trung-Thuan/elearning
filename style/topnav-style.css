@@ -27,14 +27,6 @@
     align-items: center;
 }
 
-/* #header-content {
-    
-}
-
-#user-account {
-
-} */
-
 #topnav {
     overflow: hidden;
     display: flex;
@@ -44,12 +36,12 @@
     height: 35px;
 }
 
-#left-div {
+.left-div {
     width: 80%;
     display: flex;
 }
 
-#right-div {
+.right-div {
     width: 20%;
     display: flex;
 }
@@ -71,7 +63,7 @@
 }
 
 #searching {
-    width: 234px;
+    width: 233.4px;
 }
 
 #home-link > a {
