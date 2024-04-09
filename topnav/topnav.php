@@ -1,9 +1,8 @@
 <?php    
-    // header('Content-type: application/json; charset=utf-8');
     session_start();
 
     require __DIR__ . "/../utils/config.php";  
-    $student_id = isset($_SESSION["username"]) ? strtolower($_SESSION["username"]) : null;
+    $student_id = $_SESSION["username"];
     
     $conn = @new mysqli($servername, $username, $password, $database) or die 
     ('connection failed: ' . $conn->connect_error);   
@@ -24,5 +23,6 @@
         array_push($data, $class_info);
     }  
     
-    echo json_encode($data);   
+     
     $conn->close();
+    echo json_encode($data);
