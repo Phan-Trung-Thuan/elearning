@@ -12,7 +12,7 @@ document.getElementById("logout-btn").addEventListener("click", function() {
         window.location.href = "http://localhost/elearning/login/index.php";
     } else {
         window.location.href = window.location.href;
-    }    
+    }
 });
 
 async function checkEnrollment() {
