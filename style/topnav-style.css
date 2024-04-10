@@ -130,7 +130,7 @@
     color: rgb(255, 255, 255);
     background-color: orange;
     font-family: 'Poppins', sans-serif;
-    padding: 14px 15px;
+    align-items: center;
 }
 
 .dropdown-content {
