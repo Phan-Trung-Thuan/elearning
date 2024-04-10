@@ -2,7 +2,7 @@
     session_start();
 
     $save_dir = __DIR__ . "/../files/homework/" . $_REQUEST["cell_id"] . "/" . $_SESSION["username"] . "/";
-    
+
     if (!is_dir($save_dir)) {
         mkdir($save_dir, 0777, true);
     }
