@@ -11,22 +11,6 @@ body {
     background: #e4c49d;
 }
 
-.warning-message {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background-color: #fdfdfd;
-    color: #b08544;
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    display: flex;
-}
-
-.hidden {
-    display: none;
-}
-
 .login-box {
     background: #fdfdfd;
     display: flex;
@@ -89,7 +73,3 @@ body {
     padding: 8px;
     outline: none;
 }
-
-/* ::placeholder {
-    color: #b08544;
-} */
