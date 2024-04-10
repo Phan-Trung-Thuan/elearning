@@ -2,6 +2,7 @@ import { interpolate } from '/elearning/utils/functions.js';
 
 let search_kw = document.getElementById("search-kw").value;
 let page = document.getElementById("page").value;
+let ppage = document.getElementById("ppage").value;
 
 getSearchResult();
 
@@ -30,6 +31,7 @@ async function getSearchResult() {
         p_total : paging['p_total'],
         p_prev : paging['p_prev'],
         p_next : paging['p_next'],
+        ppage : ppage,
         self_file_path : "/elearning/search/search.php",
         search_kw : search_kw
     };
@@ -56,7 +58,8 @@ async function getSearchResult() {
 
 async function sendSearchRequest() {
     let url = '/elearning/utils/functions.php';    
-    let data = { 'do' : 'search_class', 'search_kw' : search_kw, 'record_ppage': 3, 'page' : page};
+    let data = { 'do' : 'search_class', 'search_kw' : search_kw, 'record_ppage': ppage, 'page' : page};
+    console.log(ppage);
     
     const response = await fetch(url, {
         method: 'POST',
