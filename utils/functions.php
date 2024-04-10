@@ -60,16 +60,18 @@
         $conn = @new mysqli($servername, $username, $password, $database) or die($conn->connect_error);
         $conn->set_charset($charset);
         
-        $stmt = $conn->prepare('SELECT cell_title, cell_description, cell_createddate, notification_note FROM cell C INNER JOIN notification N on C.cell_id = N.cell_id WHERE class_id = ? ORDER BY cell_createddate');
+        $stmt = $conn->prepare('SELECT C.cell_id, cell_title, cell_description, cell_createddate, notification_note, homework_expirationdate FROM CELL C LEFT JOIN NOTIFICATION N on C.cell_id = N.cell_id LEFT JOIN HOMEWORK H on C.cell_id = H.cell_id WHERE class_id = ? ORDER BY cell_createddate');
         $stmt->bind_param('s', $class_id);
         $stmt->execute();
 
         $data = array();
         $result = $stmt->get_result();
         while ($row = $result->fetch_assoc()) {
+            if ($row['homework_expirationdate'] != null) {
+                $row['homework_expirationdate'] = changeDateTimeFormat($row['homework_expirationdate'], "d-m-Y H:i:s");
+            }            
             array_push($data, $row);
         }
-
 
         $stmt->close();
         $conn->close();
@@ -130,6 +132,10 @@
 
         $conn->close();
         return $class_list;
+    }
+
+    function changeDateTimeFormat($datetime, $format) {
+        return date($format, strtotime($datetime));
     }
 
     

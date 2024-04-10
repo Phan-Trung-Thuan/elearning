@@ -19,6 +19,10 @@ async function getSearchResult() {
     let navigation_template = document.getElementById("search-navigation-template");
     
     let html = '';
+    if (data['raw_data'] == null) {
+        alert("No class found!");
+        return;
+    }
     for (let raw_data of data['raw_data']) {        
         let class_cell_template_clone = class_cell_template.cloneNode(true);
         html += interpolate(class_cell_template_clone.innerHTML, raw_data);        
@@ -73,7 +77,8 @@ async function sendSearchRequest() {
 function addClassCellEvents() {
     let join_buttons = document.getElementsByClassName("join-button");
     for (let i = 0; i < join_buttons.length; i++) {
-        join_buttons[i].addEventListener("click", async (e) => { e.preventDefault(); 
+        join_buttons[i].addEventListener("click", async (e) => { 
+            e.preventDefault(); 
             joinCallBack(e.target.attributes.classId.value);    
         });        
     }

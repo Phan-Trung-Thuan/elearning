@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Class</title>
 
-    <link rel="stylesheet" href="/elearning/style/notification-cell-template.css">
+    <link rel="stylesheet" href="/elearning/style/class-style.css">
 </head>
 <body>
     <?php
@@ -30,6 +30,19 @@
                 <div class="notification-cell-desc">${cell_description}</div>
 
                 <div class="notification-cell-note">${notification_note}</div>
+            </div>
+        </template>
+
+        <template id="homework-cell-template">
+            <div class="homework-cell">
+                <div class="homework-cell-title">${cell_title}</div>
+
+                <div class="homework-cell-desc">${cell_description}</div>
+                
+                <input type="file" name="homework-file-upload" class="homework-file-upload" id="file-upload-${cell_id}" multiple>
+                <button class="upload-button" id="upload-button-${cell_id}" cellId = ${cell_id}>Upload</button>              
+
+                <div class="homework-cell-expiration-date">${homework_expirationdate}</div>
             </div>
         </template>
     </div>

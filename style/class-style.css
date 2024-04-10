@@ -1,0 +1,25 @@
+.notification-cell, .homework-cell {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid black;
+    margin-bottom: 20px;
+}
+
+.notification-cell-title, .homework-cell-title {
+    font-weight: bold;
+    color: rgb(202, 133, 4);
+    padding-top: 5px;
+    padding-bottom: 10px;
+}
+
+.notification-cell-note {
+    font-style: italic;
+    color: rgb(144, 136, 136);
+    font-size: 15px;
+    padding-top: 5px;
+}
+
+.homework-cell-expiration-date {
+    font-weight: bold;
+}
