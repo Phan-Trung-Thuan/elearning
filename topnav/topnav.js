@@ -10,7 +10,7 @@ dropdown_content_class.style.left = (rect.left + 13).toString() + 'px';
 let dropdown_content_account = document.getElementById("dropdown-content-account-option");
 rect = document.getElementById("account-option").getBoundingClientRect();
 
-document.getElementById("logout-button").addEventListener("click", function() {
+document.getElementById("logout").addEventListener("click", function() {
     const confirm = window.confirm("Are you sure?");
     if (confirm) {
         window.location.href = "http://localhost/elearning/login/index.php";

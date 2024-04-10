@@ -29,6 +29,7 @@ async function getInitCell() {
 
     container.innerHTML = html;
     addEvents();
+    await checkUploadFile();
 }
 
 async function sendGetInitCellRequest() {
@@ -77,4 +78,8 @@ function addEvents() {
             uploadCallBack(e.target.attributes.cellId.value);    
         });
     }
+}
+
+async function checkUploadFile() {
+
 }
