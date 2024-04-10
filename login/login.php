@@ -26,6 +26,8 @@
             setcookie("username", $login_username, time() + 60 * 60 * 24 * 5); # 5 days
             setcookie("password", $login_password, time() + 60 * 60 * 24 * 5);
             $_SESSION["username"] = $login_username;
+            $row = $result->fetch_assoc();
+            $_SESSION["name"] = $row["STUDENT_NAME"];
             $_SESSION["type"] = "student_login";
         }
         else {
@@ -42,6 +44,8 @@
                 setcookie("username", $login_username, time() + 60 * 60 * 24 * 5); # 5 days
                 setcookie("password", $login_password, time() + 60 * 60 * 24 * 5);
                 $_SESSION["username"] = $login_username;
+                $row = $result->fetch_assoc();
+                $_SESSION["name"] = $row["INSTRUCTOR_NAME"];
                 $_SESSION["type"] = "instructor_login";
             }
             else {

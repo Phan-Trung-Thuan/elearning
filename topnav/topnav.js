@@ -3,14 +3,10 @@ checkEnrollment();
 // Set position of my class dropdown content
 let dropdown_content_class = document.getElementById("dropdown-content-class");
 let rect = document.getElementById("my-class").getBoundingClientRect();
-dropdown_content_class.style.top = (rect.bottom + 1).toString() + 'px';
+dropdown_content_class.style.top = (rect.bottom).toString() + 'px';
 dropdown_content_class.style.left = (rect.left + 13).toString() + 'px';
 
-// Set position of account option content
-let dropdown_content_account = document.getElementById("dropdown-content-account-option");
-rect = document.getElementById("account-option").getBoundingClientRect();
-
-document.getElementById("logout").addEventListener("click", function() {
+document.getElementById("logout-btn").addEventListener("click", function() {
     const confirm = window.confirm("Are you sure?");
     if (confirm) {
         window.location.href = "http://localhost/elearning/login/index.php";
@@ -29,7 +25,7 @@ async function checkEnrollment() {
     for (let enroll_class of data) {
         let element = document.createElement("a");
         element.setAttribute("href", `/elearning/class/class.php?class_id=${enroll_class["class_id"]}`);
-        element.innerText = enroll_class["class_id"] + " - " + enroll_class["class_name"];
+        element.innerHTML = '<strong>' + enroll_class["class_id"] + " - " + enroll_class["class_name"] + '</strong>';
         dropdown.append(element);
     }
 }

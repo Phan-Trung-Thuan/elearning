@@ -6,12 +6,12 @@
             <span><strong>ELEARNING</strong></span>
         </div>
         <div id="user-account">
-            <span>ACCOUNT</span>
-            <div id="account-option" class="dropdown" >
+            <span><strong>ACCOUNT</strong></span>
+            <div id="account-option" class="dropdown">
                 <button class="dropbtn"></button>
                 <div class="dropdown-content" id="dropdown-content-account-option">
-                    <a id="setting" href="#">Setting</a>
-                    <a id="logout" href="#">Logout</a>
+                    <a id="setting-btn" href="#"><strong>Setting</strong></a>
+                    <a id="logout-btn" href="#"><strong>Logout</strong></a>
                 </div>
             </div>
         </div>
@@ -19,16 +19,16 @@
     <div id="topnav">
         <div class="left-div">
             <div id="home-link">
-                <a href="/elearning/homepage/home.php">Home</a> 
+                <a href="/elearning/homepage/home.php"><strong>Home</strong></a> 
             </div>   
             <div id="my-class" class="dropdown" >
-                <button class="dropbtn">My Classroom</button>
+                <button class="dropbtn"><strong>My Classroom</strong></button>
                 <div class="dropdown-content" id="dropdown-content-class">
                 </div>
             </div>
         </div>
         
-        <div class="right-div" id="searching">
+        <div class="right-div" id="searching-container">
             <form action="/elearning/search/search.php" method="get" id="search-bar">                
                 <input type="text" name="class-title-keyword" id="class-title-keyword" placeholder="Search Class Here">
                 <input type="hidden" name="ppage" value="3">
