@@ -21,8 +21,7 @@
         $class_info = array("class_id" => $row["class_id"], "class_name" => $row["class_name"]);
 
         array_push($data, $class_info);
-    }  
-    
+    }
      
     $conn->close();
     echo json_encode($data);
