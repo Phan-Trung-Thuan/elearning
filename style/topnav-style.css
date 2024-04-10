@@ -5,7 +5,6 @@
     margin-left: auto;
     margin-right: auto;
     width: 95%;
-    /* height: 80%; */
     background: rgb(247, 242, 234);
     border-radius: 10px;
     padding: 10px;
@@ -18,13 +17,49 @@
     height: 50px;
     display: flex;
     justify-content: space-between;
+    padding-bottom: 5px;
 }
 
 #header-content, #user-account {
     width: 500px;
+    height: inherit;
     display: flex;
-    justify-content: center;
     align-items: center;
+    /* border: 1px solid black; */
+}
+
+#header-content {
+    justify-content: left;
+}
+
+#header-content span {
+    color: rgb(228, 148, 0);
+    padding-left: 10px;
+    font-size: 32px;
+}
+
+#header-content img {
+    width: auto;
+    height: inherit;
+    border-radius: 5px;
+}
+
+#user-account {
+    justify-content: right;
+}
+
+#user-account span {
+    color: rgb(228, 148, 0);
+    padding-right: 10px;
+    font-size: 20px;
+}
+
+#user-account .dropbtn {
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    line-height: inherit;
+    border-radius: 6px;
 }
 
 #topnav {
@@ -67,7 +102,7 @@
 }
 
 #home-link > a {
-    color: black;
+    color: white;
     text-decoration: none;
 }
 
@@ -76,7 +111,6 @@
 }
 
 .dropdown {
-    float: left;
     overflow: hidden;
 }
 
@@ -87,6 +121,7 @@
 .dropdown .dropbtn {
     border: none;
     outline: none;
+    color: white;
     background-color: orange;
     font-family: 'Poppins', sans-serif;
     padding: 14px 15px;
@@ -105,12 +140,12 @@
 
 .dropdown-content a {
     float: none;
-    color: black;
+    color: orange;
     padding: 6px 8px;
     text-decoration: none;
     display: block;
     text-align: left;
-    min-width: 200px;
+    min-width: auto;
     border-bottom: 1px solid orange;
     font-size: 14px;
 }

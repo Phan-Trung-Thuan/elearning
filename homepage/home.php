@@ -9,11 +9,20 @@
 </head>
 <body>
     <?php
+        session_start();
+        # Check login session
+        if (!isset($_SESSION["type"])) {
+            header("Location: /elearning/login/index.php");
+            exit;
+        }
+        
         include __DIR__ . '/../topnav/topnav.html';
     ?>
 
     <div id="homepage-container">
         This is body
     </div>
+
+    <script src="/elearning/homepage/check_session.js"></script>
 </body>
 </html>
