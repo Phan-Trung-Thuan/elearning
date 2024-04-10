@@ -9,11 +9,13 @@
 </head>
 <body>
     <?php
+        session_start();
         # Check login session
         if (!isset($_SESSION["type"])) {
-            // header("Location: " . __DIR__ . "/../login/index.php");
             header("Location: /elearning/login/index.php");
+            exit;
         }
+        
         include __DIR__ . '/../topnav/topnav.html';
     ?>
 
