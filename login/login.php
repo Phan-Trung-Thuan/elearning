@@ -26,6 +26,7 @@
             setcookie("username", $login_username, time() + 60 * 60 * 24 * 5); # 5 days
             setcookie("password", $login_password, time() + 60 * 60 * 24 * 5);
             $_SESSION["username"] = $login_username;
+            $_SESSION["type"] = "student_login";
         }
         else {
             # Check instructor login
@@ -41,6 +42,7 @@
                 setcookie("username", $login_username, time() + 60 * 60 * 24 * 5); # 5 days
                 setcookie("password", $login_password, time() + 60 * 60 * 24 * 5);
                 $_SESSION["username"] = $login_username;
+                $_SESSION["type"] = "instructor_login";
             }
             else {
                 # LOGIN FAILED
