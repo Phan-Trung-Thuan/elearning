@@ -18,7 +18,11 @@
                 <span class="id">${class_id}</span>
                 <span class="class-name">${class_name}</span>
                 <div class="instructor-name">Giảng viên: <a href="">${instructor_name}</a></div>
-                <button class="join-button" classId="${class_id}">Join Class</button>
+                <form class="join-form" id="join-form-${class_id}" action="/elearning/utils/functions.php" method="POST">
+                    <input type="hidden" name="class-id" value="${class_id}">
+                    <button class="join-button" classId="${class_id}">Join Class</button>
+                </form>
+                
             </div>
         </template>
     </div>

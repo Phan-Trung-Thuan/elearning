@@ -1,4 +1,4 @@
-import { interpolate } from '/elearning/utils/functions.js';
+import { interpolate, sendRequest, sendRequestForm } from '/elearning/utils/functions.js';
 
 let search_kw = document.getElementById("search-kw").value;
 let page = document.getElementById("page").value;
@@ -7,9 +7,13 @@ let ppage = document.getElementById("ppage").value;
 getSearchResult();
 
 async function getSearchResult() {
-    let response = await sendSearchRequest();
-    // alert(response);
+    let response = await sendRequest(
+        '/elearning/utils/functions.php',
+        { 'do' : 'search_class', 'search_kw' : search_kw, 'record_ppage': ppage, 'page' : page}
+    );
+    
     let data = JSON.parse(response);
+
     console.log(data);
 
     let search_container = document.getElementById("search-container");
@@ -39,10 +43,10 @@ async function getSearchResult() {
         self_file_path : "/elearning/search/search.php",
         search_kw : search_kw
     };
+
     // console.log(paging_data);
     
     let nav_html = interpolate(navigation_template.innerHTML, paging_data);
-
 
     search_container.innerHTML = html;
     navigation_container.innerHTML = nav_html;
@@ -57,51 +61,28 @@ async function getSearchResult() {
         next_link.remove();
     }
 
-    addClassCellEvents();
+    addEvents();
 }
 
-async function sendSearchRequest() {
-    let url = '/elearning/utils/functions.php';    
-    let data = { 'do' : 'search_class', 'search_kw' : search_kw, 'record_ppage': ppage, 'page' : page};
-    console.log(ppage);
-    
-    const response = await fetch(url, {
-        method: 'POST',
-        body: JSON.stringify(data)
-    });
-
-    return response.text();
-}
-
-
-function addClassCellEvents() {
-    let join_buttons = document.getElementsByClassName("join-button");
-    for (let i = 0; i < join_buttons.length; i++) {
-        join_buttons[i].addEventListener("click", async (e) => { 
+function addEvents() {    
+    let join_forms = document.getElementsByClassName("join-form");
+    for (let form of join_forms) {
+        form.addEventListener("submit", async (e) => { 
             e.preventDefault(); 
-            joinCallBack(e.target.attributes.classId.value);    
-        });        
+            let class_id = e.target.querySelector("[name=class-id]").value;
+            joinClass(class_id);  
+        });
     }
 }
 
-async function joinCallBack(class_id) {
-    let response = await sendJoinClassRequest(class_id);
+async function joinClass(class_id) {
+    let form = document.getElementById(`join-form-${class_id}`);
+    let response = await sendRequestForm(form, {'do' : 'join_class'});
+
     if (response === "SUCCESS") {
         window.location.href = `/elearning/class/class.php?class_id=${class_id}`;
-    } else if (response === "ERROR") {
-        alert("ERROR: Can't read join class request!");
+    } else {
+        alert("ERROR: Can't join class");
         return;
     }
-}
-
-async function sendJoinClassRequest(class_id) {
-    let url = "/elearning/utils/functions.php";
-    let data = { 'do': "join_class", 'class_id': class_id };
-
-    const response = await fetch(url, {
-        method: 'POST',
-        body: JSON.stringify(data)
-    });
-
-    return response.text();
 }

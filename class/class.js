@@ -1,9 +1,14 @@
+import { interpolate, sendRequest, sendRequestForm } from '/elearning/utils/functions.js';
+
 getInitCell();
 
-import { interpolate } from '/elearning/utils/functions.js';
-
 async function getInitCell() {
-    let response = await sendGetInitCellRequest();
+    let class_id = document.getElementById('class-id').value;
+    let response = await sendRequest(
+        '/elearning/utils/functions.php', 
+        {'do' : 'get_init_cell', 'class_id' : class_id}
+    );    
+
     let data = JSON.parse(response);
 
     console.log(data);
@@ -31,50 +36,24 @@ async function getInitCell() {
     addEvents();
 }
 
-async function sendGetInitCellRequest() {
-    let url = '/elearning/utils/functions.php';
-    let class_id = document.getElementById('class_id').name;
-    let data = { 'do' : 'get_init_cell', 'class_id' : class_id};
-
-    const response = await fetch(url, {
-        method: 'POST',
-        body: JSON.stringify(data)
-    });
-
-    return response.text();
-}
-
-async function sendUploadFileRequest(cell_id) {
-    let form_data = new FormData();
-    let files_upload = document.getElementById(`file-upload-${cell_id}`).files;
-    for (let i = 0; i < files_upload.length; i++) {
-        form_data.append("file[]", files_upload[i]);        
+function addEvents() {
+    let homework_forms = document.getElementsByClassName("homework-form");
+    for (let form of homework_forms) {
+        form.addEventListener("submit", async (e) => { 
+            e.preventDefault(); 
+            let cell_id = e.target.querySelector("[name=cell-id]").value;
+            uploadCallBack(cell_id);  
+        });
     }
-
-    form_data.append("cell_id", cell_id);
-
-    let url = '/elearning/utils/upload.php';
-    const response = await fetch(url, {
-        method: 'POST',
-        body: form_data
-    });
-
-    return response.text();
 }
 
 async function uploadCallBack(cell_id) {
-    let response = await sendUploadFileRequest(cell_id);
-    if (response != null) {
-        alert(response);
-    }
-}
-
-function addEvents() {
-    let upload_buttons = document.getElementsByClassName("upload-button");
-    for (let btn of upload_buttons) {
-        btn.addEventListener("click", async (e) => { 
-            e.preventDefault(); 
-            uploadCallBack(e.target.attributes.cellId.value);    
-        });
+    let form = document.getElementById(`homework-form-${cell_id}`);
+    let response = await sendRequestForm(form, {'do' : 'upload_homework'});
+    if (response === "SUCCESS") {
+        alert("Upload file successfully!");
+    } else {
+        alert("Error when trying to upload file!");
+        return;
     }
 }
