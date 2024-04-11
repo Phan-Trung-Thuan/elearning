@@ -11,28 +11,29 @@
     <?php
         include __DIR__ . '/../topnav/topnav.html';
     ?>    
-    
-    <div id="search-container">
-        <template id="class-cell-template">
-            <div class="class-cell">
-                <span class="id">${class_id}</span>
-                <span class="class-name">${class_name}</span>
-                <div class="instructor-name">Giảng viên: <a href="">${instructor_name}</a></div>
-                <form class="join-form" id="join-form-${class_id}" action="/elearning/utils/functions.php" method="POST">
-                    <input type="hidden" name="class-id" value="${class_id}">
-                    <button class="join-button" classId="${class_id}">Join Class</button>
-                </form>
-                
-            </div>
-        </template>
-    </div>
-    
-    <div id="search-navigation">
-        <template id="search-navigation-template">
-            Page ${p_no}/${p_total}&nbsp&nbsp&nbsp
-            <a href="${self_file_path}?class-title-keyword=${search_kw}&page=${p_prev}&ppage=${ppage}">Previous</a>&nbsp&nbsp&nbsp
-            <a href="${self_file_path}?class-title-keyword=${search_kw}&page=${p_next}&ppage=${ppage}">Next</a>&nbsp&nbsp&nbsp
-        </template>
+
+    <div id="main-container">
+        <div id="search-container">
+            <template id="class-cell-template">
+                <div class="class-cell">
+                    <span class="id">${class_id}</span>
+                    <span class="class-name">${class_name}</span>
+                    <div class="instructor-name">Giảng viên: <a href="">${instructor_name}</a></div>
+                    <form class="join-form" id="join-form-${class_id}" action="/elearning/utils/functions.php" method="POST">
+                        <input type="hidden" name="class-id" value="${class_id}">
+                        <button class="join-button" classId="${class_id}">Join Class</button>
+                    </form>
+                </div>
+            </template>
+        </div>
+        
+        <div id="search-navigation">
+            <template id="search-navigation-template">
+                Page ${p_no}/${p_total}&nbsp&nbsp&nbsp
+                <a href="${self_file_path}?class-title-keyword=${search_kw}&page=${p_prev}&ppage=${ppage}">Previous</a>&nbsp&nbsp&nbsp
+                <a href="${self_file_path}?class-title-keyword=${search_kw}&page=${p_next}&ppage=${ppage}">Next</a>&nbsp&nbsp&nbsp
+            </template>
+        </div>
     </div>
     
     <input type="hidden" id="search-kw" name="search-kw" value="<?php echo $_REQUEST['class-title-keyword']?>">
