@@ -138,10 +138,8 @@
             echo "STUDENT LOGIN SUCCESSFULLY";
             setcookie("username", $login_username, time() + 60 * 60 * 24 * 5); # 5 days
             setcookie("password", $login_password, time() + 60 * 60 * 24 * 5);
-            $_SESSION["username"] = $login_username;
             $row = $result->fetch_assoc();
-            $_SESSION["name"] = $row["STUDENT_NAME"];
-            $_SESSION["type"] = "student_login";
+            setcookie("type", $row["INSTRUCTOR_NAME"], time() + 60 * 60 * 24 * 5);
         }
         else {
             # Check instructor login
@@ -156,10 +154,8 @@
                 echo "INSTRUCTOR LOGIN SUCCESSFULLY";
                 setcookie("username", $login_username, time() + 60 * 60 * 24 * 5); # 5 days
                 setcookie("password", $login_password, time() + 60 * 60 * 24 * 5);
-                $_SESSION["username"] = $login_username;
                 $row = $result->fetch_assoc();
-                $_SESSION["name"] = $row["INSTRUCTOR_NAME"];
-                $_SESSION["type"] = "instructor_login";
+                setcookie("type", $row["INSTRUCTOR_NAME"], time() + 60 * 60 * 24 * 5);
             }
             else {
                 # LOGIN FAILED
