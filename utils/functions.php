@@ -48,7 +48,8 @@
             }
 
             if ($data['do'] === 'upload_homework') {
-                $err_file_list = uploadHomeworkFile();
+                $student_id = $_SESSION["username"];
+                $err_file_list = uploadHomeworkFile($student_id);
                 if (count( $err_file_list ) > 0) {
                     echo json_encode($err_file_list);
                 } else {
@@ -64,9 +65,42 @@
                 return;
             }
 
+            if ($data['do'] === 'get_homework') {
+                $student_id = $_SESSION['username'];
+                $cell_id = $data['cell_id'];
+                $data = getHomework($student_id, $cell_id);
+                if ($data == null) {
+                    echo null;
+                } else {
+                    echo json_encode($data);
+                }                
+                return;
+            }
+
         } else {
             echo "ERROR: Can't identify which function to execute at /elearning/utils/functions.php";
         }    
+    }
+
+    function getHomework($student_id, $cell_id) {
+        $save_dir = __DIR__ . "/../files/homework/" . $cell_id . "/" . $student_id . "/";
+        
+        //If directory does not exist or is empty
+        if (!is_dir($save_dir) or !(new \FilesystemIterator($save_dir))->valid()) {
+            return null;
+        } else {
+            $data = array();
+            $files = scandir($save_dir);
+            $files_length = count($files);
+            for ($i = 2; $i < $files_length; $i++) {               
+                $tmp = explode(".", $files[$i]);
+                $file_name = $tmp[0];
+                $file_extension = $tmp[1];
+                
+                $data[$i-2] = array('file_name' => $file_name, 'file_extension' => $file_extension);
+            }
+            return $data;
+        }
     }
 
     function getEnrollClass($student_id=null) {
@@ -252,8 +286,8 @@
         return date($format, strtotime($datetime));
     }
 
-    function uploadHomeworkFile() {
-        $save_dir = __DIR__ . "/../files/homework/" . $_REQUEST["cell-id"] . "/" . $_SESSION["username"] . "/";
+    function uploadHomeworkFile($student_id) {
+        $save_dir = __DIR__ . "/../files/homework/" . $_REQUEST["cell-id"] . "/" . $student_id . "/";
 
         if (!is_dir($save_dir)) {
             mkdir($save_dir, 0777, true);

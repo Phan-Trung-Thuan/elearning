@@ -88,3 +88,13 @@ export const sendRequestForm = async function (form, params=null) {
     const response = await fetch(url, fetch_options);
     return response.text();
 }
+
+
+
+// function resolveAfter2Seconds() {
+//     return new Promise((resolve) => {
+//       setTimeout(() => {
+//         resolve('resolved');
+//       }, 2000);
+//     });
+// }

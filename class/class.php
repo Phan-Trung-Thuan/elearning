@@ -41,9 +41,14 @@
                 
                 <form class="homework-form" id="homework-form-${cell_id}" method="POST" enctype="multipart/form-data" action="/elearning/utils/functions.php">
                     <input type="hidden" name="cell-id" value="${cell_id}">
-                    <input type="file" name="file[]" class="homework-file-upload" multiple>
+                    <input type="file" name="file[]" class="homework-file-upload" multiple>                    
                     <button class="upload-button">Upload</button>
-                </form>                             
+                    <ul class="homework-list" id="homework-list-${cell_id}">
+                </form>
+                
+                
+                    
+                </ul>
 
                 <div class="homework-cell-expiration-date">${homework_expirationdate}</div>
             </div>
