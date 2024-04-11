@@ -12,15 +12,15 @@
     ?>
     <div class="login-box">
         <header>Login</header>
-        <form id="login-form">
+        <form id="login-form" action="/elearning/utils/functions.php" method="POST">
             <div class="input">
                 <label for="username">Username</label>
-                <input type="text" name="username" id="username" placeholder="username" required>
+                <input type="text" name="username" placeholder="username" required>
             </div>
 
             <div class="input">
                 <label for="password">Password</label>
-                <input type="password" name="password" id="password" placeholder="password" required>
+                <input type="password" name="password" placeholder="password" required>
             </div>
 
             <div class="login-btn">
@@ -32,6 +32,6 @@
             </div> -->
         </form>
     </div>
-    <script src="/elearning/login/send_message.js"></script>
+    <script src="/elearning/login/login.js" type="module"></script>
 </body>
 </html>

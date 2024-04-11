@@ -1,22 +1,10 @@
+import { sendRequest, sendRequestForm } from '/elearning/utils/functions.js';
+
 let login_form = document.getElementById("login-form");
 
-async function sendLoginRequest(uname, pass) {
-    let url = "/elearning/login/login.php";
-    let data = { 'username': uname, 'password': pass };
-
-    const response = await fetch(url, {
-        method: 'POST',
-        body: JSON.stringify(data)
-    });
-
-    return response.text();
-}
-
 async function callBack() {
-    let username = document.getElementById("username").value;
-    let password = document.getElementById("password").value;
-
-    let response = await sendLoginRequest(username, password);
+    let form = document.getElementById("login-form");
+    let response = await sendRequestForm(form, {'do' : 'login'});
 
     if (response === "STUDENT LOGIN SUCCESSFULLY") {
         // Go to homepage for student
