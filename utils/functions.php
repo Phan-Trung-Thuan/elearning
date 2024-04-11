@@ -173,7 +173,7 @@
             setcookie("username", $login_username, time() + 60 * 60 * 24 * 5); # 5 days
             setcookie("password", $login_password, time() + 60 * 60 * 24 * 5);
             $row = $result->fetch_assoc();
-            setcookie("type", $row["INSTRUCTOR_NAME"], time() + 60 * 60 * 24 * 5);
+            setcookie("type", $row["STUDENT_NAME"], time() + 60 * 60 * 24 * 5);
         }
         else {
             # Check instructor login
