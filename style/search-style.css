@@ -54,12 +54,19 @@ a {
     text-decoration: none;
 }
 
-#join-button {
+.join-button {
     padding: 5px;
-    margin-top: 10px;
     font-size: 16px;
     color: white;
     background-color: #ff9e28;
+    border: none;
+    border-radius: 5px;
+}
+
+.join-button:hover {
+    color: #ff9e28;
+    background-color: white;
+    border: 2px dashed orange;
 }
 
 #search-navigation {
@@ -68,22 +75,30 @@ a {
     align-self: flex-end;
     justify-content: center;
     align-items: center;
+    gap: 10px;
 }
 
-#search-navigation, #search-navigation a {
-    width: auto;
-    height: 20px;
+#search-navigation * {
     font-weight: bold;
     color: rgb(219, 143, 0);
 }
 
-#search-navigation span {
-    width: auto;
-    display: inline-flex;
+#search-navigation div {
+    display: flex;
+    justify-content: center;
+}
+
+#search-navigation #page-content {
+    height: inherit;
+    width: fit-content; 
+}
+
+#search-navigation #previous-button, #search-navigation #next-button {
+    height: inherit;
+    width: 80px; 
 }
 
 #previous-button:hover, #next-button:hover {
     border: 2px solid orange;
     border-radius: 5px;
-    /* font-size: 20px; */
 }
