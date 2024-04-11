@@ -17,22 +17,35 @@ body {
 }
 
 .class-cell {
-    width: 100%;
-    border: 1px solid black;
+    width: inherit;
+    /* border: 1px solid black; */
+    border-radius: 5px;
     margin: 10px 0px;
+    background-color: #ffe7ca;
+    padding: 8px;
+}
+
+.class-cell:hover {
+    border: 2px solid orange;
 }
 
 .class-cell .id {
     font-weight: bold;
-    color: blue;
+    color: rgb(193, 154, 25);
 }
 
 .class-cell .class-name {
     font-weight: bold;
+    color: rgb(193, 154, 25);
+    font-family: 'Time news roman', sans-serif;
 }
 
 .class-cell .instructor-name {
+    /* font-style: none; */
+}
 
+.class-cell .instructor-name a {
+    text-decoration: none;
 }
 
 #join-button {

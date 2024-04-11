@@ -5,11 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search</title>
     <link rel="stylesheet" href="/elearning/style/search-style.css">
+    <link rel="stylesheet" href="/elearning/style/warning-box-style.css">
 </head>
 
 <body>
     <?php
         include __DIR__ . '/../topnav/topnav.html';
+        include __DIR__ . '/../utils/warning-box.html';
     ?>    
 
     <div id="main-container">
@@ -18,7 +20,7 @@
                 <div class="class-cell">
                     <span class="id">${class_id}</span>
                     <span class="class-name">${class_name}</span>
-                    <div class="instructor-name">Giảng viên: <a href="">${instructor_name}</a></div>
+                    <div class="instructor-name">Instructor: <a href="">${instructor_name}</a></div>
                     <form class="join-form" id="join-form-${class_id}" action="/elearning/utils/functions.php" method="POST">
                         <input type="hidden" name="class-id" value="${class_id}">
                         <button class="join-button" classId="${class_id}">Join Class</button>

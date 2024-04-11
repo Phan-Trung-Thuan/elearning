@@ -24,7 +24,12 @@ async function getSearchResult() {
     
     let html = '';
     if (data['raw_data'] == null) {
-        alert("No class found!");
+        // Show warning message
+        let warning_message = document.querySelector(".warning-message");
+        warning_message.innerHTML = "No class found!";
+
+        warning_message.classList.remove('hidden');
+        setTimeout(() => { warning_message.classList.add('hidden'); }, 3000);
         return;
     }
     for (let raw_data of data['raw_data']) {        
@@ -82,7 +87,12 @@ async function joinClass(class_id) {
     if (response === "SUCCESS") {
         window.location.href = `/elearning/class/class.php?class_id=${class_id}`;
     } else {
-        alert("ERROR: Can't join class");
+        // Show warning message
+        let warning_message = document.querySelector(".warning-message");
+        warning_message.innerHTML = "ERROR: Can't join class";
+
+        warning_message.classList.remove('hidden');
+        setTimeout(() => { warning_message.classList.add('hidden'); }, 3000);
         return;
     }
 }
