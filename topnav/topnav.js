@@ -25,7 +25,7 @@ async function getEnrollClasses() {
 let dropdown_content_class = document.getElementById("dropdown-content-class");
 let rect = document.getElementById("my-class").getBoundingClientRect();
 dropdown_content_class.style.top = (rect.bottom).toString() + 'px';
-dropdown_content_class.style.left = (rect.left + 13).toString() + 'px';
+dropdown_content_class.style.left = (rect.left).toString() + 'px';
 
 document.getElementById("logout-btn").addEventListener("click", function() {
     const confirm = window.confirm("Are you sure?");
