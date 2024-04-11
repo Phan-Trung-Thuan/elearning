@@ -4,21 +4,25 @@ body {
 
 #main-container {
     margin-top: 10px;
+    display: grid;
     margin-left: auto;
     margin-right: auto;
     width: 95%;
     height: 390px;
     background: rgb(247, 242, 234);
     border-radius: 10px;
-    padding: 10px;
+    padding: 0px 10px 10px 10px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     font-family: 'Poppins', sans-serif;
     font-size: 15px;
 }
 
+#search-container {
+    width: auto;
+    align-self: flex-start;
+}
+
 .class-cell {
-    width: inherit;
-    /* border: 1px solid black; */
     border-radius: 5px;
     margin: 10px 0px;
     background-color: #ffe7ca;
@@ -38,17 +42,48 @@ body {
     font-weight: bold;
     color: rgb(193, 154, 25);
     font-family: 'Time news roman', sans-serif;
+    font-size: 18px;
 }
 
-.class-cell .instructor-name {
-    /* font-style: none; */
+.class-cell .instructor-name, .class-cell .instructor-name a {
+    color: rgb(202, 131, 0);
+    font-size: 16px;
 }
 
-.class-cell .instructor-name a {
+a {
     text-decoration: none;
 }
 
 #join-button {
     padding: 5px;
     margin-top: 10px;
+    font-size: 16px;
+    color: white;
+    background-color: #ff9e28;
+}
+
+#search-navigation {
+    width: inherit;
+    display: flex;
+    align-self: flex-end;
+    justify-content: center;
+    align-items: center;
+}
+
+#search-navigation, #search-navigation a {
+    width: auto;
+    height: 20px;
+    font-weight: bold;
+    color: rgb(219, 143, 0);
+}
+
+#search-navigation span {
+    width: auto;
+    display: inline-flex;
+}
+
+#previous-button:hover, #next-button:hover {
+    border: 2px solid orange;
+    border-radius: 5px;
+    /* font-size: 20px; */
 }

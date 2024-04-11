@@ -6,6 +6,7 @@
     <title>Search</title>
     <link rel="stylesheet" href="/elearning/style/search-style.css">
     <link rel="stylesheet" href="/elearning/style/warning-box-style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 </head>
 
 <body>
@@ -20,7 +21,7 @@
                 <div class="class-cell">
                     <span class="id">${class_id}</span>
                     <span class="class-name">${class_name}</span>
-                    <div class="instructor-name">Instructor: <a href="">${instructor_name}</a></div>
+                    <div class="instructor-name">Instructor: <i class="fa-solid fa-user-graduate"></i><a href="">${instructor_name}</a></div>
                     <form class="join-form" id="join-form-${class_id}" action="/elearning/utils/functions.php" method="POST">
                         <input type="hidden" name="class-id" value="${class_id}">
                         <button class="join-button" classId="${class_id}">Join Class</button>
@@ -31,9 +32,9 @@
         
         <div id="search-navigation">
             <template id="search-navigation-template">
-                Page ${p_no}/${p_total}&nbsp&nbsp&nbsp
-                <a href="${self_file_path}?class-title-keyword=${search_kw}&page=${p_prev}&ppage=${ppage}">Previous</a>&nbsp&nbsp&nbsp
-                <a href="${self_file_path}?class-title-keyword=${search_kw}&page=${p_next}&ppage=${ppage}">Next</a>&nbsp&nbsp&nbsp
+                <span>Page ${p_no}/${p_total}&nbsp&nbsp&nbsp</span>
+                <span id="previous-button"><a href="${self_file_path}?class-title-keyword=${search_kw}&page=${p_prev}&ppage=${ppage}">Previous</a>&nbsp&nbsp&nbsp</span>
+                <span id="next-button"><a href="${self_file_path}?class-title-keyword=${search_kw}&page=${p_next}&ppage=${ppage}">Next</a>&nbsp&nbsp&nbsp</span>
             </template>
         </div>
     </div>
