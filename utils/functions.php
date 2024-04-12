@@ -1,4 +1,6 @@
 <?php
+    session_start();
+
     /* -----------------------------FUNCTIONS ------------------------- */  
     call();
     function call() {
@@ -10,7 +12,6 @@
         } else { // POST method with body is JSON or FormData
             if (file_get_contents('php://input') != null) {
                 $data = json_decode(file_get_contents('php://input'), true);
-                // echo $data['class-id'];
             } else if (isset($_REQUEST['form_params'])) {
                 $data = json_decode($_REQUEST['form_params'], true); 
             }
@@ -51,7 +52,7 @@
                 if (count( $err_file_list ) > 0) {
                     echo json_encode($err_file_list);
                 } else {
-                    echo "SUCCESS";
+                    echo json_encode(null);
                 }
                 return;
             }
@@ -65,13 +66,17 @@
 
             if ($data['do'] === 'get_homework') {
                 $student_id = $_SESSION['username'];
-                $cell_id = $data['cell_id'];
+                $cell_id = $_REQUEST['cell-id'];
                 $data = getHomework($student_id, $cell_id);
-                if ($data == null) {
-                    echo null;
-                } else {
-                    echo json_encode($data);
-                }                
+                echo json_encode($data);               
+                return;
+            }
+
+            if ($data['do'] === 'cancel_homework') {
+                $student_id = $_SESSION['username'];
+                $cell_id = $data['cell-id'];
+                $data = cancelHomework($student_id, $cell_id);
+                echo json_encode($data);
                 return;
             }
 
@@ -80,15 +85,40 @@
         }    
     }
 
+    function cancelHomework($student_id, $cell_id) {
+        $dir_path = __DIR__ . "/../files/homework/" . $cell_id . "/" . $student_id . "/";
+        
+        $data = array();
+        //If directory does not exist
+        if (!is_dir($dir_path)) {
+            $data["error_code"] = 1;  //DIR DOES NOT EXIST
+        } else {
+            $dir = new DirectoryIterator($dir_path);
+            foreach ($dir as $fileinfo) {
+                if (!$dir->isDot()) {
+                    unlink($fileinfo->getPathname());
+                }
+            }
+
+            $data["error_code"] = 0;
+        }
+
+        return $data;
+    }
+
     function getHomework($student_id, $cell_id) {
-        $save_dir = __DIR__ . "/../files/homework/" . $cell_id . "/" . $student_id . "/";
+        $dir_path = __DIR__ . "/../files/homework/" . $cell_id . "/" . $student_id . "/";
         
         //If directory does not exist or is empty
-        if (!is_dir($save_dir) or !(new \FilesystemIterator($save_dir))->valid()) {
+        if (!is_dir($dir_path) or !(new FilesystemIterator($dir_path))->valid()) {
             return null;
         } else {
             $data = array();
-            $files = scandir($save_dir);
+
+            $data["dir"] = "/elearning/files/homework/". $cell_id . "/" . $student_id . "/";
+            $data["length"] = 0;
+
+            $files = scandir($dir_path);    
             $files_length = count($files);
             for ($i = 2; $i < $files_length; $i++) {               
                 $tmp = explode(".", $files[$i]);
@@ -96,6 +126,7 @@
                 $file_extension = $tmp[1];
                 
                 $data[$i-2] = array('file_name' => $file_name, 'file_extension' => $file_extension);
+                $data["length"]++;
             }
             return $data;
         }
