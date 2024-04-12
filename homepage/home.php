@@ -26,6 +26,6 @@
         This is body
     </div>
 
-    <script src="/elearning/homepage/check_session.js"></script>
+    <!-- <script src="/elearning/homepage/check_session.js"></script> -->
 </body>
 </html>
