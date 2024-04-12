@@ -5,6 +5,7 @@ let login_form = document.getElementById("login-form");
 async function callBack() {
     let form = document.getElementById("login-form");
     let response = await sendRequestForm(form, {'do' : 'login'});
+    // console.log(document.cookie);
 
     if (response === "STUDENT LOGIN SUCCESSFULLY") {
         // Go to homepage for student

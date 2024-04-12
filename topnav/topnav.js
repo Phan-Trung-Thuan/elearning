@@ -30,6 +30,7 @@ dropdown_content_class.style.left = (rect.left).toString() + 'px';
 document.getElementById("logout-btn").addEventListener("click", function() {
     const confirm = window.confirm("Are you sure?");
     if (confirm) {
+        // document.cookie = "typr" + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
         window.location.href = "http://localhost/elearning/login/index.php";
     } else {
         window.location.href = window.location.href;

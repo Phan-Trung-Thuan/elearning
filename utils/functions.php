@@ -1,7 +1,5 @@
 <?php
     /* -----------------------------FUNCTIONS ------------------------- */  
-    session_start();   
-
     call();
     function call() {
         include __DIR__ . "/config.php";
@@ -138,8 +136,8 @@
             echo "STUDENT LOGIN SUCCESSFULLY";
             setcookie("username", $login_username, time() + 60 * 60 * 24 * 5); # 5 days
             setcookie("password", $login_password, time() + 60 * 60 * 24 * 5);
-            $row = $result->fetch_assoc();
-            setcookie("type", $row["STUDENT_NAME"], time() + 60 * 60 * 24 * 5);
+            // $row = $result->fetch_assoc();
+            setcookie("type", "STUDENT LOGIN", time() + 60 * 60 * 24 * 5);
         }
         else {
             # Check instructor login
@@ -154,8 +152,8 @@
                 echo "INSTRUCTOR LOGIN SUCCESSFULLY";
                 setcookie("username", $login_username, time() + 60 * 60 * 24 * 5); # 5 days
                 setcookie("password", $login_password, time() + 60 * 60 * 24 * 5);
-                $row = $result->fetch_assoc();
-                setcookie("type", $row["INSTRUCTOR_NAME"], time() + 60 * 60 * 24 * 5);
+                // $row = $result->fetch_assoc();
+                setcookie("type", "INSTRUCTOR LOGIN", time() + 60 * 60 * 24 * 5);
             }
             else {
                 # LOGIN FAILED
