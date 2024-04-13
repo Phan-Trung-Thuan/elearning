@@ -41,8 +41,8 @@
                 
                 <form class="homework-input-form" id="homework-input-form-${cell_id}" method="POST" enctype="multipart/form-data" action="/elearning/utils/functions.php">
                     <input type="hidden" name="cell-id" value="${cell_id}">
-                    <input type="file" name="file[]" class="homework-file-upload" multiple>                    
-                    <button class="upload-button">Upload</button>                                                           
+                    <input type="file" name="file[]" class="homework-file-upload" multiple>                   
+                    <button class="upload-button">Upload</button>
                 </form>
 
                 <form class="homework-output-form" id="homework-output-form-${cell_id}" method="POST" action="/elearning/utils/functions.php">
@@ -55,6 +55,43 @@
             </div>
         </template>
     </div>
+
+    <button id="open-form-button">Create Cell</button>
+    <div id="create-cell-form-container">
+        <form action="/elearning/utils/functions.php" method="POST" id="create-cell-form">
+            <h2>Create Cell</h2>
+
+            <label for="cell-title">Title(*)</label>
+            <input type="text" name="cell-title" placeholder="Enter Title" required>
+
+            <label for="cell-description">Description(*)</label>
+            <input type="text" name="cell-description" placeholder="Enter description" required>
+
+            <label for="cell-type">Choose Type(*)</label>
+            <select name="cell-type" id="cell-type" required>
+                <option disabled selected value>-- select an option --</option>
+                <option value="0">Notification</option>
+                <option value="1">Homework</option>
+            </select>
+
+            <input type="hidden" name="option-no" value="">
+            <div id="option-container">
+                <div class="cell-type-option" id="cell-type-option-0">
+                    <label for="notification-note">Note</label>
+                    <input type="text" name="notification-note">
+                </div>
+                
+                <div class="cell-type-option" id="cell-type-option-1">
+                    <label for="homework-expireddate">Expiration DateTime(*)</label>
+                    <input type="datetime-local" name="homework-expireddate" required>
+                </div>
+            </div>            
+
+            <button id="create-cell-button">Create</button>
+            <button type="button" id="close-form-button">Close</button>
+        </form>
+    </div>
+  
     
     <input type="hidden" id="class-id" name="class-id" value="<?php echo $_REQUEST['class_id']?>">
     <script src="/elearning/class/class.js" type="module"></script>

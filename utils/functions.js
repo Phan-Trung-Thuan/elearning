@@ -18,6 +18,11 @@ export const interpolate =  function (str, params) {
 	return new Function(...names, `return \`${str}\`;`)(...vals);
 };
 
+export const getDOMFromTemplate = function (template, params="") {
+    let node = new DOMParser().parseFromString(interpolate(template.innerHTML, params), "text/html").body.childNodes[0];
+    return node;
+}
+
 
 /**
  * Send a request to server using fetch API and get response from server

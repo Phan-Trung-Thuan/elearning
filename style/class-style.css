@@ -23,3 +23,33 @@
 .homework-cell-expiration-date {
     font-weight: bold;
 }
+
+#open-form-button {
+    position: fixed;
+    right: 30px;
+    bottom: 30px;
+}
+
+#create-cell-form-container {
+    display: none;
+}
+
+#create-cell-form {
+    position: fixed;
+    right: 30px;
+    bottom: 0;
+    z-index: 9;
+    border: 3px solid black;
+    max-width: 300px;
+    padding: 30px;
+    background-color: white;
+}
+
+#create-cell-form input, #create-cell-form select {
+    width: 100%;
+    margin: 5px 0px 15px 0px;
+}
+
+.cell-type-option {
+    display: none;
+}

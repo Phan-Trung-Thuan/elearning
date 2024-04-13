@@ -1,9 +1,12 @@
-import { interpolate, sendRequest, sendRequestForm } from '/elearning/utils/functions.js';
+import { sendRequest, sendRequestForm, getDOMFromTemplate } from '/elearning/utils/functions.js';
+
+let class_id = document.getElementById('class-id').value;
+
+/** Class cell */
 
 getInitCell();
 
 async function getInitCell() {
-    let class_id = document.getElementById('class-id').value;
     let response = await sendRequest(
         '/elearning/utils/functions.php', 
         {'do' : 'get_init_cell', 'class_id' : class_id}
@@ -18,31 +21,30 @@ async function getInitCell() {
     let homework_template = document.getElementById("homework-cell-template");
 
     let html = '';
-    for (let row of data) {
+    for (let params of data) {
         let template_clone = null;  
-        if (row['notification_note'] != null) {
+        if (params['notification_note'] != null) {
             template_clone = notification_template.cloneNode(true);
-        } else if (row['homework_expirationdate'] != null) {
+        } else if (params['homework_expirationdate'] != null) {
             template_clone = homework_template.cloneNode(true);
         } else {
             console.log("ERROR: Can't undentify class cell type!");
             return;
         }
-        
-        html += interpolate(template_clone.innerHTML, row);        
+        let node = getDOMFromTemplate(template_clone, params);
+        container.appendChild(node);  
     }
-
-    container.innerHTML = html;
-    addEvents();
 
     for (let row of data) {
         if (row['homework_expirationdate'] != null ) {
             updateFileDisplay(row['cell_id']);
         }
     }
+
+    addFormEvents()
 }
 
-function addEvents() {
+function addFormEvents() {
     let input_forms = document.getElementsByClassName("homework-input-form");    
 
     for (let form of input_forms) {
@@ -63,6 +65,7 @@ function addEvents() {
             cancelUploadCallBack(form);
         });
     }
+
 
 }
 
@@ -100,13 +103,12 @@ async function cancelUploadCallBack(form) {
         alert("File removed successfully");
         
         let cell_id = form.querySelector("[name=cell-id]").value;
-        updateFileDisplay(cell_id);
+        await updateFileDisplay(cell_id);
     } else if (data['error_code'] == 1) {
         alert("Directory did not exist before deletion!");
         return;
     }
 }
-
 
 async function updateFileDisplay(cell_id) {   
     let input_form = document.getElementById(`homework-input-form-${cell_id}`);
@@ -122,6 +124,7 @@ async function updateFileDisplay(cell_id) {
         console.log(data);
 
         let ul = output_form.querySelector("ul");
+        ul.innerHTML = '';
         for (let i = 0; i < data.length; i++) {
             let file = data[i]["file_name"] + "." + data[i]["file_extension"];
             let a = document.createElement("a");
@@ -147,4 +150,64 @@ function changeDisplayHelper(input_form, output_form, is_display_input) {
         input_form.style.display = "none";
         output_form.style.display = "block";
     }
+}
+
+/** Popup create class cell form */
+let form = document.getElementById("create-cell-form-container");
+let open_form_btn = document.getElementById("open-form-button");
+open_form_btn.addEventListener("click", () => {
+    form.style.display = 'block';
+});
+let close_form_btn = document.getElementById("close-form-button");
+close_form_btn.addEventListener("click", () => {
+    form.style.display = 'none';
+});
+
+let cell_type_selection = document.getElementById("cell-type");
+let option_container = document.getElementById("option-container");
+let option_length = document.getElementById("option-container").childElementCount;
+
+//Get all required fields of all options
+let required_fields = [];
+for (let i = 0; i < option_length; i++) {
+    let node = document.getElementById(`cell-type-option-${i}`);
+    required_fields[i] = node.querySelectorAll("[required]");
+}
+
+cell_type_selection.addEventListener("change", () => {
+    let option_no = parseInt(cell_type_selection.value);
+    form.querySelector("[type=hidden][name=option-no]").value = option_no;
+
+    for (let i = 0; i < option_length; i++) {
+        let node = document.getElementById(`cell-type-option-${i}`);
+        if (i == option_no) {
+            node.style.display = 'block';
+
+            //enable required inputs of chosen option
+            let fields = required_fields[i];
+            fields.forEach( field => field.required = true);
+        } else {
+            node.style.display = 'none';
+
+            //clear input and disable required inputs of other options
+            let inputs = node.querySelectorAll("input");
+            inputs.forEach( input => input.value = "" );
+            
+            let fields = required_fields[i];
+            fields.forEach( field => field.required = false);
+        }
+    }
+});
+
+
+//Create form
+let create_cell_form = document.getElementById("create-cell-form");
+create_cell_form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    await addNewCell();
+});
+
+async function addNewCell() {
+    let response = await sendRequestForm(create_cell_form, { 'do' : 'create_cell', 'class-id' : class_id });
+    console.log(response);
 }

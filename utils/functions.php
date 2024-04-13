@@ -1,6 +1,6 @@
 <?php
     session_start();
-
+    date_default_timezone_set("Asia/Ho_Chi_Minh");
     /* -----------------------------FUNCTIONS ------------------------- */  
     call();
     function call() {
@@ -14,6 +14,11 @@
                 $data = json_decode(file_get_contents('php://input'), true);
             } else if (isset($_REQUEST['form_params'])) {
                 $data = json_decode($_REQUEST['form_params'], true); 
+
+                foreach ($_REQUEST as $key => $value) {
+                    $data[$key] = $_REQUEST[$key];
+                }
+                
             }
         }        
         
@@ -66,7 +71,8 @@
 
             if ($data['do'] === 'get_homework') {
                 $student_id = $_SESSION['username'];
-                $cell_id = $_REQUEST['cell-id'];
+                // $cell_id = $_REQUEST['cell-id'];
+                $cell_id = $data["cell-id"];
                 $data = getHomework($student_id, $cell_id);
                 echo json_encode($data);               
                 return;
@@ -80,9 +86,71 @@
                 return;
             }
 
+            if ($data['do'] === 'create_cell') {
+                $input_data = array(
+                    'class-id'=> $data['class-id'],
+                    'cell-title' => $data['cell-title'],
+                    'cell-description'=> $data['cell-description'],
+                    'cell-type' => $data['option-no'],
+                );
+
+                switch ($data['option-no']) {
+                    case 0:
+                        $input_data['notification-note'] = $data['notification-note'];
+                        break;
+                    case 1:
+                        $input_data['homework-expireddate'] = $data['homework-expireddate'];
+                        break;
+                }
+
+                $data = createCell($input_data);
+                echo json_encode($data);
+            }
+
         } else {
             echo "ERROR: Can't identify which function to execute at /elearning/utils/functions.php";
         }    
+    }
+
+    function createCell($input_data) {
+        include __DIR__ . "/../utils/config.php";  
+        
+        $conn = @new mysqli($servername, $username, $password, $database) or die 
+        ('connection failed: ' . $conn->connect_error);   
+        mysqli_set_charset($conn,"utf8mb4");
+
+        $new_id = "";
+        $sql = "SELECT MAX(cell_id) FROM cell";
+        $result = $conn->query($sql);
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_row();
+            $curr_id = $row[0];
+            $new_id = ($curr_id != null) ? (string)((int)$row[0] + 1) : "100001";
+        }
+
+        $create_date = date("Y-m-d H:i:s");
+
+        $stmt_cell = $conn->prepare("INSERT INTO cell VALUES(?, ?, ?, ?, ?)");
+        $stmt_cell->bind_param("sssss", $new_id, $input_data['class-id'], $input_data['cell-title'], $input_data['cell-description'], $create_date);
+        $stmt_cell->execute();
+        $stmt_cell->close();
+
+        switch ($input_data['cell-type']) {
+            case 0:
+                $stmt_insert = $conn->prepare("INSERT INTO notification VALUES(?, ?)");
+                $stmt_insert->bind_param("ss", $new_id, $input_data['notification-note']);
+                $stmt_insert->execute();
+                $stmt_insert->close();
+                break;
+            case 1:
+                $stmt_insert = $conn->prepare("INSERT INTO homework VALUES(?, ?)");
+                $stmt_insert->bind_param("ss", $new_id, $input_data['homework-expireddate']);
+                $stmt_insert->execute();
+                $stmt_insert->close();
+                break;
+        }
+
+        return "SUCCESS";
     }
 
     function cancelHomework($student_id, $cell_id) {
@@ -203,6 +271,7 @@
             setcookie("password", $login_password, time() + 60 * 60 * 24 * 5);
             // $row = $result->fetch_assoc();
             setcookie("type", "STUDENT LOGIN", time() + 60 * 60 * 24 * 5);
+            $_SESSION["username"] = $login_username;
         }
         else {
             # Check instructor login
@@ -219,6 +288,7 @@
                 setcookie("password", $login_password, time() + 60 * 60 * 24 * 5);
                 // $row = $result->fetch_assoc();
                 setcookie("type", "INSTRUCTOR LOGIN", time() + 60 * 60 * 24 * 5);
+                $_SESSION["username"] = $login_username;
             }
             else {
                 # LOGIN FAILED
