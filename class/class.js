@@ -20,7 +20,6 @@ async function getInitCell() {
     let notification_template = document.getElementById("notification-cell-template");
     let homework_template = document.getElementById("homework-cell-template");
 
-    let html = '';
     for (let params of data) {
         let template_clone = null;  
         if (params['notification_note'] != null) {
@@ -28,20 +27,18 @@ async function getInitCell() {
         } else if (params['homework_expirationdate'] != null) {
             template_clone = homework_template.cloneNode(true);
         } else {
-            console.log("ERROR: Can't undentify class cell type!");
+            console.log("ERROR: Can't identify class cell type!");
             return;
         }
         let node = getDOMFromTemplate(template_clone, params);
-        container.appendChild(node);  
-    }
-
-    for (let row of data) {
-        if (row['homework_expirationdate'] != null ) {
-            updateFileDisplay(row['cell_id']);
+        container.appendChild(node);
+        
+        if (params['homework_expirationdate'] != null ) {
+            updateFileDisplay(params['cell_id']);
         }
     }
 
-    addFormEvents()
+    addFormEvents();
 }
 
 function addFormEvents() {
