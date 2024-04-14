@@ -65,6 +65,4 @@ async function createCellCallBack(form) {
     if (result) {
         alert("Create cell successfully!");
     }
-
-    // addFormEvents();
 }

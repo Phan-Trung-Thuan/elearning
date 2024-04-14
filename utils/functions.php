@@ -53,19 +53,19 @@
             }
 
             if ($data['do'] === 'get_init_cell') {
-                $class_id = $data['class_id'];
-                $notification_data = getInitCell($class_id);               
-                echo json_encode($notification_data);
+                $class_id = $data['class-id'];
+                $data = getInitCell($class_id);               
+                echo json_encode($data);
                 return;
             }
 
             if ($data['do'] === 'search_class') {
-                $search_kw = $data['search_kw'];
-                $record_ppage = $data['record_ppage'];
+                $search_kw = $data['search-kw'];
+                $record_ppage = $data['record-ppage'];
                 $page = $data['page'];
-                $paging = computePaging($search_kw, $record_ppage, $page);
                 $data = classSearchBy($search_kw, $record_ppage, $page);
-                echo json_encode(array('paging' => $paging, 'raw_data' => $data));             
+                // echo json_encode(array('paging' => $paging, 'raw_data' => $data));
+                echo json_encode($data);             
                 return;
             }
 
@@ -324,6 +324,8 @@
             }                    
         }                
         $conn->close();
+
+        
     }
 
     function login($login_username, $login_password) {
@@ -461,7 +463,7 @@
         $paging = computePaging($search_kw, $record_ppage, $page);
         $test = $paging['p_start'];
         $query = "SELECT class_id, class_name, instructor_name FROM class C INNER JOIN instructor I on C.instructor_id = I.instructor_id where class_name LIKE '%$search_kw%' LIMIT ". $paging['p_start'] . ", $record_per_page";
-
+        
         $result = $conn->query($query);
 
         $class_list = array();
@@ -476,7 +478,7 @@
         }
 
         $conn->close();
-        return $class_list;
+        return array("paging" => $paging, "raw_data" => $class_list);
     }
 
     function uploadHomeworkFile($student_id) {

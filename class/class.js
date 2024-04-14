@@ -41,7 +41,7 @@ export async function addCell(cell_id) {
 async function getInitCell() {
     let response = await sendRequest(
         '/elearning/utils/functions.php', 
-        {'do' : 'get_init_cell', 'class_id' : class_id}
+        {'do' : 'get_init_cell', 'class-id' : class_id}
     );    
 
     let cells = JSON.parse(response);
@@ -49,8 +49,6 @@ async function getInitCell() {
     for (let cell of cells) {
         let result = await addCell(cell['cell_id']);
     }
-
-    // addFormEvents();
 }
 
 export function addCellEvent(cell_id) {
@@ -83,37 +81,6 @@ export function addCellEvent(cell_id) {
         });
     }
 }
-
-// export function addFormEvents() {
-//     let input_forms = document.getElementsByClassName("homework-input-form");    
-
-//     for (let form of input_forms) {
-//         form.addEventListener("submit", async (e) => { 
-//             e.preventDefault();             
-
-//             let cell_id = form.querySelector("[name=cell-id]").value;
-//             await uploadCallBack(form);
-//             await updateFileDisplay(cell_id);
-//         });
-//     }
-
-//     let output_forms = document.getElementsByClassName("homework-output-form"); 
-//     for (let form of output_forms) {
-//         form.addEventListener("submit", async(e) => {
-//             e.preventDefault();
-//             await cancelUploadCallBack(form);
-//         });
-//     }
-
-//     let delete_forms = document.getElementsByClassName("delete-form");
-//     console.log(delete_forms);
-//     for (let form of delete_forms) {
-//         form.addEventListener("submit", async (e) => {
-//             e.preventDefault();
-//             await deleteCallBack(form);
-//         });
-//     }
-// }
 
 async function deleteCallBack(cell_id) {
     let form = document.getElementById(`delete-form-${cell_id}`);

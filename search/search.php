@@ -36,7 +36,7 @@
 
         <div id="search-navigation">
             <template id="search-navigation-template">
-                <div id="previous-button">
+                <div><div id="previous-button">
                     <a href="${self_file_path}?class-title-keyword=${search_kw}&page=${p_prev}&ppage=${ppage}">
                         <i class="fa-solid fa-chevron-left"></i> Prev
                     </a>
@@ -50,7 +50,7 @@
                     <a href="${self_file_path}?class-title-keyword=${search_kw}&page=${p_next}&ppage=${ppage}">
                         Next <i class="fa-solid fa-chevron-right"></i>
                     </a>
-                </div>
+                </div></div>
             </template>
         </div>
     </div>

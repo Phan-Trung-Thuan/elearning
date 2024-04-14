@@ -1,4 +1,4 @@
-import { interpolate, sendRequest, sendRequestForm } from '/elearning/utils/functions.js';
+import { sendRequest, sendRequestForm, getDOMFromTemplate } from '/elearning/utils/functions.js';
 
 let search_kw = document.getElementById("search-kw").value;
 let page = document.getElementById("page").value;
@@ -9,7 +9,7 @@ getSearchResult();
 async function getSearchResult() {
     let response = await sendRequest(
         '/elearning/utils/functions.php',
-        { 'do' : 'search_class', 'search_kw' : search_kw, 'record_ppage': ppage, 'page' : page}
+        { 'do' : 'search_class', 'search-kw' : search_kw, 'record-ppage': ppage, 'page' : page}
     );
     
     let data = JSON.parse(response);
@@ -34,9 +34,9 @@ async function getSearchResult() {
     }
     for (let raw_data of data['raw_data']) {        
         let class_cell_template_clone = class_cell_template.cloneNode(true);
-        html += interpolate(class_cell_template_clone.innerHTML, raw_data);        
+        let node = getDOMFromTemplate(class_cell_template_clone, raw_data);
+        search_container.appendChild(node);       
     }
-    console.log(data['paging']);
     let paging = data['paging'];
 
     let paging_data = {
@@ -49,15 +49,15 @@ async function getSearchResult() {
         search_kw : search_kw
     };
 
-    // console.log(paging_data);
+    console.log(paging_data);
     
-    let nav_html = interpolate(navigation_template.innerHTML, paging_data);
-
-    search_container.innerHTML = html;
-    navigation_container.innerHTML = nav_html;
     
-    let prev_link = navigation_container.getElementsByTagName("a")[0];
-    let next_link = navigation_container.getElementsByTagName("a")[1];
+    let navigation_template_clone = navigation_template.cloneNode(true);
+    let node = getDOMFromTemplate(navigation_template_clone, paging_data);
+    navigation_container.appendChild(node);    
+    
+    let prev_link = document.getElementById("previous-button");
+    let next_link = document.getElementById("next-button");
     if (paging['p_prev'] <= 0) {
         prev_link.remove();
     }
