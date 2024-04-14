@@ -41,7 +41,6 @@
         <template id="homework-cell-template">
             <div class="homework-cell" id="${cell_id}">
                 <div class="homework-cell-title">${cell_title}</div>
-
                 <div class="homework-cell-desc">${cell_description}</div>
                 
                 <form class="homework-input-form" id="homework-input-form-${cell_id}" method="POST" enctype="multipart/form-data" action="/elearning/utils/functions.php">
@@ -72,10 +71,10 @@
             <h2>Create Cell</h2>
 
             <label for="cell-title">Title(*)</label>
-            <input type="text" name="cell-title" placeholder="Enter Title" required>
+            <input type="text" name="cell-title" id="cell-title" placeholder="Enter Title" required>
 
             <label for="cell-description">Description(*)</label>
-            <input type="text" name="cell-description" placeholder="Enter description" required>
+            <input type="text" name="cell-description" id="cell-description" placeholder="Enter description" required>
 
             <label for="cell-type">Choose Type(*)</label>
             <select name="cell-type" id="cell-type" required>
@@ -88,12 +87,12 @@
             <div id="option-container">
                 <div class="cell-type-option" id="cell-type-option-0">
                     <label for="notification-note">Note</label>
-                    <input type="text" name="notification-note">
+                    <input type="text" name="notification-note" id="notification-note">
                 </div>
                 
                 <div class="cell-type-option" id="cell-type-option-1">
                     <label for="homework-expireddate">Expiration DateTime(*)</label>
-                    <input type="datetime-local" name="homework-expireddate" required>
+                    <input type="datetime-local" name="homework-expireddate" id="homework-expireddate" required>
                 </div>
             </div>            
 
@@ -104,7 +103,8 @@
   
     
     <input type="hidden" id="class-id" name="class-id" value="<?php echo $_REQUEST['class_id']?>">
-    <script src="/elearning/class/class.js" type="module"></script>
+    <script type="module" src="/elearning/class/class.js"></script>
+    <script type="module" src="/elearning/class/form.js"></script>
 </body>
 </html>
 
