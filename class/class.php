@@ -24,17 +24,22 @@
 
     <div id="class-cell-container">
         <template id="notification-cell-template">
-            <div class="notification-cell">
+            <div class="notification-cell" id="${cell_id}">
                 <div class="notification-cell-title">${cell_title}</div>
 
                 <div class="notification-cell-desc">${cell_description}</div>
 
                 <div class="notification-cell-note">${notification_note}</div>
+                
+                <form class="delete-form" id="delete-form-${cell_id}" method="POST" action="/elearning/utils/functions.php">
+                    <input type="hidden" name="cell-id" value="${cell_id}">
+                    <button class="delete-button">Delete</button>
+                </form>
             </div>
         </template>
 
         <template id="homework-cell-template">
-            <div class="homework-cell">
+            <div class="homework-cell" id="${cell_id}">
                 <div class="homework-cell-title">${cell_title}</div>
 
                 <div class="homework-cell-desc">${cell_description}</div>
@@ -52,8 +57,13 @@
                 </form>             
             
                 <div class="homework-cell-expiration-date">${homework_expirationdate}</div>
+                
+                <form class="delete-form" id="delete-form-${cell_id}" method="POST" action="/elearning/utils/functions.php">
+                    <input type="hidden" name="cell-id" value="${cell_id}">
+                    <button class="delete-button">Delete</button>
+                </form>
             </div>
-        </template>
+        </template>        
     </div>
 
     <button id="open-form-button">Create Cell</button>
