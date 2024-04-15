@@ -4,7 +4,7 @@ getEnrollClasses();
 
 async function getEnrollClasses() {
     let response = await sendRequest(
-        "/elearning/utils/functions.php",
+        "http://localhost/elearning/utils/functions.php",
         { 'do' : 'get_enroll_class' }
     );
 

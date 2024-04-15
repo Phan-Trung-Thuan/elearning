@@ -51,7 +51,7 @@
 
             if ($data['do'] === 'join_class') {
                 $class_id = $data['class-id'];
-                $student_id = $_SESSION['username'];                
+                $student_id = $_COOKIE['username'];                
                 joinClass($student_id, $class_id);
                 echo "SUCCESS";
                 return;
@@ -75,7 +75,7 @@
             }
 
             if ($data['do'] === 'upload_homework') {
-                $student_id = $_SESSION["username"];
+                $student_id = $_COOKIE["username"];
                 $err_file_list = uploadHomeworkFile($student_id);
                 if (count( $err_file_list ) > 0) {
                     echo json_encode($err_file_list);
@@ -86,14 +86,14 @@
             }
             
             if ($data['do'] === 'get_enroll_class') {
-                $student_id = $_SESSION['username'];
+                $student_id = $_COOKIE['username'];
                 $data = getEnrollClass($student_id);
                 echo json_encode($data);
                 return;
             }
 
             if ($data['do'] === 'get_homework') {
-                $student_id = $_SESSION['username'];
+                $student_id = $_COOKIE['username'];
                 // $cell_id = $_REQUEST['cell-id'];
                 $cell_id = $data["cell-id"];
                 $data = getHomework($student_id, $cell_id);
@@ -102,7 +102,7 @@
             }
 
             if ($data['do'] === 'cancel_homework') {
-                $student_id = $_SESSION['username'];
+                $student_id = $_COOKIE['username'];
                 $cell_id = $data['cell-id'];
                 $data = cancelHomework($student_id, $cell_id);
                 echo json_encode($data);
