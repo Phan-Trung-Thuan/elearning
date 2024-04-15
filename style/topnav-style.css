@@ -79,6 +79,7 @@
 .right-div {
     width: 20%;
     display: flex;
+    white-space: nowrap;
 }
 
 #home-link, #my-class, #searching-container{
@@ -197,7 +198,6 @@
     background-color: rgb(229, 143, 6);
     color: white;
     font-weight: bold;
-    border-radius: 5px;
     cursor: pointer;
 }
 

@@ -43,7 +43,7 @@
                 </div>
 
                 <div id="page-content">
-                    Page ${p_no}/${p_total} 
+                    Page ${p_no}/${p_total}
                 </div>
 
                 <div id="next-button">
