@@ -13,8 +13,13 @@
 
 <body>
     <?php
-    include __DIR__ . '/../topnav/topnav.html';
-    include __DIR__ . '/../utils/warning-box.html';
+        # Check login cookie
+        if (!isset($_COOKIE["type"])) {
+            header("Location: /elearning/login/index.php");
+        }
+        
+        include __DIR__ . '/../topnav/topnav.html';
+        include __DIR__ . '/../utils/warning-box.html';
     ?>
 
     <div id="main-container">

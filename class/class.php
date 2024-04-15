@@ -1,7 +1,3 @@
-<?php
-    session_start();
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,6 +9,11 @@
 </head>
 <body>
     <?php
+        # Check login cookie
+        if (!isset($_COOKIE["type"])) {
+            header("Location: /elearning/login/index.php");
+        }
+
         if (!is_enrolled()) {
             $redirect_url = "/elearning/homepage/home.php";
             header("Location: $redirect_url");
@@ -113,7 +114,7 @@
         include __DIR__ . '/../utils/config.php';
         
         $class_id = $_REQUEST['class_id'];
-        $student_id = $_SESSION['username'];
+        $student_id = $_COOKIE['username'];
         $is_join = null;
 
         $conn = @new mysqli($servername, $username, $password, $database) or die($conn->connect_error);

@@ -9,7 +9,7 @@
 </head>
 <body>
     <?php
-        # Check login session
+        # Check login cookie
         if (!isset($_COOKIE["type"])) {
             header("Location: /elearning/login/index.php");
         }
