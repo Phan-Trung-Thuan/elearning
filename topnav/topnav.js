@@ -27,12 +27,10 @@ let rect = document.getElementById("my-class").getBoundingClientRect();
 dropdown_content_class.style.top = (rect.bottom).toString() + 'px';
 dropdown_content_class.style.left = (rect.left).toString() + 'px';
 
-document.getElementById("logout-btn").addEventListener("click", function() {
+document.getElementById("logout-btn").addEventListener("click", async function() {
     const confirm = window.confirm("Are you sure?");
     if (confirm) {
-        // document.cookie = "typr" + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-        window.location.href = "http://localhost/elearning/login/index.php";
-    } else {
-        window.location.href = window.location.href;
+        await sendRequest('http://localhost/elearning/utils/functions.php', {'do': 'logout'});
+        location.reload()
     }
 });

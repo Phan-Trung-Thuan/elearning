@@ -44,6 +44,11 @@
             if ($data['do'] === 'login') {
                 login($data['username'], $data['password']);
             }
+
+            if ($data['do'] === 'logout') {
+                setcookie('type', '', time() - 100, '/');
+            }
+
             if ($data['do'] === 'join_class') {
                 $class_id = $data['class-id'];
                 $student_id = $_SESSION['username'];                
@@ -346,12 +351,10 @@
     
         if ($result->num_rows == 1) {
             # STUDENT LOGIN SUCCESSFULLY
+            setcookie("username", $login_username, time() + 60 * 60 * 24 * 5, '/'); # 5 days
+            setcookie("password", $login_password, time() + 60 * 60 * 24 * 5, '/');
+            setcookie("type", "STUDENT LOGIN", time() + 60 * 60 * 24 * 5, '/');
             echo "STUDENT LOGIN SUCCESSFULLY";
-            setcookie("username", $login_username, time() + 60 * 60 * 24 * 5); # 5 days
-            setcookie("password", $login_password, time() + 60 * 60 * 24 * 5);
-            // $row = $result->fetch_assoc();
-            setcookie("type", "STUDENT LOGIN", time() + 60 * 60 * 24 * 5);
-            $_SESSION["username"] = $login_username;
         }
         else {
             # Check instructor login
@@ -363,12 +366,10 @@
     
             if ($result->num_rows == 1) {
                 # INSTRUCTOR LOGIN SUCCESSFULLY
+                setcookie("username", $login_username, time() + 60 * 60 * 24 * 5, '/'); # 5 days
+                setcookie("password", $login_password, time() + 60 * 60 * 24 * 5, '/');
+                setcookie("type", "INSTRUCTOR LOGIN", time() + 60 * 60 * 24 * 5, '/');
                 echo "INSTRUCTOR LOGIN SUCCESSFULLY";
-                setcookie("username", $login_username, time() + 60 * 60 * 24 * 5); # 5 days
-                setcookie("password", $login_password, time() + 60 * 60 * 24 * 5);
-                // $row = $result->fetch_assoc();
-                setcookie("type", "INSTRUCTOR LOGIN", time() + 60 * 60 * 24 * 5);
-                $_SESSION["username"] = $login_username;
             }
             else {
                 # LOGIN FAILED
