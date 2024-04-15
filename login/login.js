@@ -1,4 +1,4 @@
-import { sendRequest, sendRequestForm } from '/elearning/utils/functions.js';
+import { sendRequestForm } from '/elearning/utils/functions.js';
 
 let login_form = document.getElementById("login-form");
 

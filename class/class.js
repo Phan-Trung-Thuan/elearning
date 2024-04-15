@@ -1,59 +1,185 @@
-import { interpolate, sendRequest, sendRequestForm } from '/elearning/utils/functions.js';
+import { sendRequest, sendRequestForm, getDOMFromTemplate } from '/elearning/utils/functions.js';
+
+let class_id = document.getElementById('class-id').value;
+
 
 getInitCell();
 
-async function getInitCell() {
-    let class_id = document.getElementById('class-id').value;
-    let response = await sendRequest(
-        '/elearning/utils/functions.php', 
-        {'do' : 'get_init_cell', 'class_id' : class_id}
-    );    
+/** Class cell */
 
-    let data = JSON.parse(response);
-
-    console.log(data);
-
+export async function addCell(cell_id) {
     let container = document.getElementById("class-cell-container");
     let notification_template = document.getElementById("notification-cell-template");
     let homework_template = document.getElementById("homework-cell-template");
 
-    let html = '';
-    for (let row of data) {
-        let template_clone = null;  
-        if (row['notification_note'] != null) {
-            template_clone = notification_template.cloneNode(true);
-        } else if (row['homework_expirationdate'] != null) {
-            template_clone = homework_template.cloneNode(true);
-        } else {
-            console.log("ERROR: Can't undentify class cell type!");
-            return;
-        }
-        
-        html += interpolate(template_clone.innerHTML, row);        
-    }
+    let response = await sendRequest(
+        '/elearning/utils/functions.php',
+        { 'do' : 'get_cell_data', 'cell-id' : cell_id }
+    );
+    let data = JSON.parse(response);
 
-    container.innerHTML = html;
-    addEvents();
+    let template_clone = null;  
+    if (data['notification_note'] != null) {
+        template_clone = notification_template.cloneNode(true);
+    } else if (data['homework_expirationdate'] != null) {
+        template_clone = homework_template.cloneNode(true);
+    } else {
+        console.log("ERROR: Can't identify class cell type!");
+        return;
+    }
+    let node = getDOMFromTemplate(template_clone, data);
+    container.appendChild(node);
+    
+    if (data['homework_expirationdate'] != null ) {
+        await updateFileDisplay(data['cell_id']);
+    }
+    addCellEvent(cell_id);
+
+    return true;
 }
 
-function addEvents() {
-    let homework_forms = document.getElementsByClassName("homework-form");
-    for (let form of homework_forms) {
+async function getInitCell() {
+    let response = await sendRequest(
+        '/elearning/utils/functions.php', 
+        {'do' : 'get_init_cell', 'class-id' : class_id}
+    );    
+
+    let cells = JSON.parse(response);
+
+    for (let cell of cells) {
+        let result = await addCell(cell['cell_id']);
+    }
+}
+
+export function addCellEvent(cell_id) {
+    console.log(cell_id);
+    let cell = document.getElementById(cell_id);
+    
+    let form = null;
+    form = cell.querySelector("[class=homework-input-form]");
+    if (form != null) {
         form.addEventListener("submit", async (e) => { 
-            e.preventDefault(); 
-            let cell_id = e.target.querySelector("[name=cell-id]").value;
-            uploadCallBack(cell_id);  
+            e.preventDefault();             
+            await uploadCallBack(cell_id);            
+            await updateFileDisplay(cell_id);            
+        });
+    }
+    
+    form = cell.querySelector("[class=homework-output-form]");
+    if (form != null) {
+        form.addEventListener("submit", async(e) => {
+            e.preventDefault();
+            await cancelUploadCallBack(cell_id);
+        });
+    }
+
+    form = cell.querySelector("[class=delete-form]");
+    if (form != null) {
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            await deleteCallBack(cell_id);
         });
     }
 }
 
+async function deleteCallBack(cell_id) {
+    let form = document.getElementById(`delete-form-${cell_id}`);
+    let confirm = window.confirm("Are you sure you want to delete this cell?");
+    if (confirm) {
+        let response = await sendRequestForm(form, { 'do' : 'delete_cell' });
+        let data = JSON.parse(response);
+        if (data['err_code'] == 1) {
+            alert("Delete error: Unknow cell type!");
+            return;
+        } else {
+            // console.log(data['cell_id']);
+            let cell = document.getElementById(data['cell_id']);
+            cell.remove();
+        }
+
+        alert("Delete cell successfully!");
+    }   
+}
+
 async function uploadCallBack(cell_id) {
-    let form = document.getElementById(`homework-form-${cell_id}`);
+    let form = document.getElementById(`homework-input-form-${cell_id}`);
+    console.log(form);
+    let file = form.querySelector("[type=file]").files;
+    if (file.length == 0) {
+        alert("No file to upload");
+        return;
+    }
+
     let response = await sendRequestForm(form, {'do' : 'upload_homework'});
-    if (response === "SUCCESS") {
+    let data = JSON.stringify(response);
+    if (data != null) {
         alert("Upload file successfully!");
-    } else {
+    } else {      
         alert("Error when trying to upload file!");
         return;
     }
+    
+    //Clear input file
+    form.querySelector("[type=file]").value = null;
 }
+
+async function cancelUploadCallBack(cell_id) {
+    let form = document.getElementById(`homework-output-form-${cell_id}`);
+    let confirm = window.confirm("Do you want to cancel the upload?");
+
+    if (confirm == true) {
+        let response = await sendRequestForm(form, {'do' : 'cancel_homework'});
+        let data = JSON.parse(response);
+
+        if (data['error_code'] == 1) {
+            alert("Directory did not exist before deletion!");
+            return;
+        } else {
+            alert("File removed successfully");
+            
+            let cell_id = form.querySelector("[name=cell-id]").value;
+            await updateFileDisplay(cell_id);
+        }        
+    }
+
+}
+
+async function updateFileDisplay(cell_id) {   
+    let input_form = document.getElementById(`homework-input-form-${cell_id}`);
+    let output_form = document.getElementById(`homework-output-form-${cell_id}`);
+
+    let response = await sendRequestForm(input_form, {'do' : 'get_homework'});
+    let data = JSON.parse(response);
+
+    if (data == null) {      
+        changeDisplayHelper(input_form, output_form, true);
+    } else {
+        let ul = output_form.querySelector("ul");
+        ul.innerHTML = '';
+        for (let i = 0; i < data.length; i++) {
+            let file = data[i]["file_name"] + "." + data[i]["file_extension"];
+            let a = document.createElement("a");
+            a.download = "";
+            a.href = data["dir"] + file; 
+            a.innerText = file;      
+            
+            let li = document.createElement("li");
+            li.style.listStyleType = "disc";
+            li.appendChild(a);
+            ul.appendChild(li);           
+        }
+        
+        changeDisplayHelper(input_form, output_form, false);
+    }
+}
+
+function changeDisplayHelper(input_form, output_form, is_display_input) {
+    if (is_display_input == true) {
+        input_form.style.display = "block";
+        output_form.style.display = "none";
+    } else {
+        input_form.style.display = "none";
+        output_form.style.display = "block";
+    }
+}
+

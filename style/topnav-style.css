@@ -79,6 +79,7 @@
 .right-div {
     width: 20%;
     display: flex;
+    white-space: nowrap;
 }
 
 #home-link, #my-class, #searching-container{
@@ -197,9 +198,8 @@
     background-color: rgb(229, 143, 6);
     color: white;
     font-weight: bold;
-    border-radius: 5px;
     cursor: pointer;
-}@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+}
 
 #topnav-container {
     margin-top: 0;

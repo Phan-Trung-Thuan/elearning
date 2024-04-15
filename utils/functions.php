@@ -1,5 +1,26 @@
 <?php
+    session_start();
+    date_default_timezone_set("Asia/Ho_Chi_Minh");
     /* -----------------------------FUNCTIONS ------------------------- */  
+    function changeDateTimeFormat($datetime, $format) {
+        return date($format, strtotime($datetime));
+    }
+
+    function remove_dir($dir) {
+        if (is_dir($dir)) {
+          $objects = scandir($dir);
+          foreach ($objects as $object) {
+            if ($object != "." && $object != "..") {
+              if (filetype($dir."/".$object) == "dir") 
+                 remove_dir($dir."/".$object); 
+              else unlink   ($dir."/".$object);
+            }
+          }
+          reset($objects);
+          rmdir($dir);
+        }
+    }
+
     call();
     function call() {
         include __DIR__ . "/config.php";
@@ -10,9 +31,12 @@
         } else { // POST method with body is JSON or FormData
             if (file_get_contents('php://input') != null) {
                 $data = json_decode(file_get_contents('php://input'), true);
-                // echo $data['class-id'];
             } else if (isset($_REQUEST['form_params'])) {
                 $data = json_decode($_REQUEST['form_params'], true); 
+
+                foreach ($_REQUEST as $key => $value) {
+                    $data[$key] = $_REQUEST[$key];
+                }
             }
         }        
         
@@ -29,28 +53,29 @@
             }
 
             if ($data['do'] === 'get_init_cell') {
-                $class_id = $data['class_id'];
-                $notification_data = getNotificationCell($class_id);               
-                echo json_encode($notification_data);
+                $class_id = $data['class-id'];
+                $data = getInitCell($class_id);               
+                echo json_encode($data);
                 return;
             }
 
             if ($data['do'] === 'search_class') {
-                $search_kw = $data['search_kw'];
-                $record_ppage = $data['record_ppage'];
+                $search_kw = $data['search-kw'];
+                $record_ppage = $data['record-ppage'];
                 $page = $data['page'];
-                $paging = computePaging($search_kw, $record_ppage, $page);
                 $data = classSearchBy($search_kw, $record_ppage, $page);
-                echo json_encode(array('paging' => $paging, 'raw_data' => $data));             
+                // echo json_encode(array('paging' => $paging, 'raw_data' => $data));
+                echo json_encode($data);             
                 return;
             }
 
             if ($data['do'] === 'upload_homework') {
-                $err_file_list = uploadHomeworkFile();
+                $student_id = $_SESSION["username"];
+                $err_file_list = uploadHomeworkFile($student_id);
                 if (count( $err_file_list ) > 0) {
                     echo json_encode($err_file_list);
                 } else {
-                    echo "SUCCESS";
+                    echo json_encode(null);
                 }
                 return;
             }
@@ -62,9 +87,195 @@
                 return;
             }
 
+            if ($data['do'] === 'get_homework') {
+                $student_id = $_SESSION['username'];
+                // $cell_id = $_REQUEST['cell-id'];
+                $cell_id = $data["cell-id"];
+                $data = getHomework($student_id, $cell_id);
+                echo json_encode($data);               
+                return;
+            }
+
+            if ($data['do'] === 'cancel_homework') {
+                $student_id = $_SESSION['username'];
+                $cell_id = $data['cell-id'];
+                $data = cancelHomework($student_id, $cell_id);
+                echo json_encode($data);
+                return;
+            }
+
+            if ($data['do'] === 'create_cell') {
+                $input_data = array(
+                    'class-id'=> $data['class-id'],
+                    'cell-title' => $data['cell-title'],
+                    'cell-description'=> $data['cell-description'],
+                    'cell-type' => $data['option-no'],
+                );
+
+                switch ($data['option-no']) {
+                    case 0:
+                        $input_data['notification-note'] = $data['notification-note'];
+                        break;
+                    case 1:
+                        $input_data['homework-expireddate'] = $data['homework-expireddate'];
+                        break;
+                }
+
+                $data = createCell($input_data);
+                echo json_encode($data);
+                return;
+            }
+
+            if ($data['do'] === 'get_cell_data') {
+                $cell_id = $data['cell-id'];
+                $data = getCellData($cell_id);
+                echo json_encode($data);
+                return;
+            }
+
+            if ($data['do'] === 'delete_cell') {
+                $cell_id = $data['cell-id'];
+                $data = deleteCell($cell_id);
+                echo json_encode($data);
+                return;
+            }
+
         } else {
             echo "ERROR: Can't identify which function to execute at /elearning/utils/functions.php";
         }    
+    }
+
+    function deleteCell($cell_id) {
+        include __DIR__ . "/../utils/config.php";  
+        
+        $conn = @new mysqli($servername, $username, $password, $database) or die 
+        ('connection failed: ' . $conn->connect_error);   
+        mysqli_set_charset($conn,"utf8mb4");
+
+        $stmt = $conn->prepare("SELECT N.cell_id, H.cell_id FROM CELL C LEFT JOIN NOTIFICATION N on C.cell_id = N.cell_id LEFT JOIN HOMEWORK H on C.cell_id = H.cell_id WHERE C.cell_id = ?");
+        $stmt->bind_param("s", $cell_id);
+        $stmt->bind_result($is_notification, $is_homework);
+        $stmt->execute();
+        
+        $data = null;
+        if ($stmt->fetch()) {
+            $stmt->close();
+            if ($is_notification) {               
+                //Delete notification and its cell
+                $stmt_1 = $conn->prepare("DELETE FROM notification WHERE cell_id = ?");
+                $stmt_1->bind_param("s", $cell_id);
+                $stmt_1->execute();
+                $stmt_1->close(); 
+                
+                $stmt_2 = $conn->prepare("DELETE FROM cell WHERE cell_id = ?");
+                $stmt_2->bind_param("s", $cell_id);
+                $stmt_2->execute();
+                $stmt_2->close();
+
+                $data['cell_id'] = $cell_id;
+            } else if ($is_homework) {
+                $dir_path = __DIR__ . "/../files/homework/" . $cell_id . "/";
+                remove_dir($dir_path);
+
+                $stmt_1 = $conn->prepare("DELETE FROM homework WHERE cell_id = ?");
+                $stmt_1->bind_param("s", $cell_id);
+                $stmt_1->execute(); 
+                $stmt_1->close();
+
+                $stmt_2 = $conn->prepare("DELETE FROM cell WHERE cell_id = ?");
+                $stmt_2->bind_param("s", $cell_id);
+                $stmt_2->execute();
+                $stmt_2->close();
+
+                $data['cell_id'] = $cell_id;
+            } else {                
+                $data['err_code'] = 1;
+            }
+        }
+        
+        $conn->close();
+        return $data;
+    }
+
+    function createCell($input_data) {
+        include __DIR__ . "/../utils/config.php";  
+        
+        $conn = @new mysqli($servername, $username, $password, $database) or die 
+        ('connection failed: ' . $conn->connect_error);   
+        mysqli_set_charset($conn,"utf8mb4");
+
+        $new_id = "";
+        $sql = "SELECT MAX(cell_id) FROM cell";
+        $result = $conn->query($sql);
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_row();
+            $curr_id = $row[0];
+            $new_id = ($curr_id != null) ? (string)((int)$row[0] + 1) : "100001";
+        }
+
+        $create_date = date("Y-m-d H:i:s");
+
+        $stmt_cell = $conn->prepare("INSERT INTO cell VALUES(?, ?, ?, ?, ?)");
+        $stmt_cell->bind_param("sssss", $new_id, $input_data['class-id'], $input_data['cell-title'], $input_data['cell-description'], $create_date);
+        $stmt_cell->execute();
+        $stmt_cell->close();
+        
+        switch ($input_data['cell-type']) {
+            case 0:
+                $stmt_insert = $conn->prepare("INSERT INTO notification VALUES(?, ?)");
+                $stmt_insert->bind_param("ss", $new_id, $input_data['notification-note']);
+                $stmt_insert->execute();
+                $stmt_insert->close();
+                break;
+            case 1:
+                $stmt_insert = $conn->prepare("INSERT INTO homework VALUES(?, ?)");
+                $stmt_insert->bind_param("ss", $new_id, $input_data['homework-expireddate']);
+                $stmt_insert->execute();
+                $stmt_insert->close();
+                break;
+        }
+        
+        return array('cell_id' => $new_id);
+    }
+
+    function cancelHomework($student_id, $cell_id) {
+        $dir_path = __DIR__ . "/../files/homework/" . $cell_id . "/" . $student_id . "/";
+        
+        $data = array();
+        //If directory does not exist
+        if (!is_dir($dir_path)) {
+            $data["error_code"] = 1;  //DIR DOES NOT EXIST
+        } else {
+            remove_dir($dir_path);
+        }
+
+        return $data;
+    }
+
+    function getHomework($student_id, $cell_id) {
+        $dir_path = __DIR__ . "/../files/homework/" . $cell_id . "/" . $student_id . "/";
+        
+        //If directory does not exist or is empty
+        if (!is_dir($dir_path) or !(new FilesystemIterator($dir_path))->valid()) {
+            return null;
+        } else {
+            $data = array();
+
+            $data["dir"] = "/elearning/files/homework/". $cell_id . "/" . $student_id . "/";
+            $data["length"] = 0;
+
+            $files = scandir($dir_path);    
+            $files_length = count($files);
+            for ($i = 2; $i < $files_length; $i++) {               
+                $tmp = explode(".", $files[$i]);
+                $file_name = $tmp[0];
+                $file_extension = $tmp[1];
+                
+                $data[$i-2] = array('file_name' => $file_name, 'file_extension' => $file_extension);
+                $data["length"]++;
+            }
+            return $data;
+        }
     }
 
     function getEnrollClass($student_id=null) {
@@ -113,6 +324,8 @@
             }                    
         }                
         $conn->close();
+
+        
     }
 
     function login($login_username, $login_password) {
@@ -138,6 +351,7 @@
             setcookie("password", $login_password, time() + 60 * 60 * 24 * 5);
             // $row = $result->fetch_assoc();
             setcookie("type", "STUDENT LOGIN", time() + 60 * 60 * 24 * 5);
+            $_SESSION["username"] = $login_username;
         }
         else {
             # Check instructor login
@@ -154,6 +368,7 @@
                 setcookie("password", $login_password, time() + 60 * 60 * 24 * 5);
                 // $row = $result->fetch_assoc();
                 setcookie("type", "INSTRUCTOR LOGIN", time() + 60 * 60 * 24 * 5);
+                $_SESSION["username"] = $login_username;
             }
             else {
                 # LOGIN FAILED
@@ -162,23 +377,47 @@
         }
         $conn->close();
     }
+    
+    function getCellData($cell_id) {
+        include __DIR__ . "/config.php";
+        
+        $conn = @new mysqli($servername, $username, $password, $database) or die($conn->connect_error);
+        $conn->set_charset($charset);
 
-    function getNotificationCell($class_id) {
+        $stmt = $conn->prepare("SELECT C.cell_id, cell_title, cell_description, cell_createddate, notification_note, homework_expirationdate FROM CELL C LEFT JOIN NOTIFICATION N on C.cell_id = N.cell_id LEFT JOIN HOMEWORK H on C.cell_id = H.cell_id WHERE C.cell_id = ?");
+        $stmt->bind_param("s", $cell_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $data = null;
+        if ($result->num_rows == 1) {
+            $row = $result->fetch_assoc();
+            if ($row['homework_expirationdate'] != null) {
+                $row['homework_expirationdate'] = changeDateTimeFormat($row['homework_expirationdate'], "d-m-Y H:i:s");
+            } 
+            $data = $row;
+        }
+
+        $stmt->close();
+        $conn->close();
+
+        return $data;
+    }
+
+    function getInitCell($class_id) {
         include __DIR__ . "/config.php";
         
         $conn = @new mysqli($servername, $username, $password, $database) or die($conn->connect_error);
         $conn->set_charset($charset);
         
-        $stmt = $conn->prepare('SELECT C.cell_id, cell_title, cell_description, cell_createddate, notification_note, homework_expirationdate FROM CELL C LEFT JOIN NOTIFICATION N on C.cell_id = N.cell_id LEFT JOIN HOMEWORK H on C.cell_id = H.cell_id WHERE class_id = ? ORDER BY cell_createddate');
+        $stmt = $conn->prepare("SELECT C.cell_id as cell_id FROM CELL C LEFT JOIN NOTIFICATION N on C.cell_id = N.cell_id LEFT JOIN HOMEWORK H on C.cell_id = H.cell_id WHERE class_id = ? ORDER BY cell_createddate");       
+
         $stmt->bind_param('s', $class_id);
         $stmt->execute();
 
         $data = array();
         $result = $stmt->get_result();
-        while ($row = $result->fetch_assoc()) {
-            if ($row['homework_expirationdate'] != null) {
-                $row['homework_expirationdate'] = changeDateTimeFormat($row['homework_expirationdate'], "d-m-Y H:i:s");
-            }            
+        while ($row = $result->fetch_assoc()) {                       
             array_push($data, $row);
         }
 
@@ -224,7 +463,7 @@
         $paging = computePaging($search_kw, $record_ppage, $page);
         $test = $paging['p_start'];
         $query = "SELECT class_id, class_name, instructor_name FROM class C INNER JOIN instructor I on C.instructor_id = I.instructor_id where class_name LIKE '%$search_kw%' LIMIT ". $paging['p_start'] . ", $record_per_page";
-
+        
         $result = $conn->query($query);
 
         $class_list = array();
@@ -239,15 +478,11 @@
         }
 
         $conn->close();
-        return $class_list;
+        return array("paging" => $paging, "raw_data" => $class_list);
     }
 
-    function changeDateTimeFormat($datetime, $format) {
-        return date($format, strtotime($datetime));
-    }
-
-    function uploadHomeworkFile() {
-        $save_dir = __DIR__ . "/../files/homework/" . $_REQUEST["cell-id"] . "/" . $_SESSION["username"] . "/";
+    function uploadHomeworkFile($student_id) {
+        $save_dir = __DIR__ . "/../files/homework/" . $_REQUEST["cell-id"] . "/" . $student_id . "/";
 
         if (!is_dir($save_dir)) {
             mkdir($save_dir, 0777, true);
