@@ -32,6 +32,10 @@
     justify-content: left;
 }
 
+img {
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
 #header-content span {
     color: rgb(228, 148, 0);
     padding-left: 10px;
@@ -69,6 +73,7 @@
     background-color: rgb(248, 172, 32);
     border-radius: 5px;
     height: 35px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
 .left-div {
@@ -316,6 +321,7 @@
 #account-option {
     float: right;
     border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
 #account-option > .dropbtn {

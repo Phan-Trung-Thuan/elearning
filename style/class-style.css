@@ -1,9 +1,30 @@
-.notification-cell, .homework-cell {
-    width: 100%;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+
+body {
+    background: #e4c49d;
+}
+
+#main-container {
+    margin-top: 10px;
     margin-left: auto;
     margin-right: auto;
-    border: 1px solid black;
+    width: 95%;
+    height: 390px;
+    background: rgb(247, 242, 234);
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+}
+
+.cell {
+    font-family: inherit;
+    border-radius: 6px;
     margin-bottom: 20px;
+    padding: 10px;
+    background-color: rgb(255, 249, 239);
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.2);
 }
 
 .notification-cell-title, .homework-cell-title {
