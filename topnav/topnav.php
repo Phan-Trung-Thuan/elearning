@@ -7,7 +7,7 @@
             <span><strong>ELEARNING</strong></span>
         </div>
         <div id="user-account">
-            <span><strong>ACCOUNT</strong></span>
+            <span><strong><?php echo 'WELCOME ' . $_COOKIE['username']?></strong></span>
             <div id="account-option" class="dropdown">
                 <button class="dropbtn"><i class="fa-solid fa-caret-down"></i></button>
                 <div class="dropdown-content" id="dropdown-content-account-option">

@@ -18,7 +18,7 @@
             header("Location: /elearning/login/index.php");
         }
         
-        include __DIR__ . '/../topnav/topnav.html';
+        include __DIR__ . '/../topnav/topnav.php';
         include __DIR__ . '/../utils/warning-box.html';
     ?>
 

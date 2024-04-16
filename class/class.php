@@ -19,7 +19,7 @@
             header("Location: $redirect_url");
         }
         
-        include __DIR__ . '/../topnav/topnav.html';
+        include __DIR__ . '/../topnav/topnav.php';
                         
     ?>
 

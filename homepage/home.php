@@ -14,7 +14,7 @@
             header("Location: /elearning/login/index.php");
         }
         
-        include __DIR__ . '/../topnav/topnav.html';
+        include __DIR__ . '/../topnav/topnav.php';
     ?>
 
     <div id="homepage-container">
