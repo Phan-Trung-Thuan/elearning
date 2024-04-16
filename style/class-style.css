@@ -14,34 +14,45 @@ body {
     border-radius: 10px;
     padding: 10px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    font-family: 'Poppins', sans-serif;
-    font-size: 15px;
+    font-family: 'Times new roman', sans-serif;
+    font-size: 16px;
 }
 
 .cell {
     font-family: inherit;
-    border-radius: 6px;
+    border-radius: 8px;
     margin-bottom: 20px;
     padding: 10px;
     background-color: rgb(255, 249, 239);
     box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.2);
 }
 
-.notification-cell-title, .homework-cell-title {
+.title {
+    font-size: 18px;
     font-weight: bold;
-    color: rgb(202, 133, 4);
-    padding-top: 5px;
-    padding-bottom: 10px;
+    color: white;
+    background-color: orange;
+    padding: 3px 20px;
+    margin-bottom: 3px;
+    width: fit-content;
+    border-radius: 5px 5px 0px 0px;
 }
 
-.notification-cell-note {
+.desc {
+    font-size: 16px;
+    color: rgb(231, 150, 0);
+}
+
+.note {
     font-style: italic;
-    color: rgb(144, 136, 136);
+    color: rgb(232, 158, 0);
     font-size: 15px;
     padding-top: 5px;
 }
 
 .homework-cell-expiration-date {
+    font-size: 15px;
+    color: rgb(232, 158, 0);
     font-weight: bold;
 }
 
