@@ -48,6 +48,8 @@
             }
 
             if ($data['do'] === 'logout') {
+                setcookie('username', '', time() - 100, '/');
+                setcookie('password', '', time() - 100,'/');
                 setcookie('type', '', time() - 100, '/');
                 setcookie('username', '', time() - 100, '/');
                 return;
