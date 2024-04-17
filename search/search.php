@@ -25,13 +25,13 @@
         
         include __DIR__ . '/../topnav/topnav.php';
         include __DIR__ . '/../utils/warning-box.html';
+
     ?>
 
     <div id="main-container">
         <div id="search-container">
             <template id="class-cell-template">
                 <div class="class-cell">
-                    <span class="id">${class_id}</span>
                     <span class="class-name">${class_name}</span>
                     <div class="instructor-name">Instructor: <i class="fa-solid fa-user-graduate"></i><a
                             href="">${instructor_name}</a></div>

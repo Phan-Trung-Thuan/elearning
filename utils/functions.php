@@ -42,13 +42,17 @@
         
         if (isset($data) && isset($data['do'])) {
             if ($data['do'] === 'login') {
-                login($data['username'], $data['password']);
+                $data = login($data['username'], $data['password']);
+                echo json_encode($data);
+                return;
             }
 
             if ($data['do'] === 'logout') {
                 setcookie('username', '', time() - 100, '/');
                 setcookie('password', '', time() - 100,'/');
                 setcookie('type', '', time() - 100, '/');
+                setcookie('username', '', time() - 100, '/');
+                return;
             }
 
             if ($data['do'] === 'join_class') {
@@ -88,8 +92,15 @@
             }
             
             if ($data['do'] === 'get_enroll_class') {
-                $student_id = $_COOKIE['username'];
+                $student_id = $_COOKIE['username'];                
                 $data = getEnrollClass($student_id);
+                echo json_encode($data);
+                return;
+            }
+
+            if ($data['do'] === 'get_instructor_class') {
+                $instructor_id = $_COOKIE['username'];
+                $data = getInstructorClass($instructor_id);
                 echo json_encode($data);
                 return;
             }
@@ -147,9 +158,58 @@
                 return;
             }
 
+            if ($data['do'] === 'leave_class') {
+                $student_id = $_COOKIE['username'];
+                $class_id = $data['class-id'];
+                $data = leaveClass($student_id, $class_id);
+                echo json_encode($data);
+                return;
+            }
+           
+
         } else {
             echo "ERROR: Can't identify which function to execute at /elearning/utils/functions.php";
         }    
+    }
+
+    function getInstructorClass($instructor_id) {
+        include __DIR__ . "/../utils/config.php";
+
+        $conn = @new mysqli($servername, $username, $password, $database) or die 
+        ('connection failed: ' . $conn->connect_error);   
+        mysqli_set_charset($conn,"utf8mb4");
+
+        $stmt = $conn->prepare("SELECT class_id, class_name FROM class WHERE instructor_id = ?");
+        $stmt->bind_param("s", $instructor_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $data = array();
+        while ($row = $result->fetch_assoc()) { 
+            $class_info = array("class_id" => $row["class_id"], "class_name" => $row["class_name"]);
+            array_push($data, $class_info);
+        }
+
+        $stmt->close();
+        $conn->close();
+        
+        return $data;
+    }
+
+    function leaveClass($student_id, $class_id) {
+        include __DIR__ . "/../utils/config.php";
+
+        $conn = @new mysqli($servername, $username, $password, $database) or die 
+        ('connection failed: ' . $conn->connect_error);   
+        mysqli_set_charset($conn,"utf8mb4");
+
+        $stmt = $conn->prepare("DELETE FROM enrollment WHERE class_id = ? AND student_id = ?");
+        $stmt->bind_param("ss", $class_id, $student_id);
+        $stmt->execute();
+
+        $stmt->close();
+        $conn->close();
+
+        return array("err_code" => 0);
     }
 
     function deleteCell($cell_id) {
@@ -345,40 +405,64 @@
         }
         
         # Check student login
-        $stmt = $conn->prepare("SELECT * FROM STUDENT WHERE STUDENT_ID = ? AND STUDENT_PASSWORD = ?");
-        $stmt->bind_param('ss', $login_username, $login_password);
-    
+        $stmt = $conn->prepare("SELECT student_password FROM student WHERE student_id = ?");
+        $stmt->bind_param('s', $login_username);
         $stmt->execute();
+
+        $data = array();
+
         $result = $stmt->get_result();
-    
         if ($result->num_rows == 1) {
-            # STUDENT LOGIN SUCCESSFULLY
-            setcookie("username", $login_username, time() + 60 * 60 * 24 * 5, '/'); # 5 days
-            setcookie("password", $login_password, time() + 60 * 60 * 24 * 5, '/');
-            setcookie("type", "STUDENT LOGIN", time() + 60 * 60 * 24 * 5, '/');
-            echo "STUDENT LOGIN SUCCESSFULLY";
+            $row = $result->fetch_assoc();
+            $hash_password = $row['student_password'];
+            $verify = password_verify($login_password, $hash_password);
+            if ($verify) {
+                # STUDENT LOGIN SUCCESSFULLY
+                setcookie("username", $login_username, time() + 60 * 60 * 24 * 5, '/'); # 5 days
+                setcookie("password", $login_password, time() + 60 * 60 * 24 * 5, '/');
+                setcookie("type", "STUDENT", time() + 60 * 60 * 24 * 5, '/');
+                // echo "STUDENT LOGIN SUCCESSFULLY";
+                $data['login_status'] = "SUCCESS";
+                $data['login_type'] = "STUDENT";
+            } else {
+                $data['login_status'] = "FAIL";
+            }           
         }
         else {
             # Check instructor login
-            $stmt = $conn->prepare("SELECT * FROM INSTRUCTOR WHERE INSTRUCTOR_ID = ? AND INSTRUCTOR_PASSWORD = ?");
-            $stmt->bind_param('ss', $login_username, $login_password);
+            $stmt = $conn->prepare("SELECT instructor_password FROM instructor WHERE instructor_id = ?");
+            $stmt->bind_param('s', $login_username);
     
             $stmt->execute();
-            $result = $stmt->get_result();
-    
+
+            $result = $stmt->get_result();    
             if ($result->num_rows == 1) {
-                # INSTRUCTOR LOGIN SUCCESSFULLY
-                setcookie("username", $login_username, time() + 60 * 60 * 24 * 5, '/'); # 5 days
-                setcookie("password", $login_password, time() + 60 * 60 * 24 * 5, '/');
-                setcookie("type", "INSTRUCTOR LOGIN", time() + 60 * 60 * 24 * 5, '/');
-                echo "INSTRUCTOR LOGIN SUCCESSFULLY";
+                $row = $result->fetch_assoc();
+                $hash_password = $row['instructor_password'];
+                $verify = password_verify($login_password, $hash_password);
+                if ($verify) {
+                    # INSTRUCTOR LOGIN SUCCESSFULLY
+                    setcookie("username", $login_username, time() + 60 * 60 * 24 * 5, '/'); # 5 days
+                    setcookie("password", $login_password, time() + 60 * 60 * 24 * 5, '/');
+                    setcookie("type", "INSTRUCTOR", time() + 60 * 60 * 24 * 5, '/');
+                    // echo "INSTRUCTOR LOGIN SUCCESSFULLY";
+
+                    $data['login_status'] = "SUCCESS";
+                    $data['login_type'] = "INSTRUCTOR";
+                }
+                else {
+                    $data['login_status'] = "FAIL";
+                }                
             }
             else {
                 # LOGIN FAILED
-                echo "LOGIN FAILED";
+                // echo "LOGIN FAILED";
+
+                $data['login_status'] = "FAIL";
             }
         }
         $conn->close();
+        return $data;
     }
     
     function getCellData($cell_id) {

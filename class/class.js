@@ -2,10 +2,46 @@ import { sendRequest, sendRequestForm, getDOMFromTemplate } from '/elearning/uti
 
 let class_id = document.getElementById('class-id').value;
 
+/** Leave button */
+let leave_btn = document.getElementById('leave-button');
+leave_btn.addEventListener("click", async (e) => {
+    e.preventDefault();
+    await leaveCallBack();
+});
+
+async function leaveCallBack() {
+    let confirm = window.confirm("Do you want to leave this class?");
+    if (confirm) {
+        let response = await sendRequest(
+            '/elearning/utils/functions.php',
+            { 'do' : 'leave_class', 'class-id' : class_id }
+        );
+        let data = JSON.parse(response);
+        if (data['err_code'] === 0) {
+            alert("Leave now! Redirect to homepage.");
+            window.location.href = '/elearning/homepage/home.php';
+        } else {
+            alert("Error: Can't leave class!");
+        }
+    }
+}
+
 
 getInitCell();
 
 /** Class cell */
+async function getInitCell() {
+    let response = await sendRequest(
+        '/elearning/utils/functions.php', 
+        {'do' : 'get_init_cell', 'class-id' : class_id}
+    );    
+
+    let cells = JSON.parse(response);
+
+    for (let cell of cells) {
+        let result = await addCell(cell['cell_id']);
+    }
+}
 
 export async function addCell(cell_id) {
     let container = document.getElementById("class-cell-container");
@@ -36,19 +72,6 @@ export async function addCell(cell_id) {
     addCellEvent(cell_id);
 
     return true;
-}
-
-async function getInitCell() {
-    let response = await sendRequest(
-        '/elearning/utils/functions.php', 
-        {'do' : 'get_init_cell', 'class-id' : class_id}
-    );    
-
-    let cells = JSON.parse(response);
-
-    for (let cell of cells) {
-        let result = await addCell(cell['cell_id']);
-    }
 }
 
 export function addCellEvent(cell_id) {
@@ -92,7 +115,6 @@ async function deleteCallBack(cell_id) {
             alert("Delete error: Unknow cell type!");
             return;
         } else {
-            // console.log(data['cell_id']);
             let cell = document.getElementById(data['cell_id']);
             cell.remove();
         }
@@ -144,9 +166,12 @@ async function cancelUploadCallBack(cell_id) {
 
 }
 
-async function updateFileDisplay(cell_id) {   
-    let input_form = document.getElementById(`homework-input-form-${cell_id}`);
-    let output_form = document.getElementById(`homework-output-form-${cell_id}`);
+async function updateFileDisplay(cell_id, file_type) {   
+    if (file_type === 'homework') {
+        
+        let input_form = document.getElementById(`homework-input-form-${cell_id}`);
+        let output_form = document.getElementById(`homework-output-form-${cell_id}`);
+    }
 
     let response = await sendRequestForm(input_form, {'do' : 'get_homework'});
     let data = JSON.parse(response);

@@ -16,6 +16,17 @@ body {
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     font-family: 'Times new roman', sans-serif;
     font-size: 16px;
+    
+}
+
+#container-header {
+    margin-bottom: 7px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+#leave-button {
+    font-weight: bold;
 }
 
 .cell {

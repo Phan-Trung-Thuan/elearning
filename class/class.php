@@ -19,22 +19,49 @@
             header("Location: /elearning/login/index.php");
         }
 
-        if (!is_enrolled()) {
-            $redirect_url = "/elearning/homepage/home.php";
-            header("Location: $redirect_url");
+        $login_type = $_COOKIE["type"];
+        if ($login_type === "STUDENT") {
+            if (!isEnrolled()) {
+                $redirect_url = "/elearning/homepage/home.php";
+                header("Location: $redirect_url");
+            }    
+        } else if ($login_type === "INSTRUCTOR") {
+            if (!isBelong()) {
+                $redirect_url = "/elearning/homepage/home.php";
+                header("Location: $redirect_url");
+            }
         }
+
+        
         
         include __DIR__ . '/../topnav/topnav.php';
                         
     ?>
 
     <div id="main-container">
+        <div id="container-header">
+            <button id="leave-button">Leave</button>
+        </div>      
         <div id="class-cell-container">
             <template id="notification-cell-template">
                 <div class="notification-cell cell" id="${cell_id}">
                     <div class="notification-cell-title title">${cell_title}</div>
 
                     <div class="notification-cell-desc desc">${cell_description}</div>
+
+                    <form class="document-input-form" id="document-input-form-${cell_id}" method="POST" enctype="multipart/form-data" action="/elearning/utils/functions.php">
+                        <div>This is a place to upload document</div>
+                        <input type="hidden" name="cell-id" value="${cell_id}">
+                        <input type="file" name="file[]" class="document-file-upload" multiple>                   
+                        <button class="upload-button">Upload</button>
+                    </form>
+
+                    <form class="document-output-form" id="document-output-form-${cell_id}" method="POST" action="/elearning/utils/functions.php">
+                        <div>This is a place to display document</div>
+                        <input type="hidden" name="cell-id" value="${cell_id}">
+                        <ul class="document-list" id="document-list-${cell_id}"></ul>
+                        <button class="cancel-button">Cancel</button>
+                    </form>
 
                     <div class="notification-cell-note note">${notification_note}</div>
                     
@@ -118,7 +145,7 @@
 </html>
 
 <?php
-    function is_enrolled() {
+    function isEnrolled() {
         include __DIR__ . '/../utils/config.php';
         
         $class_id = $_REQUEST['class_id'];
@@ -144,4 +171,32 @@
         $conn->close();
 
         return $is_join;
+    }
+
+    function isBelong() {
+        include __DIR__ . '/../utils/config.php';
+        
+        $class_id = $_REQUEST['class_id'];
+        $instructor_id = $_COOKIE['username'];
+        $is_belong = null;
+
+        $conn = @new mysqli($servername, $username, $password, $database) or die($conn->connect_error);
+        $conn->set_charset($charset);
+        
+        $stmt = $conn->prepare('SELECT count(*) FROM class WHERE class_id = ? AND instructor_id = ?');
+        $stmt->bind_param('ss', $class_id, $instructor_id);
+        $stmt->bind_result($row_count);
+        $stmt->execute();
+        while ($stmt->fetch()) {
+            if ($row_count === 0) {
+                $is_belong = false;
+            } else if ($row_count === 1) {
+                $is_belong = true;
+            }
+        }
+
+        $stmt->close();
+        $conn->close();
+
+        return $is_belong;
     }
