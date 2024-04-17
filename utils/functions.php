@@ -98,6 +98,13 @@
                 return;
             }
 
+            if ($data['do'] === 'get_instructor_class') {
+                $instructor_id = $_COOKIE['username'];
+                $data = getInstructorClass($instructor_id);
+                echo json_encode($data);
+                return;
+            }
+
             if ($data['do'] === 'get_homework') {
                 $student_id = $_COOKIE['username'];
                 // $cell_id = $_REQUEST['cell-id'];
@@ -158,10 +165,34 @@
                 echo json_encode($data);
                 return;
             }
+           
 
         } else {
             echo "ERROR: Can't identify which function to execute at /elearning/utils/functions.php";
         }    
+    }
+
+    function getInstructorClass($instructor_id) {
+        include __DIR__ . "/../utils/config.php";
+
+        $conn = @new mysqli($servername, $username, $password, $database) or die 
+        ('connection failed: ' . $conn->connect_error);   
+        mysqli_set_charset($conn,"utf8mb4");
+
+        $stmt = $conn->prepare("SELECT class_id, class_name FROM class WHERE instructor_id = ?");
+        $stmt->bind_param("s", $instructor_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $data = array();
+        while ($row = $result->fetch_assoc()) { 
+            $class_info = array("class_id" => $row["class_id"], "class_name" => $row["class_name"]);
+            array_push($data, $class_info);
+        }
+
+        $stmt->close();
+        $conn->close();
+        
+        return $data;
     }
 
     function leaveClass($student_id, $class_id) {
@@ -389,7 +420,7 @@
                 # STUDENT LOGIN SUCCESSFULLY
                 setcookie("username", $login_username, time() + 60 * 60 * 24 * 5, '/'); # 5 days
                 setcookie("password", $login_password, time() + 60 * 60 * 24 * 5, '/');
-                setcookie("type", "STUDENT LOGIN", time() + 60 * 60 * 24 * 5, '/');
+                setcookie("type", "STUDENT", time() + 60 * 60 * 24 * 5, '/');
                 // echo "STUDENT LOGIN SUCCESSFULLY";
                 $data['login_status'] = "SUCCESS";
                 $data['login_type'] = "STUDENT";
@@ -413,7 +444,7 @@
                     # INSTRUCTOR LOGIN SUCCESSFULLY
                     setcookie("username", $login_username, time() + 60 * 60 * 24 * 5, '/'); # 5 days
                     setcookie("password", $login_password, time() + 60 * 60 * 24 * 5, '/');
-                    setcookie("type", "INSTRUCTOR LOGIN", time() + 60 * 60 * 24 * 5, '/');
+                    setcookie("type", "INSTRUCTOR", time() + 60 * 60 * 24 * 5, '/');
                     // echo "INSTRUCTOR LOGIN SUCCESSFULLY";
 
                     $data['login_status'] = "SUCCESS";

@@ -38,5 +38,7 @@
         </div>
     </div>
 </div>
+<input type="hidden" name="username" value="<?php echo $_COOKIE['username'] ?>">
+<input type="hidden" name="type" value="<?php echo $_COOKIE['type'] ?>">
 <script src="/elearning/topnav/topnav.js" type="module"></script>
 <script src="https://kit.fontawesome.com/694106e21d.js" crossorigin="anonymous"></script>

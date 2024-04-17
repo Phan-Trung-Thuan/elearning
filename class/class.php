@@ -14,10 +14,20 @@
             header("Location: /elearning/login/index.php");
         }
 
-        if (!is_enrolled()) {
-            $redirect_url = "/elearning/homepage/home.php";
-            header("Location: $redirect_url");
+        $login_type = $_COOKIE["type"];
+        if ($login_type === "STUDENT") {
+            if (!isEnrolled()) {
+                $redirect_url = "/elearning/homepage/home.php";
+                header("Location: $redirect_url");
+            }    
+        } else if ($login_type === "INSTRUCTOR") {
+            if (!isBelong()) {
+                $redirect_url = "/elearning/homepage/home.php";
+                header("Location: $redirect_url");
+            }
         }
+
+        
         
         include __DIR__ . '/../topnav/topnav.php';
                         
@@ -116,7 +126,7 @@
 </html>
 
 <?php
-    function is_enrolled() {
+    function isEnrolled() {
         include __DIR__ . '/../utils/config.php';
         
         $class_id = $_REQUEST['class_id'];
@@ -142,4 +152,32 @@
         $conn->close();
 
         return $is_join;
+    }
+
+    function isBelong() {
+        include __DIR__ . '/../utils/config.php';
+        
+        $class_id = $_REQUEST['class_id'];
+        $instructor_id = $_COOKIE['username'];
+        $is_belong = null;
+
+        $conn = @new mysqli($servername, $username, $password, $database) or die($conn->connect_error);
+        $conn->set_charset($charset);
+        
+        $stmt = $conn->prepare('SELECT count(*) FROM class WHERE class_id = ? AND instructor_id = ?');
+        $stmt->bind_param('ss', $class_id, $instructor_id);
+        $stmt->bind_result($row_count);
+        $stmt->execute();
+        while ($stmt->fetch()) {
+            if ($row_count === 0) {
+                $is_belong = false;
+            } else if ($row_count === 1) {
+                $is_belong = true;
+            }
+        }
+
+        $stmt->close();
+        $conn->close();
+
+        return $is_belong;
     }

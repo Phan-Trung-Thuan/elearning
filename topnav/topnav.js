@@ -1,17 +1,35 @@
 import { sendRequest } from '/elearning/utils/functions.js'
 
-getEnrollClasses();
+let login_type = document.querySelector("input[type=hidden][name=type]").value;
+if (login_type === "STUDENT") {
+    getEnrollClasses();
+} else if (login_type === "INSTRUCTOR") {
+    getInstructorClasses();
+}
 
 async function getEnrollClasses() {
     let response = await sendRequest(
         "http://localhost/elearning/utils/functions.php",
         { 'do' : 'get_enroll_class' }
     );
-
-    let data = JSON.parse(response);
     
-    // console.log(data);
+    let data = JSON.parse(response);
+    addClass(data);
+}
 
+async function getInstructorClasses() {
+    let response = await sendRequest(
+        'http://localhost/elearning/utils/functions.php',
+        { 'do' : 'get_instructor_class' }
+    );
+    // console.log(response);
+    let data = JSON.parse(response);
+    console.log(data);
+
+    addClass(data);
+}
+
+function addClass(data) {
     let dropdown = document.getElementById("dropdown-content-class");
     for (let enroll_class of data) {
         let element = document.createElement("a");
