@@ -11,15 +11,11 @@
     <?php
         include __DIR__ ."/../utils/check-login.php";
 
-        $flag = false;
         if (isset($_COOKIE["username"]) && isset($_COOKIE["password"]) && isset($_COOKIE["type"])) {
             $response = check_login($_COOKIE["username"], $_COOKIE["password"]);
-            if ($response) {
-                $flag = true;
-            }
         }
 
-        if (!$flag) {
+        if (!$response) {
             header("Location: /elearning/login/index.php");
         }
         
