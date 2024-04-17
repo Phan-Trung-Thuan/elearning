@@ -73,6 +73,23 @@
                     <div class="homework-cell-desc desc">${cell_description}</div>
                     
                     <hr>
+                    <div class="document-file">
+                        <div>DOCUMENT</div>
+                        <form class="document-input-form file-input-form" id="document-input-form-${cell_id}" method="POST" enctype="multipart/form-data" action="/elearning/utils/functions.php">
+                            <input type="hidden" name="cell-id" value="${cell_id}">
+                            <input type="file" name="file[]" class="document-file-upload" multiple>                   
+                            <button class="upload-button">Upload</button>
+                        </form>
+
+                        <form class="document-output-form file-output-form" id="document-output-form-${cell_id}" method="POST" action="/elearning/utils/functions.php">
+                            <input type="hidden" name="cell-id" value="${cell_id}">
+                            <ul class="homework-list" id="homework-list-${cell_id}"></ul>
+                            <button class="cancel-button">Cancel</button>
+                        </form>
+                    </div>
+                    <hr>
+
+                    <hr>
                     <div class="homework-file">
                         <div>HOMEWORK</div>
                         <form class="homework-input-form file-input-form" id="homework-input-form-${cell_id}" method="POST" enctype="multipart/form-data" action="/elearning/utils/functions.php">
@@ -87,7 +104,9 @@
                             <button class="cancel-button">Cancel</button>
                         </form>
                     </div>
-                    <hr>             
+                    <hr>
+                    
+                    
                 
                     <div class="homework-cell-expiration-date">Expiration: ${homework_expirationdate}</div>
                     
