@@ -28,8 +28,8 @@
     
     $instructor_data = array(
         "GV001, Thai Ha X, 1986-01-01, pass001",
-        "GV002', Huu Van Y, 1980-03-01, pass002",
-        "GV003', Huynh Van Z', 1989-12-01, pass003"
+        "GV002, Huu Van Y, 1980-03-01, pass002",
+        "GV003, Huynh Van Z', 1989-12-01, pass003"
     );
 
     foreach ($instructor_data as $str) {

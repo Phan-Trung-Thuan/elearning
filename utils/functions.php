@@ -42,12 +42,15 @@
         
         if (isset($data) && isset($data['do'])) {
             if ($data['do'] === 'login') {
-                login($data['username'], $data['password']);
+                $data = login($data['username'], $data['password']);
+                echo json_encode($data);
+                return;
             }
 
             if ($data['do'] === 'logout') {
                 setcookie('type', '', time() - 100, '/');
                 setcookie('username', '', time() - 100, '/');
+                return;
             }
 
             if ($data['do'] === 'join_class') {
@@ -373,7 +376,9 @@
         $stmt->bind_param('s', $login_username);
         $stmt->execute();
 
-        $result = $stmt->get_result();    
+        $data = array();
+
+        $result = $stmt->get_result();
         if ($result->num_rows == 1) {
             $row = $result->fetch_assoc();
             $hash_password = $row['student_password'];
@@ -383,8 +388,12 @@
                 setcookie("username", $login_username, time() + 60 * 60 * 24 * 5, '/'); # 5 days
                 setcookie("password", $login_password, time() + 60 * 60 * 24 * 5, '/');
                 setcookie("type", "STUDENT LOGIN", time() + 60 * 60 * 24 * 5, '/');
-                echo "STUDENT LOGIN SUCCESSFULLY";
-            }            
+                // echo "STUDENT LOGIN SUCCESSFULLY";
+                $data['login_status'] = "SUCCESS";
+                $data['login_type'] = "STUDENT";
+            } else {
+                $data['login_status'] = "FAIL";
+            }           
         }
         else {
             # Check instructor login
@@ -403,15 +412,24 @@
                     setcookie("username", $login_username, time() + 60 * 60 * 24 * 5, '/'); # 5 days
                     setcookie("password", $login_password, time() + 60 * 60 * 24 * 5, '/');
                     setcookie("type", "INSTRUCTOR LOGIN", time() + 60 * 60 * 24 * 5, '/');
-                    echo "INSTRUCTOR LOGIN SUCCESSFULLY";
+                    // echo "INSTRUCTOR LOGIN SUCCESSFULLY";
+
+                    $data['login_status'] = "SUCCESS";
+                    $data['login_type'] = "INSTRUCTOR";
+                }
+                else {
+                    $data['login_status'] = "FAIL";
                 }                
             }
             else {
                 # LOGIN FAILED
-                echo "LOGIN FAILED";
+                // echo "LOGIN FAILED";
+
+                $data['login_status'] = "FAIL";
             }
         }
         $conn->close();
+        return $data;
     }
     
     function getCellData($cell_id) {
