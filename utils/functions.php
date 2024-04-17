@@ -357,6 +357,7 @@
             setcookie("password", $login_password, time() + 60 * 60 * 24 * 5, '/');
             setcookie("type", "STUDENT LOGIN", time() + 60 * 60 * 24 * 5, '/');
             echo "STUDENT LOGIN SUCCESSFULLY";
+            return true;
         }
         else {
             # Check instructor login
@@ -372,10 +373,12 @@
                 setcookie("password", $login_password, time() + 60 * 60 * 24 * 5, '/');
                 setcookie("type", "INSTRUCTOR LOGIN", time() + 60 * 60 * 24 * 5, '/');
                 echo "INSTRUCTOR LOGIN SUCCESSFULLY";
+                return true;
             }
             else {
                 # LOGIN FAILED
                 echo "LOGIN FAILED";
+                return false;
             }
         }
         $conn->close();
