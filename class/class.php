@@ -44,19 +44,24 @@
 
                     <div class="notification-cell-desc desc">${cell_description}</div>
 
-                    <form class="document-input-form" id="document-input-form-${cell_id}" method="POST" enctype="multipart/form-data" action="/elearning/utils/functions.php">
-                        <div>This is a place to upload document</div>
-                        <input type="hidden" name="cell-id" value="${cell_id}">
-                        <input type="file" name="file[]" class="document-file-upload" multiple>                   
-                        <button class="upload-button">Upload</button>
-                    </form>
+                    <hr>
+                    <div class="document-file">
+                        <div>DOCUMENT</div>
+                        <form class="document-input-form file-input-form" id="document-input-form-${cell_id}" method="POST" enctype="multipart/form-data" action="/elearning/utils/functions.php">
+                            <input type="hidden" name="cell-id" value="${cell_id}">
+                            <input type="hidden" name="type" value="document">
+                            <input type="file" name="file[]" class="document-file-upload" multiple>                   
+                            <button class="upload-button">Upload</button>
+                        </form>
 
-                    <form class="document-output-form" id="document-output-form-${cell_id}" method="POST" action="/elearning/utils/functions.php">
-                        <div>This is a place to display document</div>
-                        <input type="hidden" name="cell-id" value="${cell_id}">
-                        <ul class="document-list" id="document-list-${cell_id}"></ul>
-                        <button class="cancel-button">Cancel</button>
-                    </form>
+                        <form class="document-output-form file-output-form" id="document-output-form-${cell_id}" method="POST" action="/elearning/utils/functions.php">
+                            <input type="hidden" name="cell-id" value="${cell_id}">
+                            <input type="hidden" name="type" value="document">
+                            <ul class="homework-list" id="homework-list-${cell_id}"></ul>
+                            <button class="cancel-button">Cancel</button>
+                        </form>
+                    </div>
+                    <hr>
 
                     <div class="notification-cell-note note">${notification_note}</div>
                     
@@ -77,12 +82,14 @@
                         <div>DOCUMENT</div>
                         <form class="document-input-form file-input-form" id="document-input-form-${cell_id}" method="POST" enctype="multipart/form-data" action="/elearning/utils/functions.php">
                             <input type="hidden" name="cell-id" value="${cell_id}">
+                            <input type="hidden" name="type" value="document">
                             <input type="file" name="file[]" class="document-file-upload" multiple>                   
                             <button class="upload-button">Upload</button>
                         </form>
 
                         <form class="document-output-form file-output-form" id="document-output-form-${cell_id}" method="POST" action="/elearning/utils/functions.php">
                             <input type="hidden" name="cell-id" value="${cell_id}">
+                            <input type="hidden" name="type" value="document">
                             <ul class="homework-list" id="homework-list-${cell_id}"></ul>
                             <button class="cancel-button">Cancel</button>
                         </form>
@@ -94,12 +101,14 @@
                         <div>HOMEWORK</div>
                         <form class="homework-input-form file-input-form" id="homework-input-form-${cell_id}" method="POST" enctype="multipart/form-data" action="/elearning/utils/functions.php">
                             <input type="hidden" name="cell-id" value="${cell_id}">
+                            <input type="hidden" name="type" value="homework">
                             <input type="file" name="file[]" class="homework-file-upload" multiple>                   
                             <button class="upload-button">Upload</button>
                         </form>
 
                         <form class="homework-output-form file-output-form" id="homework-output-form-${cell_id}" method="POST" action="/elearning/utils/functions.php">
                             <input type="hidden" name="cell-id" value="${cell_id}">
+                            <input type="hidden" name="type" value="homework">
                             <ul class="homework-list" id="homework-list-${cell_id}"></ul>
                             <button class="cancel-button">Cancel</button>
                         </form>

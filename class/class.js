@@ -66,112 +66,87 @@ export async function addCell(cell_id) {
     let node = getDOMFromTemplate(template_clone, data);
     container.appendChild(node);
     
-    if (data['homework_expirationdate'] != null ) {
-        await updateFileDisplay(data['cell_id']);
+    // if (data['homework_expirationdate'] != null ) {
+    //     await updateFileDisplay(data['cell_id']);
+    // }
+
+    let inputs = node.querySelectorAll(".file-input-form");
+    for (let input_form of inputs) {
+        await updateFileDisplay(input_form);
     }
     addCellEvent(cell_id);
 
     return true;
 }
 
-export function addCellEvent(cell_id) {
+function addCellEvent(cell_id) {
     console.log(cell_id);
     let cell = document.getElementById(cell_id);
-    
-    let form = null;
-    form = cell.querySelector(".homework-input-form");
-    console.log(form);
-    if (form != null) {
-        form.addEventListener("submit", async (e) => { 
-            e.preventDefault();             
-            await uploadCallBack(cell_id);            
-            await updateFileDisplay(cell_id);            
-        });
+
+    let inputs = cell.querySelectorAll(".file-input-form");
+    if (inputs != null) {
+        inputs.forEach(
+            form => form.addEventListener("submit", async (e) => {
+                e.preventDefault();
+                await uploadCallBack(e.target);
+            })
+        );
     }
-    
-    form = cell.querySelector(".homework-output-form");
-    if (form != null) {
-        form.addEventListener("submit", async(e) => {
-            e.preventDefault();
-            await cancelUploadCallBack(cell_id);
-        });
+    let outputs = cell.querySelectorAll(".file-output-form");
+    if (outputs != null) {
+        outputs.forEach(
+            form => form.addEventListener("submit", async (e) => {
+                e.preventDefault();
+                await cancelUploadCallBack(e.target);
+            })
+        );
     }
 
-    form = cell.querySelector(".delete-form");
-    if (form != null) {
-        form.addEventListener("submit", async (e) => {
+    let delete_form = cell.querySelector(".delete-form");
+    if (delete_form != null) {
+        delete_form.addEventListener("submit", async (e) => {
             e.preventDefault();
-            await deleteCallBack(cell_id);
-        });
+            await deleteCell(e.target);
+        })
     }
 }
 
-async function deleteCallBack(cell_id) {
-    let form = document.getElementById(`delete-form-${cell_id}`);
-    let confirm = window.confirm("Are you sure you want to delete this cell?");
-    if (confirm) {
-        let response = await sendRequestForm(form, { 'do' : 'delete_cell' });
-        let data = JSON.parse(response);
-        if (data['err_code'] == 1) {
-            alert("Delete error: Unknow cell type!");
-            return;
-        } else {
-            let cell = document.getElementById(data['cell_id']);
-            cell.remove();
-        }
-
-        alert("Delete cell successfully!");
-    }   
-}
-
-async function uploadCallBack(cell_id) {
-    let form = document.getElementById(`homework-input-form-${cell_id}`);
-    console.log(form);
+async function uploadCallBack(form) {
     let file = form.querySelector("[type=file]").files;
     if (file.length == 0) {
         alert("No file to upload");
         return;
     }
 
-    let response = await sendRequestForm(form, {'do' : 'upload_homework'});
+    let response = await sendRequestForm(form, { 'do' : 'upload_file' });
     let data = JSON.stringify(response);
     if (data != null) {
         alert("Upload file successfully!");
     } else {      
         alert("Error when trying to upload file!");
         return;
-    }
+    }   
     
     //Clear input file
     form.querySelector("[type=file]").value = null;
+
+    //Update file display
+    await updateFileDisplay(form);
 }
 
-async function cancelUploadCallBack(cell_id) {
-    let form = document.getElementById(`homework-output-form-${cell_id}`);
-    let confirm = window.confirm("Do you want to cancel the upload?");
+async function updateFileDisplay(form) {
+    let input_form, output_form;
+    if (form.id.includes("input")) {
+        let output_form_id = form.id.replace("input", "output");
+        input_form = form;
+        output_form = document.getElementById(output_form_id);
+    } else if (form.id.includes("output")) {
+        let input_form_id = form.id.replace("output", "input");
+        output_form = form;
+        input_form = document.getElementById(input_form_id);        
+    } 
 
-    if (confirm == true) {
-        let response = await sendRequestForm(form, {'do' : 'cancel_homework'});
-        let data = JSON.parse(response);
-
-        if (data['error_code'] == 1) {
-            alert("Directory did not exist before deletion!");
-            return;
-        } else {
-            alert("File removed successfully");
-            
-            let cell_id = form.querySelector("[name=cell-id]").value;
-            await updateFileDisplay(cell_id);
-        }        
-    }
-
-}
-
-async function updateFileDisplay(cell_id) {   
-    let input_form = document.getElementById(`homework-input-form-${cell_id}`);
-    let output_form = document.getElementById(`homework-output-form-${cell_id}`);
-
-    let response = await sendRequestForm(input_form, {'do' : 'get_homework'});
+    let response = await sendRequestForm(input_form, { 'do' : 'get_file' });
     let data = JSON.parse(response);
 
     if (data == null) {      
@@ -206,3 +181,38 @@ function changeDisplayHelper(input_form, output_form, is_display_input) {
     }
 }
 
+async function cancelUploadCallBack(form) {
+    let confirm = window.confirm("Do you want to cancel the upload?");
+
+    if (confirm == true) {
+        let response = await sendRequestForm(form, {'do' : 'cancel_upload_file'});
+        
+        let data = JSON.parse(response);
+
+        if (data['error_code'] == 1) {
+            alert("Directory did not exist before deletion!");
+            return;
+        } else {
+            alert("File removed successfully");
+            await updateFileDisplay(form);
+        }        
+    }
+
+}
+
+async function deleteCell(form) {
+    let confirm = window.confirm("Are you sure you want to delete this cell?");
+    if (confirm) {
+        let response = await sendRequestForm(form, { 'do' : 'delete_cell' });
+        let data = JSON.parse(response);
+        if (data['err_code'] == 1) {
+            alert("Delete error: Unknow cell type!");
+            return;
+        } else {
+            let cell = document.getElementById(data['cell_id']);
+            cell.remove();
+        }
+
+        alert("Delete cell successfully!");
+    }   
+}

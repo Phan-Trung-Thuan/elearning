@@ -57,8 +57,8 @@
 
             if ($data['do'] === 'join_class') {
                 $class_id = $data['class-id'];
-                $student_id = $_COOKIE['username'];                
-                joinClass($student_id, $class_id);
+                $username = $_COOKIE['username'];                
+                joinClass($username, $class_id);
                 echo "SUCCESS";
                 return;
             }
@@ -80,9 +80,10 @@
                 return;
             }
 
-            if ($data['do'] === 'upload_homework') {
-                $student_id = $_COOKIE["username"];
-                $err_file_list = uploadHomeworkFile($student_id);
+            if ($data['do'] === 'upload_file') {
+                $username = $_COOKIE["username"];
+                $type = $data['type'];
+                $err_file_list = uploadFile($username, $type);
                 if (count( $err_file_list ) > 0) {
                     echo json_encode($err_file_list);
                 } else {
@@ -92,8 +93,8 @@
             }
             
             if ($data['do'] === 'get_enroll_class') {
-                $student_id = $_COOKIE['username'];                
-                $data = getEnrollClass($student_id);
+                $username = $_COOKIE['username'];                
+                $data = getEnrollClass($username);
                 echo json_encode($data);
                 return;
             }
@@ -105,19 +106,21 @@
                 return;
             }
 
-            if ($data['do'] === 'get_homework') {
-                $student_id = $_COOKIE['username'];
+            if ($data['do'] === 'get_file') {
+                $username = $_COOKIE['username'];
                 // $cell_id = $_REQUEST['cell-id'];
                 $cell_id = $data["cell-id"];
-                $data = getHomework($student_id, $cell_id);
+                $type = $data["type"];
+                $data = getFile($username, $cell_id, $type);
                 echo json_encode($data);               
                 return;
             }
 
-            if ($data['do'] === 'cancel_homework') {
-                $student_id = $_COOKIE['username'];
+            if ($data['do'] === 'cancel_upload_file') {
+                $username = $_COOKIE['username'];
                 $cell_id = $data['cell-id'];
-                $data = cancelHomework($student_id, $cell_id);
+                $type = $data["type"];
+                $data = cancelUploadFile($username, $cell_id, $type);
                 echo json_encode($data);
                 return;
             }
@@ -159,9 +162,9 @@
             }
 
             if ($data['do'] === 'leave_class') {
-                $student_id = $_COOKIE['username'];
+                $username = $_COOKIE['username'];
                 $class_id = $data['class-id'];
-                $data = leaveClass($student_id, $class_id);
+                $data = leaveClass($username, $class_id);
                 echo json_encode($data);
                 return;
             }
@@ -305,8 +308,8 @@
         return array('cell_id' => $new_id);
     }
 
-    function cancelHomework($student_id, $cell_id) {
-        $dir_path = __DIR__ . "/../files/homework/" . $cell_id . "/" . $student_id . "/";
+    function cancelUploadFile($username, $cell_id, $type) {
+        $dir_path = __DIR__ . "/../files/" . $type . "/" . $cell_id . "/" . $username . "/";
         
         $data = array();
         //If directory does not exist
@@ -319,8 +322,8 @@
         return $data;
     }
 
-    function getHomework($student_id, $cell_id) {
-        $dir_path = __DIR__ . "/../files/homework/" . $cell_id . "/" . $student_id . "/";
+    function getFile($username, $cell_id, $type) {
+        $dir_path = __DIR__ . "/../files/". $type . "/" . $cell_id . "/" . $username . "/";        
         
         //If directory does not exist or is empty
         if (!is_dir($dir_path) or !(new FilesystemIterator($dir_path))->valid()) {
@@ -328,7 +331,7 @@
         } else {
             $data = array();
 
-            $data["dir"] = "/elearning/files/homework/". $cell_id . "/" . $student_id . "/";
+            $data["dir"] = "/elearning/files/homework/". $cell_id . "/" . $username . "/";
             $data["length"] = 0;
 
             $files = scandir($dir_path);    
@@ -568,8 +571,8 @@
         return array("paging" => $paging, "raw_data" => $class_list);
     }
 
-    function uploadHomeworkFile($student_id) {
-        $save_dir = __DIR__ . "/../files/homework/" . $_REQUEST["cell-id"] . "/" . $student_id . "/";
+    function uploadFile($username, $type) {
+        $save_dir = __DIR__ . "/../files/". $type . "/" . $_REQUEST["cell-id"] . "/" . $username . "/";
 
         if (!is_dir($save_dir)) {
             mkdir($save_dir, 0777, true);
