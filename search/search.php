@@ -13,6 +13,12 @@
 
 <body>
     <?php
+        include __DIR__ ."/../utils/functions.php";
+
+        if (isset($_COOKIE["username"]) && isset($_COOKIE["password"])) {
+            login($_COOKIE["username"], $_COOKIE["password"]);
+        }
+        
         # Check login cookie
         if (!isset($_COOKIE["type"])) {
             header("Location: /elearning/login/index.php");
