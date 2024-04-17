@@ -166,9 +166,12 @@ async function cancelUploadCallBack(cell_id) {
 
 }
 
-async function updateFileDisplay(cell_id) {   
-    let input_form = document.getElementById(`homework-input-form-${cell_id}`);
-    let output_form = document.getElementById(`homework-output-form-${cell_id}`);
+async function updateFileDisplay(cell_id, file_type) {   
+    if (file_type === 'homework') {
+        
+        let input_form = document.getElementById(`homework-input-form-${cell_id}`);
+        let output_form = document.getElementById(`homework-output-form-${cell_id}`);
+    }
 
     let response = await sendRequestForm(input_form, {'do' : 'get_homework'});
     let data = JSON.parse(response);

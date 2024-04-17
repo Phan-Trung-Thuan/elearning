@@ -44,6 +44,20 @@
 
                     <div class="notification-cell-desc desc">${cell_description}</div>
 
+                    <form class="document-input-form" id="document-input-form-${cell_id}" method="POST" enctype="multipart/form-data" action="/elearning/utils/functions.php">
+                        <div>This is a place to upload document</div>
+                        <input type="hidden" name="cell-id" value="${cell_id}">
+                        <input type="file" name="file[]" class="document-file-upload" multiple>                   
+                        <button class="upload-button">Upload</button>
+                    </form>
+
+                    <form class="document-output-form" id="document-output-form-${cell_id}" method="POST" action="/elearning/utils/functions.php">
+                        <div>This is a place to display document</div>
+                        <input type="hidden" name="cell-id" value="${cell_id}">
+                        <ul class="document-list" id="document-list-${cell_id}"></ul>
+                        <button class="cancel-button">Cancel</button>
+                    </form>
+
                     <div class="notification-cell-note note">${notification_note}</div>
                     
                     <form class="delete-form" id="delete-form-${cell_id}" method="POST" action="/elearning/utils/functions.php">
