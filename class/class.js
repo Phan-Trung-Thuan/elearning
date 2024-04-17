@@ -79,7 +79,8 @@ export function addCellEvent(cell_id) {
     let cell = document.getElementById(cell_id);
     
     let form = null;
-    form = cell.querySelector("[class=homework-input-form]");
+    form = cell.querySelector(".homework-input-form");
+    console.log(form);
     if (form != null) {
         form.addEventListener("submit", async (e) => { 
             e.preventDefault();             
@@ -88,7 +89,7 @@ export function addCellEvent(cell_id) {
         });
     }
     
-    form = cell.querySelector("[class=homework-output-form]");
+    form = cell.querySelector(".homework-output-form");
     if (form != null) {
         form.addEventListener("submit", async(e) => {
             e.preventDefault();
@@ -96,7 +97,7 @@ export function addCellEvent(cell_id) {
         });
     }
 
-    form = cell.querySelector("[class=delete-form]");
+    form = cell.querySelector(".delete-form");
     if (form != null) {
         form.addEventListener("submit", async (e) => {
             e.preventDefault();
@@ -166,12 +167,9 @@ async function cancelUploadCallBack(cell_id) {
 
 }
 
-async function updateFileDisplay(cell_id, file_type) {   
-    if (file_type === 'homework') {
-        
-        let input_form = document.getElementById(`homework-input-form-${cell_id}`);
-        let output_form = document.getElementById(`homework-output-form-${cell_id}`);
-    }
+async function updateFileDisplay(cell_id) {   
+    let input_form = document.getElementById(`homework-input-form-${cell_id}`);
+    let output_form = document.getElementById(`homework-output-form-${cell_id}`);
 
     let response = await sendRequestForm(input_form, {'do' : 'get_homework'});
     let data = JSON.parse(response);
