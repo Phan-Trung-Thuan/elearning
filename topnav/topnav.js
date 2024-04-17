@@ -16,7 +16,7 @@ async function getEnrollClasses() {
     for (let enroll_class of data) {
         let element = document.createElement("a");
         element.setAttribute("href", `/elearning/class/class.php?class_id=${enroll_class["class_id"]}`);
-        element.innerHTML = '<strong>' + enroll_class["class_id"] + " - " + enroll_class["class_name"] + '</strong>';
+        element.innerHTML = '<strong>' + enroll_class["class_name"] + '</strong>';
         dropdown.append(element);
     }
 }
