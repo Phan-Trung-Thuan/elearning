@@ -18,7 +18,7 @@
     ?>
 
     <div id="homepage-container">
-        This is body
+        
     </div>
 
     <!-- <script src="/elearning/homepage/check_session.js"></script> -->

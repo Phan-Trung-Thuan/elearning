@@ -20,6 +20,7 @@
         
         include __DIR__ . '/../topnav/topnav.php';
         include __DIR__ . '/../utils/warning-box.html';
+
     ?>
 
     <div id="main-container">

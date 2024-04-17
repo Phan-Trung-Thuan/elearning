@@ -47,6 +47,7 @@
 
             if ($data['do'] === 'logout') {
                 setcookie('type', '', time() - 100, '/');
+                setcookie('username', '', time() - 100, '/');
             }
 
             if ($data['do'] === 'join_class') {
@@ -86,7 +87,7 @@
             }
             
             if ($data['do'] === 'get_enroll_class') {
-                $student_id = $_COOKIE['username'];
+                $student_id = $_COOKIE['username'];                
                 $data = getEnrollClass($student_id);
                 echo json_encode($data);
                 return;
@@ -368,33 +369,42 @@
         }
         
         # Check student login
-        $stmt = $conn->prepare("SELECT * FROM STUDENT WHERE STUDENT_ID = ? AND STUDENT_PASSWORD = ?");
-        $stmt->bind_param('ss', $login_username, $login_password);
-    
+        $stmt = $conn->prepare("SELECT student_password FROM student WHERE student_id = ?");
+        $stmt->bind_param('s', $login_username);
         $stmt->execute();
-        $result = $stmt->get_result();
-    
+
+        $result = $stmt->get_result();    
         if ($result->num_rows == 1) {
-            # STUDENT LOGIN SUCCESSFULLY
-            setcookie("username", $login_username, time() + 60 * 60 * 24 * 5, '/'); # 5 days
-            setcookie("password", $login_password, time() + 60 * 60 * 24 * 5, '/');
-            setcookie("type", "STUDENT LOGIN", time() + 60 * 60 * 24 * 5, '/');
-            echo "STUDENT LOGIN SUCCESSFULLY";
+            $row = $result->fetch_assoc();
+            $hash_password = $row['student_password'];
+            $verify = password_verify($login_password, $hash_password);
+            if ($verify) {
+                # STUDENT LOGIN SUCCESSFULLY
+                setcookie("username", $login_username, time() + 60 * 60 * 24 * 5, '/'); # 5 days
+                setcookie("password", $login_password, time() + 60 * 60 * 24 * 5, '/');
+                setcookie("type", "STUDENT LOGIN", time() + 60 * 60 * 24 * 5, '/');
+                echo "STUDENT LOGIN SUCCESSFULLY";
+            }            
         }
         else {
             # Check instructor login
-            $stmt = $conn->prepare("SELECT * FROM INSTRUCTOR WHERE INSTRUCTOR_ID = ? AND INSTRUCTOR_PASSWORD = ?");
-            $stmt->bind_param('ss', $login_username, $login_password);
+            $stmt = $conn->prepare("SELECT instructor_password FROM instructor WHERE instructor_id = ?");
+            $stmt->bind_param('s', $login_username);
     
             $stmt->execute();
-            $result = $stmt->get_result();
-    
+
+            $result = $stmt->get_result();    
             if ($result->num_rows == 1) {
-                # INSTRUCTOR LOGIN SUCCESSFULLY
-                setcookie("username", $login_username, time() + 60 * 60 * 24 * 5, '/'); # 5 days
-                setcookie("password", $login_password, time() + 60 * 60 * 24 * 5, '/');
-                setcookie("type", "INSTRUCTOR LOGIN", time() + 60 * 60 * 24 * 5, '/');
-                echo "INSTRUCTOR LOGIN SUCCESSFULLY";
+                $row = $result->fetch_assoc();
+                $hash_password = $row['instructor_password'];
+                $verify = password_verify($login_password, $hash_password);
+                if ($verify) {
+                    # INSTRUCTOR LOGIN SUCCESSFULLY
+                    setcookie("username", $login_username, time() + 60 * 60 * 24 * 5, '/'); # 5 days
+                    setcookie("password", $login_password, time() + 60 * 60 * 24 * 5, '/');
+                    setcookie("type", "INSTRUCTOR LOGIN", time() + 60 * 60 * 24 * 5, '/');
+                    echo "INSTRUCTOR LOGIN SUCCESSFULLY";
+                }                
             }
             else {
                 # LOGIN FAILED
