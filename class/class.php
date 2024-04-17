@@ -24,6 +24,9 @@
     ?>
 
     <div id="main-container">
+        <div id="container-header">
+            <button id="leave-button">Leave</button>
+        </div>      
         <div id="class-cell-container">
             <template id="notification-cell-template">
                 <div class="notification-cell cell" id="${cell_id}">

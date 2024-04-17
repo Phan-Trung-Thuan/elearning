@@ -145,9 +145,34 @@
                 return;
             }
 
+            if ($data['do'] === 'leave_class') {
+                $student_id = $_COOKIE['username'];
+                $class_id = $data['class-id'];
+                $data = leaveClass($student_id, $class_id);
+                echo json_encode($data);
+                return;
+            }
+
         } else {
             echo "ERROR: Can't identify which function to execute at /elearning/utils/functions.php";
         }    
+    }
+
+    function leaveClass($student_id, $class_id) {
+        include __DIR__ . "/../utils/config.php";
+
+        $conn = @new mysqli($servername, $username, $password, $database) or die 
+        ('connection failed: ' . $conn->connect_error);   
+        mysqli_set_charset($conn,"utf8mb4");
+
+        $stmt = $conn->prepare("DELETE FROM enrollment WHERE class_id = ? AND student_id = ?");
+        $stmt->bind_param("ss", $class_id, $student_id);
+        $stmt->execute();
+
+        $stmt->close();
+        $conn->close();
+
+        return array("err_code" => 0);
     }
 
     function deleteCell($cell_id) {
