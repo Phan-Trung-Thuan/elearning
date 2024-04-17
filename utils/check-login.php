@@ -9,36 +9,50 @@
         }
         
         # Check student login
-        $stmt = $conn->prepare("SELECT * FROM STUDENT WHERE STUDENT_ID = ? AND STUDENT_PASSWORD = ?");
-        $stmt->bind_param('ss', $login_username, $login_password);
-    
+        $stmt = $conn->prepare("SELECT student_password FROM student WHERE student_id = ?");
+        $stmt->bind_param('s', $login_username);
         $stmt->execute();
+
+        $data = array();
+
         $result = $stmt->get_result();
-    
-        $flag = false;
         if ($result->num_rows == 1) {
-            # STUDENT LOGIN SUCCESSFULLY
-            $flag = true;
+            $row = $result->fetch_assoc();
+            $hash_password = $row['student_password'];
+            $verify = password_verify($login_password, $hash_password);
+            if ($verify) {
+                # STUDENT LOGIN SUCCESSFULLY
+                $data['login_status'] = "SUCCESS";
+            } else {
+                $data['login_status'] = "FAIL";
+            }           
         }
         else {
             # Check instructor login
-            $stmt = $conn->prepare("SELECT * FROM INSTRUCTOR WHERE INSTRUCTOR_ID = ? AND INSTRUCTOR_PASSWORD = ?");
-            $stmt->bind_param('ss', $login_username, $login_password);
+            $stmt = $conn->prepare("SELECT instructor_password FROM instructor WHERE instructor_id = ?");
+            $stmt->bind_param('s', $login_username);
     
             $stmt->execute();
-            $result = $stmt->get_result();
-    
-            $conn->close();
+
+            $result = $stmt->get_result();    
             if ($result->num_rows == 1) {
-                # INSTRUCTOR LOGIN SUCCESSFULLY
-                $flag = true;
+                $row = $result->fetch_assoc();
+                $hash_password = $row['instructor_password'];
+                $verify = password_verify($login_password, $hash_password);
+                if ($verify) {
+                    # INSTRUCTOR LOGIN SUCCESSFULLY
+                    $data['login_status'] = "SUCCESS";
+                }
+                else {
+                    $data['login_status'] = "FAIL";
+                }                
             }
             else {
                 # LOGIN FAILED
-                $flag = false;
+                $data['login_status'] = "FAIL";
             }
         }
         $conn->close();
-        return $flag;
+        return $data['login_status'];
     }
 ?>

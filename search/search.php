@@ -19,7 +19,7 @@
             $response = check_login($_COOKIE["username"], $_COOKIE["password"]);
         }
 
-        if (!$response) {
+        if ($response == "FAIL") {
             header("Location: /elearning/login/index.php");
         }
         
