@@ -113,10 +113,8 @@
                             <button class="cancel-button">Cancel</button>
                         </form>
                     </div>
-                    <hr>
+                    <hr>                   
                     
-                    
-                
                     <div class="homework-cell-expiration-date">Expiration: ${homework_expirationdate}</div>
                     
                     <form class="delete-form" id="delete-form-${cell_id}" method="POST" action="/elearning/utils/functions.php">
