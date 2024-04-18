@@ -12,7 +12,7 @@
                 <button class="dropbtn"><i class="fa-solid fa-caret-down"></i></button>
                 <div class="dropdown-content" id="dropdown-content-account-option">
                     <a id="setting-btn" href="#"><strong>Setting</strong></a>
-                    <a id="logout-btn" href="#"><strong>Logout</strong></a>
+                    <a id="logout-btn" href="/elearning/login/index.php"><strong>Logout</strong></a>
                 </div>
             </div>
         </div>

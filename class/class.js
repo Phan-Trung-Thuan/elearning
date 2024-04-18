@@ -1,4 +1,4 @@
-import { sendRequest, sendRequestForm, getDOMFromTemplate } from '/elearning/utils/functions.js';
+import { sendRequest, sendRequestForm, getDOMFromTemplate, getCookie } from '/elearning/utils/functions.js';
 
 let class_id = document.getElementById('class-id').value;
 
@@ -25,7 +25,6 @@ async function leaveCallBack() {
         }
     }
 }
-
 
 getInitCell();
 
@@ -65,23 +64,20 @@ export async function addCell(cell_id) {
     }
     let node = getDOMFromTemplate(template_clone, data);
     container.appendChild(node);
-    
-    // if (data['homework_expirationdate'] != null ) {
-    //     await updateFileDisplay(data['cell_id']);
-    // }
-
+ 
     let inputs = node.querySelectorAll(".file-input-form");
     for (let input_form of inputs) {
         await updateFileDisplay(input_form);
     }
-    addCellEvent(cell_id);
+    await addCellEvent(cell_id);
 
     return true;
 }
 
-function addCellEvent(cell_id) {
+async function addCellEvent(cell_id) {
     console.log(cell_id);
     let cell = document.getElementById(cell_id);
+    let login_type = getCookie("type");
 
     let inputs = cell.querySelectorAll(".file-input-form");
     if (inputs != null) {
@@ -92,6 +88,7 @@ function addCellEvent(cell_id) {
             })
         );
     }
+
     let outputs = cell.querySelectorAll(".file-output-form");
     if (outputs != null) {
         outputs.forEach(
@@ -106,8 +103,37 @@ function addCellEvent(cell_id) {
     if (delete_form != null) {
         delete_form.addEventListener("submit", async (e) => {
             e.preventDefault();
-            await deleteCell(e.target);
+            await deleteCallBack(e.target);
         })
+    }
+
+    //Hide some display based on privileges
+    if (login_type === "STUDENT") {
+        let noti_cell_note = document.getElementById(`notification-cell-note-${cell_id}`);
+        if (noti_cell_note) { noti_cell_note.style.display = 'none'; }        
+
+        let doc_input_form = document.getElementById(`document-input-form-${cell_id}`);
+        if (doc_input_form) {
+            let response = await sendRequestForm(doc_input_form, { 'do' : 'get_file' });
+            let is_contained_file = (JSON.parse(response)) ? true : false;
+            if (!is_contained_file) {
+                let doc_file = document.getElementById(`document-file-${cell_id}`);
+                doc_file.style.display = 'none';
+            } else {
+                doc_input_form.style.display = 'none';
+            }
+        }  
+
+        let doc_output_form = document.getElementById(`document-output-form-${cell_id}`);
+        let cancel_btn = doc_output_form.querySelector("button");             
+        if (cancel_btn) { cancel_btn.style.display = 'none'; }
+
+        let delete_form = document.getElementById(`delete-form-${cell_id}`);
+        delete_form.style.display = 'none';
+
+    } else if (login_type === "INSTRUCTOR") {        
+        let hw_file = document.getElementById(`homework-file-${cell_id}`);
+        if (hw_file) { hw_file.style.display = 'none'; }
     }
 }
 
@@ -200,7 +226,7 @@ async function cancelUploadCallBack(form) {
 
 }
 
-async function deleteCell(form) {
+async function deleteCallBack(form) {
     let confirm = window.confirm("Are you sure you want to delete this cell?");
     if (confirm) {
         let response = await sendRequestForm(form, { 'do' : 'delete_cell' });

@@ -11,11 +11,12 @@
     <?php
         include __DIR__ ."/../utils/check-login.php";
 
+        $response = null;
         if (isset($_COOKIE["username"]) && isset($_COOKIE["password"]) && isset($_COOKIE["type"])) {
             $response = check_login($_COOKIE["username"], $_COOKIE["password"]);
-        }
+        } 
 
-        if ($response == "FAIL") {
+        if (!isset($response) || $response == "FAIL") {
             header("Location: /elearning/login/index.php");
         }
 
@@ -49,26 +50,28 @@
 
                     <div class="notification-cell-desc desc">${cell_description}</div>
 
+                    
+                    <div class="document-file" id="document-file-${cell_id}">
                     <hr>
-                    <div class="document-file">
                         <div>DOCUMENT</div>
                         <form class="document-input-form file-input-form" id="document-input-form-${cell_id}" method="POST" enctype="multipart/form-data" action="/elearning/utils/functions.php">
                             <input type="hidden" name="cell-id" value="${cell_id}">
-                            <input type="hidden" name="type" value="document">
+                            <input type="hidden" name="cell-type" value="document">
                             <input type="file" name="file[]" class="document-file-upload" multiple>                   
                             <button class="upload-button">Upload</button>
                         </form>
 
                         <form class="document-output-form file-output-form" id="document-output-form-${cell_id}" method="POST" action="/elearning/utils/functions.php">
                             <input type="hidden" name="cell-id" value="${cell_id}">
-                            <input type="hidden" name="type" value="document">
+                            <input type="hidden" name="cell-type" value="document">
                             <ul class="homework-list" id="homework-list-${cell_id}"></ul>
                             <button class="cancel-button">Cancel</button>
                         </form>
-                    </div>
                     <hr>
+                    </div>
+                    
 
-                    <div class="notification-cell-note note">${notification_note}</div>
+                    <div class="notification-cell-note note" id="notification-cell-note-${cell_id}">${notification_note}</div>
                     
                     <form class="delete-form" id="delete-form-${cell_id}" method="POST" action="/elearning/utils/functions.php">
                         <input type="hidden" name="cell-id" value="${cell_id}">
@@ -82,43 +85,47 @@
                     <div class="homework-cell-title title">${cell_title}</div>
                     <div class="homework-cell-desc desc">${cell_description}</div>
                     
+                    
+                    <div class="document-file" id="document-file-${cell_id}">
                     <hr>
-                    <div class="document-file">
                         <div>DOCUMENT</div>
                         <form class="document-input-form file-input-form" id="document-input-form-${cell_id}" method="POST" enctype="multipart/form-data" action="/elearning/utils/functions.php">
                             <input type="hidden" name="cell-id" value="${cell_id}">
-                            <input type="hidden" name="type" value="document">
+                            <input type="hidden" name="cell-type" value="document">
                             <input type="file" name="file[]" class="document-file-upload" multiple>                   
                             <button class="upload-button">Upload</button>
                         </form>
 
                         <form class="document-output-form file-output-form" id="document-output-form-${cell_id}" method="POST" action="/elearning/utils/functions.php">
                             <input type="hidden" name="cell-id" value="${cell_id}">
-                            <input type="hidden" name="type" value="document">
+                            <input type="hidden" name="cell-type" value="document">
                             <ul class="homework-list" id="homework-list-${cell_id}"></ul>
                             <button class="cancel-button">Cancel</button>
                         </form>
+                    <hr>
                     </div>
-                    <hr>
+                    
 
+                    
+                    <div class="homework-file" id="homework-file-${cell_id}">
                     <hr>
-                    <div class="homework-file">
                         <div>HOMEWORK</div>
                         <form class="homework-input-form file-input-form" id="homework-input-form-${cell_id}" method="POST" enctype="multipart/form-data" action="/elearning/utils/functions.php">
                             <input type="hidden" name="cell-id" value="${cell_id}">
-                            <input type="hidden" name="type" value="homework">
+                            <input type="hidden" name="cell-type" value="homework">
                             <input type="file" name="file[]" class="homework-file-upload" multiple>                   
                             <button class="upload-button">Upload</button>
                         </form>
 
                         <form class="homework-output-form file-output-form" id="homework-output-form-${cell_id}" method="POST" action="/elearning/utils/functions.php">
                             <input type="hidden" name="cell-id" value="${cell_id}">
-                            <input type="hidden" name="type" value="homework">
+                            <input type="hidden" name="cell-type" value="homework">
                             <ul class="homework-list" id="homework-list-${cell_id}"></ul>
                             <button class="cancel-button">Cancel</button>
                         </form>
+                    <hr>
                     </div>
-                    <hr>                   
+                                       
                     
                     <div class="homework-cell-expiration-date">Expiration: ${homework_expirationdate}</div>
                     

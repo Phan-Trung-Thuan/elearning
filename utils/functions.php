@@ -81,9 +81,11 @@
             }
 
             if ($data['do'] === 'upload_file') {
-                $username = $_COOKIE["username"];
-                $type = $data['type'];
-                $err_file_list = uploadFile($username, $type);
+                $username = $_COOKIE['username'];
+                $login_type = $_COOKIE['type'];
+                $cell_type = $data['cell-type'];
+                $cell_id = $data['cell-id'];
+                $err_file_list = uploadFile($username, $login_type, $cell_id, $cell_type);
                 if (count( $err_file_list ) > 0) {
                     echo json_encode($err_file_list);
                 } else {
@@ -108,19 +110,20 @@
 
             if ($data['do'] === 'get_file') {
                 $username = $_COOKIE['username'];
-                // $cell_id = $_REQUEST['cell-id'];
-                $cell_id = $data["cell-id"];
-                $type = $data["type"];
-                $data = getFile($username, $cell_id, $type);
+                $login_type = $_COOKIE['type'];
+                $cell_id = $data['cell-id'];
+                $cell_type = $data['cell-type'];
+                $data = getFile($username, $login_type, $cell_id, $cell_type);
                 echo json_encode($data);               
                 return;
             }
 
             if ($data['do'] === 'cancel_upload_file') {
                 $username = $_COOKIE['username'];
+                $login_type = $_COOKIE['type'];
                 $cell_id = $data['cell-id'];
-                $type = $data["type"];
-                $data = cancelUploadFile($username, $cell_id, $type);
+                $cell_type = $data['cell-type'];
+                $data = cancelUploadFile($username, $login_type, $cell_id, $cell_type);
                 echo json_encode($data);
                 return;
             }
@@ -308,8 +311,13 @@
         return array('cell_id' => $new_id);
     }
 
-    function cancelUploadFile($username, $cell_id, $type) {
-        $dir_path = __DIR__ . "/../files/" . $type . "/" . $cell_id . "/" . $username . "/";
+    function cancelUploadFile($username, $login_type, $cell_id, $cell_type) {
+        $dir_path = null;
+        if (strtoupper($cell_type) === "HOMEWORK") {
+            $dir_path = __DIR__ . "/../files/". $cell_type . "/" . $cell_id . "/" . $username . "/";
+        } else if (strtoupper($cell_type) === "DOCUMENT") {
+            $dir_path = __DIR__ . "/../files/". $cell_type . "/" . $cell_id . "/";
+        }
         
         $data = array();
         //If directory does not exist
@@ -322,8 +330,13 @@
         return $data;
     }
 
-    function getFile($username, $cell_id, $type) {
-        $dir_path = __DIR__ . "/../files/". $type . "/" . $cell_id . "/" . $username . "/";        
+    function getFile($username, $login_type, $cell_id, $cell_type) {
+        $dir_path = null;
+        if (strtoupper($cell_type) === "HOMEWORK") {
+            $dir_path = __DIR__ . "/../files/". $cell_type . "/" . $cell_id . "/" . $username . "/";
+        } else if (strtoupper($cell_type) === "DOCUMENT") {
+            $dir_path = __DIR__ . "/../files/". $cell_type . "/" . $cell_id . "/";
+        }      
         
         //If directory does not exist or is empty
         if (!is_dir($dir_path) or !(new FilesystemIterator($dir_path))->valid()) {
@@ -571,18 +584,23 @@
         return array("paging" => $paging, "raw_data" => $class_list);
     }
 
-    function uploadFile($username, $type) {
-        $save_dir = __DIR__ . "/../files/". $type . "/" . $_REQUEST["cell-id"] . "/" . $username . "/";
+    function uploadFile($username, $login_type, $cell_id, $cell_type) {        
+        $dir_path = null;
+        if (strtoupper($cell_type) === "HOMEWORK") {
+            $dir_path = __DIR__ . "/../files/". $cell_type . "/" . $cell_id . "/" . $username . "/";
+        } else if (strtoupper($cell_type) === "DOCUMENT") {
+            $dir_path = __DIR__ . "/../files/". $cell_type . "/" . $cell_id . "/";
+        }
 
-        if (!is_dir($save_dir)) {
-            mkdir($save_dir, 0777, true);
+        if (!is_dir($dir_path)) {
+            mkdir($dir_path, 0777, true);
         }        
 
         $num_files = count($_FILES["file"]["name"]);
 
         $err_list = array();
         for ($i = 0; $i < $num_files; $i++) {
-            $file_path = $save_dir . $_FILES["file"]["name"][$i];
+            $file_path = $dir_path . $_FILES["file"]["name"][$i];
             if ($_FILES["file"]["error"][$i] == UPLOAD_ERR_OK) {
 
                 if (file_exists($file_path)) {
