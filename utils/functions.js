@@ -57,7 +57,7 @@ export const sendRequestForm = async function (form, params=null) {
 
     let fetch_options = {
         method : form.method
-    };     
+    };
 
     if (form.method.toUpperCase() === 'POST') {
         if (form.enctype === 'multipart/form-data') {

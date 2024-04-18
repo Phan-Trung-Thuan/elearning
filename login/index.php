@@ -26,10 +26,6 @@
             <div class="login-btn">
                 <input type="submit" class="btn" name="submit" value="Login">
             </div>
-
-            <!-- <div class="links">
-                Don't have account? <a href="register.php">Sign Up Now</a>
-            </div> -->
         </form>
     </div>
     <script src="/elearning/login/login.js" type="module"></script>
