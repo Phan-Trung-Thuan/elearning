@@ -9,8 +9,13 @@
 </head>
 <body>
     <?php
-        # Check login cookie
-        if (!isset($_COOKIE["type"])) {
+        include __DIR__ ."/../utils/check-login.php";
+
+        if (isset($_COOKIE["username"]) && isset($_COOKIE["password"]) && isset($_COOKIE["type"])) {
+            $response = check_login($_COOKIE["username"], $_COOKIE["password"]);
+        }
+
+        if ($response == "FAIL") {
             header("Location: /elearning/login/index.php");
         }
         
