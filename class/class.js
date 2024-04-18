@@ -122,11 +122,14 @@ async function addCellEvent(cell_id) {
             } else {
                 doc_input_form.style.display = 'none';
             }
-        }  
+        }
 
         let doc_output_form = document.getElementById(`document-output-form-${cell_id}`);
         let cancel_btn = doc_output_form.querySelector("button");             
         if (cancel_btn) { cancel_btn.style.display = 'none'; }
+
+        let hw_progress = document.getElementById(`homework-progress-${cell_id}`);
+        if (hw_progress) { hw_progress.style.display = 'none'; }
 
         let delete_form = document.getElementById(`delete-form-${cell_id}`);
         delete_form.style.display = 'none';

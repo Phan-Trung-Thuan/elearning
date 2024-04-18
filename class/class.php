@@ -123,11 +123,20 @@
                             <ul class="homework-list" id="homework-list-${cell_id}"></ul>
                             <button class="cancel-button">Cancel</button>
                         </form>
-                    <hr>
+                        <div class="homework-cell-expiration-date">Expiration: ${homework_expirationdate}</div>
+                    <hr>                        
                     </div>
                                        
+                    <div class="homework-progress" id="homework-progress-${cell_id}">
+                    <hr>
+                        <div>HOMEWORK PROGRESS <i>instructor only</i></div>
+                        <form class="homework-progress-form" id="homwork-progress-form-${cell_id}" method="POST" action="">
+                            <input type="hidden" name="cell-id" value="${cell_id}">
+                            <button>Check Homework</button>
+                        </form>
+                    <hr>
+                    </div>
                     
-                    <div class="homework-cell-expiration-date">Expiration: ${homework_expirationdate}</div>
                     
                     <form class="delete-form" id="delete-form-${cell_id}" method="POST" action="/elearning/utils/functions.php">
                         <input type="hidden" name="cell-id" value="${cell_id}">
