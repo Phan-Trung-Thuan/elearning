@@ -1,4 +1,4 @@
-import { sendRequestForm } from '/elearning/utils/functions.js';
+import { sendRequestForm, getCookie } from '/elearning/utils/functions.js';
 import { addCell } from '/elearning/class/class.js';
 
 let class_id = document.getElementById('class-id').value;
@@ -6,6 +6,13 @@ let class_id = document.getElementById('class-id').value;
 let form = document.getElementById("create-cell-form-container");
 //Open button
 let open_form_btn = document.getElementById("open-form-button");
+
+//Hide open_form_btn from STUDENT
+let login_type = getCookie("type");
+if (login_type === "STUDENT") {
+    open_form_btn.style.display = 'none';
+}
+
 open_form_btn.addEventListener("click", () => {
     form.style.display = 'block';
 });
@@ -59,6 +66,7 @@ create_form.addEventListener("submit", async (e) => {
 });
 
 async function createCellCallBack(form) {
+    console.log(form.getElementsByTagName("textarea")[0].value);
     let response = await sendRequestForm(form, { 'do': 'create_cell', 'class-id': class_id });
     let data = JSON.parse(response);
     let result = await addCell(data['cell_id']);

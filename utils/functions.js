@@ -94,12 +94,27 @@ export const sendRequestForm = async function (form, params=null) {
     return response.text();
 }
 
+/**
+ * Get the value of a cookie given the key
+ * @param {string}              key         Key to search for value in cookie
+ * 
+ * @return {string | null}                  Return the value, otherwise null if not found
+ */
 
+export const getCookie = function (key) {
+    let name = key + "=";
+    let decode = decodeURIComponent(document.cookie);
+    let arr = decode.split(';');
+    for (let i = 0; i < arr.length; i++) {
+        let str = arr[i];
+        while (str.charAt(0) == ' ') {
+            str = str.substring(1);
+        }
 
-// function resolveAfter2Seconds() {
-//     return new Promise((resolve) => {
-//       setTimeout(() => {
-//         resolve('resolved');
-//       }, 2000);
-//     });
-// }
+        if (str.indexOf(name) == 0) {
+            return str.substring(name.length, str.length);
+        }
+    }
+
+    return null;
+}

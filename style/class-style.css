@@ -88,6 +88,10 @@ body {
     background-color: white;
 }
 
+textarea {
+    resize: none;
+}
+
 #create-cell-form input, #create-cell-form select {
     width: 100%;
     margin: 5px 0px 15px 0px;

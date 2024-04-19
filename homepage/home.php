@@ -9,13 +9,14 @@
 </head>
 <body>
     <?php
-        include __DIR__ ."/../utils/check-login.php";
+        include __DIR__ . "/../utils/check-login.php";
 
+        $response = null;
         if (isset($_COOKIE["username"]) && isset($_COOKIE["password"]) && isset($_COOKIE["type"])) {
             $response = check_login($_COOKIE["username"], $_COOKIE["password"]);
-        }
+        } 
 
-        if ($response == "FAIL") {
+        if (!isset($response) || $response == "FAIL") {
             header("Location: /elearning/login/index.php");
         }
         
