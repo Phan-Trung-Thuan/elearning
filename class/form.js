@@ -66,6 +66,7 @@ create_form.addEventListener("submit", async (e) => {
 });
 
 async function createCellCallBack(form) {
+    console.log(form.getElementsByTagName("textarea")[0].value);
     let response = await sendRequestForm(form, { 'do': 'create_cell', 'class-id': class_id });
     let data = JSON.parse(response);
     let result = await addCell(data['cell_id']);

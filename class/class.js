@@ -52,7 +52,7 @@ export async function addCell(cell_id) {
         { 'do' : 'get_cell_data', 'cell-id' : cell_id }
     );
     let data = JSON.parse(response);
-
+    
     let template_clone = null;  
     if (data['notification_note'] != null) {
         template_clone = notification_template.cloneNode(true);

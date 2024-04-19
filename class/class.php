@@ -123,7 +123,7 @@
                             <ul class="homework-list" id="homework-list-${cell_id}"></ul>
                             <button class="cancel-button">Cancel</button>
                         </form>
-                        <div class="homework-cell-expiration-date">Expiration: ${homework_expirationdate}</div>
+                        <div class="homework-cell-expiration-date">Expiration date: ${homework_expirationdate}</div>
                     <hr>                        
                     </div>
                                        
@@ -155,7 +155,8 @@
                 <input type="text" name="cell-title" id="cell-title" placeholder="Enter Title" required>
 
                 <label for="cell-description">Description(*)</label>
-                <input type="text" name="cell-description" id="cell-description" placeholder="Enter description" required>
+                <textarea type="text" name="cell-description" id="cell-description" placeholder="Enter description" rows="10" cols="35" required>
+                </textarea>
 
                 <label for="cell-type">Choose Type(*)</label>
                 <select name="cell-type" id="cell-type" required>
@@ -168,7 +169,8 @@
                 <div id="option-container">
                     <div class="cell-type-option" id="cell-type-option-0">
                         <label for="notification-note">Note</label>
-                        <input type="text" name="notification-note" id="notification-note">
+                        <textarea type="text" name="notification-note" id="notification-note" row="3" cols="35">
+                        </textarea>
                     </div>
                     
                     <div class="cell-type-option" id="cell-type-option-1">

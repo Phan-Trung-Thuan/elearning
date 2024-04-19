@@ -497,7 +497,13 @@
             $row = $result->fetch_assoc();
             if ($row['homework_expirationdate'] != null) {
                 $row['homework_expirationdate'] = changeDateTimeFormat($row['homework_expirationdate'], "d-m-Y H:i:s");
-            } 
+            }
+            
+            foreach ($row as $key => $value) {
+                if ($value) {
+                    $row[$key] = nl2br($row[$key]);
+                }
+            }
             $data = $row;
         }
 
