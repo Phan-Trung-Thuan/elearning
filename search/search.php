@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search</title>
+    <link rel="stylesheet" href="/elearning/style/main-style.css">
     <link rel="stylesheet" href="/elearning/style/search-style.css">
     <link rel="stylesheet" href="/elearning/style/warning-box-style.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"

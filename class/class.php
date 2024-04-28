@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Class</title>
-
+    <link rel="stylesheet" href="/elearning/style/main-style.css">
     <link rel="stylesheet" href="/elearning/style/class-style.css">
 </head>
 <body>

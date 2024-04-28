@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HOMEPAGE</title>
-    <link rel="stylesheet" href="/elearning/style/home-style.css">
+    <link rel="stylesheet" href="/elearning/style/main-style.css">
     
 </head>
 <body>
@@ -20,7 +20,7 @@
         include __DIR__ . '/../topnav/topnav.php';
     ?>
 
-    <div id="homepage-container">
+    <div id="main-container">
         
     </div>
 
