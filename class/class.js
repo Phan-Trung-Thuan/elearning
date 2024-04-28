@@ -31,7 +31,7 @@ getInitCell();
 /** Class cell */
 async function getInitCell() {
     let response = await sendRequest(
-        '/elearning/utils/functions.php', 
+        '/elearning/utils/execute-request.php', 
         {'do' : 'get_init_cell', 'class-id' : class_id}
     );    
 
@@ -48,7 +48,7 @@ export async function addCell(cell_id) {
     let homework_template = document.getElementById("homework-cell-template");
 
     let response = await sendRequest(
-        '/elearning/utils/functions.php',
+        '/elearning/utils/execute-request.php',
         { 'do' : 'get_cell_data', 'cell-id' : cell_id }
     );
     let data = JSON.parse(response);
