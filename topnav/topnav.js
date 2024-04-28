@@ -9,7 +9,7 @@ if (login_type === "STUDENT") {
 
 async function getEnrollClasses() {
     let response = await sendRequest(
-        "http://localhost/elearning/utils/functions.php",
+        "http://localhost/elearning/utils/execute-request.php",
         { 'do' : 'get_enroll_class' }
     );
     
@@ -19,7 +19,7 @@ async function getEnrollClasses() {
 
 async function getInstructorClasses() {
     let response = await sendRequest(
-        'http://localhost/elearning/utils/functions.php',
+        'http://localhost/elearning/utils/execute-request.php',
         { 'do' : 'get_instructor_class' }
     );
     // console.log(response);
@@ -48,7 +48,7 @@ dropdown_content_class.style.left = (rect.left).toString() + 'px';
 document.getElementById("logout-btn").addEventListener("click", async function() {
     const confirm = window.confirm("Are you sure?");
     if (confirm) {
-        await sendRequest('http://localhost/elearning/utils/functions.php', {'do': 'logout'});
+        await sendRequest('http://localhost/elearning/utils/execute-request.php', {'do': 'logout'});
         location.reload()
     }
 });

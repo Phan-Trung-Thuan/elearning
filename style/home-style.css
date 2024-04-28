@@ -7,7 +7,8 @@ body {
     margin-left: auto;
     margin-right: auto;
     width: 95%;
-    height: 390px;
+    min-height: 390px;
+    height: auto;
     background: rgb(247, 242, 234);
     border-radius: 10px;
     padding: 10px;

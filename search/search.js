@@ -8,7 +8,7 @@ getSearchResult();
 
 async function getSearchResult() {
     let response = await sendRequest(
-        '/elearning/utils/functions.php',
+        '/elearning/utils/execute-request.php',
         { 'do' : 'search_class', 'search-kw' : search_kw, 'record-ppage': ppage, 'page' : page}
     );
     

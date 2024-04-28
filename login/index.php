@@ -12,7 +12,7 @@
     ?>
     <div class="login-box">
         <header>Login</header>
-        <form id="login-form" action="/elearning/utils/functions.php" method="POST">
+        <form id="login-form" action="/elearning/utils/execute-request.php" method="POST">
             <div class="input">
                 <label for="username">Username</label>
                 <input type="text" name="username" placeholder="username" required>

@@ -6,6 +6,7 @@ async function callBack() {
     let form = document.getElementById("login-form");
 
     let response = await sendRequestForm(form, {'do' : 'login'});
+    console.log(response);
     let data = JSON.parse(response);
     console.log(data);
     

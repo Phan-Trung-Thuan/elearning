@@ -9,14 +9,11 @@
 </head>
 <body>
     <?php
-        include __DIR__ ."/../utils/check-login.php";
+        include __DIR__ . '/../utils/functions.php';
 
-        $response = null;
-        if (isset($_COOKIE["username"]) && isset($_COOKIE["password"]) && isset($_COOKIE["type"])) {
-            $response = check_login($_COOKIE["username"], $_COOKIE["password"]);
-        } 
-
-        if (!isset($response) || $response == "FAIL") {
+        $result = null;
+        if (!(isset($_COOKIE["username"]) && isset($_COOKIE["password"]) && isset($_COOKIE["type"]) 
+                                        && checkLogin($_COOKIE["username"], $_COOKIE["password"]))) {
             header("Location: /elearning/login/index.php");
         }
 
@@ -32,8 +29,6 @@
                 header("Location: $redirect_url");
             }
         }
-
-        
         
         include __DIR__ . '/../topnav/topnav.php';
                         
@@ -54,14 +49,14 @@
                     <div class="document-file" id="document-file-${cell_id}">
                     <hr>
                         <div>DOCUMENT</div>
-                        <form class="document-input-form file-input-form" id="document-input-form-${cell_id}" method="POST" enctype="multipart/form-data" action="/elearning/utils/functions.php">
+                        <form class="document-input-form file-input-form" id="document-input-form-${cell_id}" method="POST" enctype="multipart/form-data" action="/elearning/utils/execute-request.php">
                             <input type="hidden" name="cell-id" value="${cell_id}">
                             <input type="hidden" name="cell-type" value="document">
                             <input type="file" name="file[]" class="document-file-upload" multiple>                   
                             <button class="upload-button">Upload</button>
                         </form>
 
-                        <form class="document-output-form file-output-form" id="document-output-form-${cell_id}" method="POST" action="/elearning/utils/functions.php">
+                        <form class="document-output-form file-output-form" id="document-output-form-${cell_id}" method="POST" action="/elearning/utils/execute-request.php">
                             <input type="hidden" name="cell-id" value="${cell_id}">
                             <input type="hidden" name="cell-type" value="document">
                             <ul class="homework-list" id="homework-list-${cell_id}"></ul>
@@ -73,7 +68,7 @@
 
                     <div class="notification-cell-note note" id="notification-cell-note-${cell_id}">${notification_note}</div>
                     
-                    <form class="delete-form" id="delete-form-${cell_id}" method="POST" action="/elearning/utils/functions.php">
+                    <form class="delete-form" id="delete-form-${cell_id}" method="POST" action="/elearning/utils/execute-request.php">
                         <input type="hidden" name="cell-id" value="${cell_id}">
                         <button class="delete-button">Delete</button>
                     </form>
@@ -89,14 +84,14 @@
                     <div class="document-file" id="document-file-${cell_id}">
                     <hr>
                         <div>DOCUMENT</div>
-                        <form class="document-input-form file-input-form" id="document-input-form-${cell_id}" method="POST" enctype="multipart/form-data" action="/elearning/utils/functions.php">
+                        <form class="document-input-form file-input-form" id="document-input-form-${cell_id}" method="POST" enctype="multipart/form-data" action="/elearning/utils/execute-request.php">
                             <input type="hidden" name="cell-id" value="${cell_id}">
                             <input type="hidden" name="cell-type" value="document">
                             <input type="file" name="file[]" class="document-file-upload" multiple>                   
                             <button class="upload-button">Upload</button>
                         </form>
 
-                        <form class="document-output-form file-output-form" id="document-output-form-${cell_id}" method="POST" action="/elearning/utils/functions.php">
+                        <form class="document-output-form file-output-form" id="document-output-form-${cell_id}" method="POST" action="/elearning/utils/execute-request.php">
                             <input type="hidden" name="cell-id" value="${cell_id}">
                             <input type="hidden" name="cell-type" value="document">
                             <ul class="homework-list" id="homework-list-${cell_id}"></ul>
@@ -110,14 +105,14 @@
                     <div class="homework-file" id="homework-file-${cell_id}">
                     <hr>
                         <div>HOMEWORK</div>
-                        <form class="homework-input-form file-input-form" id="homework-input-form-${cell_id}" method="POST" enctype="multipart/form-data" action="/elearning/utils/functions.php">
+                        <form class="homework-input-form file-input-form" id="homework-input-form-${cell_id}" method="POST" enctype="multipart/form-data" action="/elearning/utils/execute-request.php">
                             <input type="hidden" name="cell-id" value="${cell_id}">
                             <input type="hidden" name="cell-type" value="homework">
                             <input type="file" name="file[]" class="homework-file-upload" multiple>                   
                             <button class="upload-button">Upload</button>
                         </form>
 
-                        <form class="homework-output-form file-output-form" id="homework-output-form-${cell_id}" method="POST" action="/elearning/utils/functions.php">
+                        <form class="homework-output-form file-output-form" id="homework-output-form-${cell_id}" method="POST" action="/elearning/utils/execute-request.php">
                             <input type="hidden" name="cell-id" value="${cell_id}">
                             <input type="hidden" name="cell-type" value="homework">
                             <ul class="homework-list" id="homework-list-${cell_id}"></ul>
@@ -138,7 +133,7 @@
                     </div>
                     
                     
-                    <form class="delete-form" id="delete-form-${cell_id}" method="POST" action="/elearning/utils/functions.php">
+                    <form class="delete-form" id="delete-form-${cell_id}" method="POST" action="/elearning/utils/execute-request.php">
                         <input type="hidden" name="cell-id" value="${cell_id}">
                         <button class="delete-button">Delete</button>
                     </form>
@@ -148,7 +143,7 @@
 
         <button id="open-form-button">Create Cell</button>
         <div id="create-cell-form-container">
-            <form action="/elearning/utils/functions.php" method="POST" id="create-cell-form">
+            <form action="/elearning/utils/execute-request.php" method="POST" id="create-cell-form">
                 <h2>Create Cell</h2>
 
                 <label for="cell-title">Title(*)</label>

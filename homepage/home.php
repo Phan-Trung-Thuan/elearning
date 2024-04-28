@@ -9,16 +9,15 @@
 </head>
 <body>
     <?php
-        include __DIR__ . "/../utils/check-login.php";
+        include __DIR__ . '/../utils/functions.php';
 
-        $response = null;
-        if (isset($_COOKIE["username"]) && isset($_COOKIE["password"]) && isset($_COOKIE["type"])) {
-            $response = check_login($_COOKIE["username"], $_COOKIE["password"]);
-        } 
+        $test = testing();
 
-        if (!isset($response) || $response == "FAIL") {
-            header("Location: /elearning/login/index.php");
-        }
+        // $result = null;
+        // if (!(isset($_COOKIE["username"]) && isset($_COOKIE["password"]) && isset($_COOKIE["type"]) 
+        //                                 && checkLogin($_COOKIE["username"], $_COOKIE["password"]))) {
+        //     header("Location: /elearning/login/index.php");
+        // }
         
         include __DIR__ . '/../topnav/topnav.php';
     ?>

@@ -13,7 +13,7 @@ async function leaveCallBack() {
     let confirm = window.confirm("Do you want to leave this class?");
     if (confirm) {
         let response = await sendRequest(
-            '/elearning/utils/functions.php',
+            '/elearning/utils/execute-request.php',
             { 'do' : 'leave_class', 'class-id' : class_id }
         );
         let data = JSON.parse(response);
