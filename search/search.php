@@ -33,7 +33,7 @@
                     <span class="class-name">${class_name}</span>
                     <div class="instructor-name">Instructor: <i class="fa-solid fa-user-graduate"></i><a
                             href="">${instructor_name}</a></div>
-                    <form class="join-form" id="join-form-${class_id}" action="/elearning/utils/functions.php"
+                    <form class="join-form" id="join-form-${class_id}" action="/elearning/utils/execute-request.php"
                         method="POST">
                         <input type="hidden" name="class-id" value="${class_id}">
                         <button class="join-button" classId="${class_id}">Join Class</button>

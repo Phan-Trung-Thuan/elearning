@@ -250,10 +250,7 @@
             }                    
         }                
         $conn->close();
-
-        
     }
-
 
     function checkLogin($login_username, $login_password) {
         include __DIR__ . "/config.php";
@@ -303,10 +300,6 @@
         
         $conn->close();
         return 'FAIL';
-    }
-
-    function testing() {
-        return true;
     }
 
     function login($login_username, $login_password) {
