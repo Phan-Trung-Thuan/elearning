@@ -172,6 +172,14 @@
                 echo json_encode($data);
                 return;
             }
+
+            if ($data['do'] === 'update_class_name') {
+                $class_id = $data['class-id'];
+                $new_class_name = $data['new-class-name'];
+                $data = updateClassName($class_id, $new_class_name);
+                echo json_encode($data);
+                return;
+            }
         } else {
             echo "ERROR: Can't identify which function to execute at /elearning/utils/functions.php";
         }    

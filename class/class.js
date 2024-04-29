@@ -10,14 +10,48 @@ let class_name = await sendRequest(
 );
 document.getElementById('class-name').innerText = class_name;
 
+//Rename button
+let rename_btn = document.getElementById('rename-button');
+rename_btn.style.display = (login_type === "INSTRUCTOR") ? 'normal' : 'none';
+rename_btn.addEventListener("click", async (e) => {
+    let new_class_name = window.prompt("Please enter new class name!", class_name);
+    if (new_class_name != null && new_class_name.length > 0) {
+        if (new_class_name === class_name) {
+            alert("No changes are made!");
+            return;
+        }
+        let confirm = window.confirm(`Do you want to change class name to "${new_class_name}"`);
+        if (confirm) {
+            await renameClassCallBack(new_class_name);
+        }
+    } else {
+        alert("Class name can't be null or empty!");
+    }
+})  
+
+async function renameClassCallBack(new_class_name) {
+    let response = await sendRequest(
+        '/elearning/utils/execute-request.php',
+        { 'do' : 'update_class_name', 'class-id': class_id, 'new-class-name' : new_class_name }
+    );
+    console.log(response);
+    let data = JSON.parse(response);
+    if (data['err_code'] === 0) {
+        alert("Rename class successfully!");
+        window.location.reload();
+    } else {
+        alert("Fail to rename class!");
+    }
+}
+
 // Leave button
 let leave_btn = document.getElementById('leave-button');
 leave_btn.style.display = (login_type === "INSTRUCTOR") ? 'none' : 'normal';
 leave_btn.addEventListener("click", async (e) => {
     e.preventDefault();
-    await leaveCallBack();
+    await leaveClassCallBack();
 });
-async function leaveCallBack() {
+async function leaveClassCallBack() {
     let confirm = window.confirm("Do you want to leave this class?");
     if (confirm) {
         let response = await sendRequest(
