@@ -81,10 +81,6 @@ h2 {
     margin-block: 0px;
 }
 
-label {
-    color: #ff9e28;
-}
-
 .button {
     padding: 3px;
     font-size: 14px;
@@ -116,7 +112,36 @@ label {
 
 } */
 
-input {
+label {
+    color: #ff9e28;
+}
+
+#create-cell-form-container input, 
+#create-cell-form-container textarea, 
+#create-cell-form-container select {
+    border: 1px solid rgb(232, 151, 0);
+    border-radius: 3px;
+    color: orange;
+}
+
+option:hover {
+    background-color: orange;
+    color: white;
+}
+
+#create-cell-form-container input:hover, 
+#create-cell-form-container textarea:hover, 
+#create-cell-form-container select:hover {
+    border: 2px solid rgb(232, 151, 0);
+}
+
+#create-cell-form-container input::placeholder, 
+#create-cell-form-container textarea::placeholder {
+    font-size: 14px;
+    color: rgb(210, 137, 0);
+}
+
+input[type=file] {
     color: orange;
 }
 

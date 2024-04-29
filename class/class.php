@@ -37,8 +37,8 @@
 
     <div id="main-container">
         <div id="container-header">
-            <button id="leave-button" class="button">Leave</button>
-            <button id="open-form-button" class="button">Create Cell</button>
+            <button id="leave-button" class="button">Leave <i class="fa-solid fa-right-from-bracket"></i></button>
+            <button id="open-form-button" class="button">Create Cell <i class="fa-solid fa-circle-plus"></i></button>
         </div>      
         <div id="class-cell-container">
             <template id="notification-cell-template">
@@ -101,9 +101,7 @@
                         </form>
                     <hr>
                     </div>
-                    
 
-                    
                     <div class="homework-file" id="homework-file-${cell_id}">
                     <hr>
                         <div class="small-title">HOMEWORK</div>
@@ -151,8 +149,7 @@
                 <input type="text" name="cell-title" id="cell-title" placeholder="Enter Title" required>
 
                 <label for="cell-description">Description(*)</label>
-                <textarea type="text" name="cell-description" id="cell-description" placeholder="Enter description" rows="10" cols="35" required>
-                </textarea>
+                <textarea type="text" name="cell-description" id="cell-description" placeholder="Enter description" rows="10" cols="35" required></textarea>
 
                 <label for="cell-type">Choose Type(*)</label>
                 <select name="cell-type" id="cell-type" required>
