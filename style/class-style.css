@@ -96,21 +96,15 @@ h2 {
     border: 1px dashed orange;
 }
 
-/* .upload-button {
-
+.homework-list > li, .homework-list > li > a {
+    width: fit-content;
+    color: orange;
+    /* text-decoration: none; */
 }
 
-.cancel-button {
-
+.homework-list > li:hover {
+    font-weight: bold;
 }
-
-.delete-button {
-
-}
-
-.check-homework-button {
-
-} */
 
 label {
     color: #ff9e28;
