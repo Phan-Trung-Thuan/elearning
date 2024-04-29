@@ -21,6 +21,157 @@
         }
     }
 
+    function getHWProgress($cell_id) {
+        //Check cell type first
+        $cell_data = getCellData($cell_id);        
+        if ($cell_data['cell_type'] !== 'HOMEWORK') {
+            return "Invalid cell type when trying to get homework progress";
+        }
+
+        $class_id = $cell_data['class_id'];
+        $class_data = getClassData($class_id);
+        // foreach ($class_data['enrollment'] as $student) {
+            
+        // }
+    }
+
+    /**
+     * Get class info along with instructor info and students info
+     * JSON format
+     * {
+     *      class: class_info
+     *      enrollment: Array of students info
+     *      instructor: ins_info     
+     * }
+     */
+    function getClassData($class_id) {
+        include __DIR__ . "/../utils/config.php";
+
+        $conn = @new mysqli($servername, $username, $password, $database) or die 
+        ('connection failed: ' . $conn->connect_error);   
+        mysqli_set_charset($conn,"utf8mb4");
+
+        $stmt = $conn->prepare("SELECT instructor_id, class_name FROM class WHERE class_id = ?");
+        $stmt->bind_param("s", $class_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        $data = array();
+        $instructor_id = null;
+        while ($row = $result->fetch_assoc()) {
+            //Only get key and value specified in array_flip
+            $data['class'] = array_intersect_key(
+                $row,
+                array_flip(['class_name'])
+            );
+
+            $instructor_id = $row['instructor_id'];
+        }        
+        $stmt->close();
+
+        $stmt_2 = $conn->prepare("SELECT instructor_name, instructor_dateofbirth FROM instructor WHERE instructor_id = ?");
+        $stmt_2->bind_param("s", $instructor_id);
+        $stmt_2->execute();
+        $result_2 = $stmt_2->get_result();
+
+        while ($row = $result_2->fetch_assoc()) {
+            $data['instructor'] = $row;
+        }
+        $stmt_2->close();
+
+        $stmt_3 = $conn->prepare("SELECT S.student_id, student_name, student_dateofbirth FROM student S INNER JOIN enrollment E ON S.student_id = E.student_id WHERE class_id = ?");
+        $stmt_3->bind_param("s", $class_id);
+        $stmt_3->execute();
+        $result_3 = $stmt_3->get_result();
+
+        $data['enrollment'] = array();
+        while ($row = $result_3->fetch_assoc()) {
+            array_push($data['enrollment'], $row);
+        }
+        $stmt_3->close();
+
+        $conn->close();
+        return $data;
+    }
+
+    function deleteClass($class_id) {
+        //Clean up all files and cells
+        $cells = getClassCell($class_id);
+        $cell_ids = array_map( function($cell) { return $cell['cell_id']; }, $cells ); 
+        foreach ( $cell_ids as $cell_id ) {
+            cancelUploadFile($cell_id);
+            deleteCell($cell_id);
+        }
+
+        include __DIR__ . "/../utils/config.php";
+
+        $conn = @new mysqli($servername, $username, $password, $database) or die 
+        ('connection failed: ' . $conn->connect_error);   
+        mysqli_set_charset($conn,"utf8mb4");
+
+        //Remove all students' enrollment
+        $stmt_1 = $conn->prepare("DELETE FROM enrollment WHERE class_id = ?");
+        $stmt_1->bind_param("s", $class_id);
+        $stmt_1->execute();
+
+        //Remove class
+        $stmt_2 = $conn->prepare("DELETE FROM class WHERE class_id = ?");
+        $stmt_2->bind_param("s", $class_id);
+        $stmt_2->execute();
+
+        $stmt_2->close();
+        $conn->close();
+        
+        $data = array();
+        $data['err_code'] = 0;
+        return $data;
+    }
+
+    function updateClassName($class_id, $new_class_name) {
+        include __DIR__ . "/../utils/config.php";
+
+        $conn = @new mysqli($servername, $username, $password, $database) or die 
+        ('connection failed: ' . $conn->connect_error);   
+        mysqli_set_charset($conn,"utf8mb4");
+
+        $stmt = $conn->prepare("UPDATE class SET class_name = ? WHERE class_id = ?");
+        $stmt->bind_param("ss", $new_class_name, $class_id);
+        $stmt->execute();
+
+        $stmt->close();
+        $conn->close();
+
+        $data = array();
+        $data["err_code"] = 0;
+        return $data;
+    }
+
+    function createClass($class_name, $instructor_id) {
+        include __DIR__ . "/../utils/config.php";
+
+        $conn = @new mysqli($servername, $username, $password, $database) or die 
+        ('connection failed: ' . $conn->connect_error);   
+        mysqli_set_charset($conn,"utf8mb4");
+
+        $new_id = "";
+        $sql = "SELECT MAX(class_id) FROM class";
+        $result = $conn->query($sql);
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_row();
+            $curr_id = $row[0];
+            $new_id = ($curr_id != null) ? (string)((int)$row[0] + 1) : "10001";
+        }
+
+        $stmt = $conn->prepare("INSERT INTO class VALUES(?, ?, ?)");
+        $stmt->bind_param("sss", $new_id, $instructor_id, $class_name);
+        $stmt->execute();
+
+        $stmt->close();
+        $conn->close();
+
+        return array("class_id" => $new_id);
+    }
+
     function getInstructorClass($instructor_id) {
         include __DIR__ . "/../utils/config.php";
 
@@ -78,52 +229,47 @@
     }
 
     function deleteCell($cell_id) {
+        //Clean up file of that cell
+        cancelUploadFile($cell_id);
+        
         include __DIR__ . "/../utils/config.php";  
         
         $conn = @new mysqli($servername, $username, $password, $database) or die 
         ('connection failed: ' . $conn->connect_error);   
         mysqli_set_charset($conn,"utf8mb4");
 
-        $stmt = $conn->prepare("SELECT N.cell_id, H.cell_id FROM CELL C LEFT JOIN NOTIFICATION N on C.cell_id = N.cell_id LEFT JOIN HOMEWORK H on C.cell_id = H.cell_id WHERE C.cell_id = ?");
-        $stmt->bind_param("s", $cell_id);
-        $stmt->bind_result($is_notification, $is_homework);
-        $stmt->execute();
+        $cell_data = getCellData($cell_id);
+        $cell_type = $cell_data['cell_type'];
         
         $data = null;
-        if ($stmt->fetch()) {
-            $stmt->close();
-            if ($is_notification) {               
-                //Delete notification and its cell
-                $stmt_1 = $conn->prepare("DELETE FROM notification WHERE cell_id = ?");
-                $stmt_1->bind_param("s", $cell_id);
-                $stmt_1->execute();
-                $stmt_1->close(); 
-                
-                $stmt_2 = $conn->prepare("DELETE FROM cell WHERE cell_id = ?");
-                $stmt_2->bind_param("s", $cell_id);
-                $stmt_2->execute();
-                $stmt_2->close();
-
-                $data['cell_id'] = $cell_id;
-            } else if ($is_homework) {
-                $dir_path = __DIR__ . "/../files/homework/" . $cell_id . "/";
-                remove_dir($dir_path);
-
-                $stmt_1 = $conn->prepare("DELETE FROM homework WHERE cell_id = ?");
-                $stmt_1->bind_param("s", $cell_id);
-                $stmt_1->execute(); 
-                $stmt_1->close();
-
-                $stmt_2 = $conn->prepare("DELETE FROM cell WHERE cell_id = ?");
-                $stmt_2->bind_param("s", $cell_id);
-                $stmt_2->execute();
-                $stmt_2->close();
-
-                $data['cell_id'] = $cell_id;
-            } else {                
-                $data['err_code'] = 1;
-            }
-        }
+        
+        if ($cell_type === 'NOTIFICATION') {               
+            //Delete notification and its cell
+            $stmt_1 = $conn->prepare("DELETE FROM notification WHERE cell_id = ?");
+            $stmt_1->bind_param("s", $cell_id);
+            $stmt_1->execute();
+            $stmt_1->close(); 
+            
+            $stmt_2 = $conn->prepare("DELETE FROM cell WHERE cell_id = ?");
+            $stmt_2->bind_param("s", $cell_id);
+            $stmt_2->execute();
+            $stmt_2->close();
+            $data['cell_id'] = $cell_id;
+        } else if ($cell_type === 'HOMEWORK') {
+            $dir_path = __DIR__ . "/../files/homework/" . $cell_id . "/";
+            remove_dir($dir_path);
+            $stmt_1 = $conn->prepare("DELETE FROM homework WHERE cell_id = ?");
+            $stmt_1->bind_param("s", $cell_id);
+            $stmt_1->execute(); 
+            $stmt_1->close();
+            $stmt_2 = $conn->prepare("DELETE FROM cell WHERE cell_id = ?");
+            $stmt_2->bind_param("s", $cell_id);
+            $stmt_2->execute();
+            $stmt_2->close();
+            $data['cell_id'] = $cell_id;
+        } else {                
+            $data['err_code'] = 1;
+        }        
         
         $conn->close();
         return $data;
@@ -170,31 +316,45 @@
         return array('cell_id' => $new_id);
     }
 
-    function cancelUploadFile($username, $login_type, $cell_id, $cell_type) {
+    function cancelUploadFile($cell_id, $file_type = null, $username = null, $login_type = null) {
         $dir_path = null;
-        if (strtoupper($cell_type) === "HOMEWORK") {
-            $dir_path = __DIR__ . "/../files/". $cell_type . "/" . $cell_id . "/" . $username . "/";
-        } else if (strtoupper($cell_type) === "DOCUMENT") {
-            $dir_path = __DIR__ . "/../files/". $cell_type . "/" . $cell_id . "/";
-        }
-        
         $data = array();
-        //If directory does not exist
-        if (!is_dir($dir_path)) {
-            $data["error_code"] = 1;  //DIR DOES NOT EXIST
-        } else {
-            remove_dir($dir_path);
+
+        $hw_dir_path = __DIR__ . "/../files/homework/" . $cell_id . "/" . ($username ? $username . "/" : "");
+        $doc_dir_path = __DIR__ . "/../files/document/" . $cell_id . "/";
+
+        $all_paths = array($hw_dir_path, $doc_dir_path);
+
+        //If not provide file type, delete all possible file types of a cell
+        if ($file_type == null) {
+            foreach ($all_paths as $path) {
+                $dir_path = $path;
+                if (is_dir($dir_path)) {
+                    remove_dir($dir_path);
+                } 
+            }
+        } else if (strtoupper($file_type) === "HOMEWORK") {
+            $dir_path = $hw_dir_path;
+            if (is_dir($dir_path)) {
+                remove_dir($dir_path);
+            } 
+        } else if (strtoupper($file_type) === "DOCUMENT") {
+            $dir_path = $doc_dir_path;
+            if (is_dir($dir_path)) {
+                remove_dir($dir_path);
+            } 
         }
 
+        // $data["error_code"] = 0;
         return $data;
     }
 
-    function getFile($username, $login_type, $cell_id, $cell_type) {
+    function getFile($username, $login_type, $cell_id, $file_type) {
         $dir_path = null;
-        if (strtoupper($cell_type) === "HOMEWORK") {
-            $dir_path = __DIR__ . "/../files/". $cell_type . "/" . $cell_id . "/" . $username . "/";
-        } else if (strtoupper($cell_type) === "DOCUMENT") {
-            $dir_path = __DIR__ . "/../files/". $cell_type . "/" . $cell_id . "/";
+        if (strtoupper($file_type) === "HOMEWORK") {
+            $dir_path = __DIR__ . "/../files/". $file_type . "/" . $cell_id . "/" . $username . "/";
+        } else if (strtoupper($file_type) === "DOCUMENT") {
+            $dir_path = __DIR__ . "/../files/". $file_type . "/" . $cell_id . "/";
         }      
         
         //If directory does not exist or is empty
@@ -356,7 +516,7 @@
         $conn = @new mysqli($servername, $username, $password, $database) or die($conn->connect_error);
         $conn->set_charset($charset);
 
-        $stmt = $conn->prepare("SELECT C.cell_id, cell_title, cell_description, cell_createddate, notification_note, homework_expirationdate FROM CELL C LEFT JOIN NOTIFICATION N on C.cell_id = N.cell_id LEFT JOIN HOMEWORK H on C.cell_id = H.cell_id WHERE C.cell_id = ?");
+        $stmt = $conn->prepare("SELECT C.cell_id, class_id, cell_title, cell_description, cell_createddate, notification_note, homework_expirationdate FROM CELL C LEFT JOIN NOTIFICATION N on C.cell_id = N.cell_id LEFT JOIN HOMEWORK H on C.cell_id = H.cell_id WHERE C.cell_id = ?");
         $stmt->bind_param("s", $cell_id);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -367,7 +527,12 @@
             if ($row['homework_expirationdate'] != null) {
                 $row['homework_expirationdate'] = changeDateTimeFormat($row['homework_expirationdate'], "d-m-Y H:i:s");
             }
-            
+
+            if ($row['notification_note'] !== null) {
+                $row['cell_type'] = "NOTIFICATION";
+            } else if ($row['homework_expirationdate'] !== null) {
+                $row['cell_type'] = "HOMEWORK";
+            }           
             foreach ($row as $key => $value) {
                 if ($value) {
                     $row[$key] = nl2br($row[$key]);
@@ -382,7 +547,7 @@
         return $data;
     }
 
-    function getInitCell($class_id) {
+    function getClassCell($class_id) {
         include __DIR__ . "/config.php";
         
         $conn = @new mysqli($servername, $username, $password, $database) or die($conn->connect_error);
@@ -395,7 +560,7 @@
 
         $data = array();
         $result = $stmt->get_result();
-        while ($row = $result->fetch_assoc()) {                       
+        while ($row = $result->fetch_assoc()) {
             array_push($data, $row);
         }
 
@@ -459,12 +624,12 @@
         return array("paging" => $paging, "raw_data" => $class_list);
     }
 
-    function uploadFile($username, $login_type, $cell_id, $cell_type) {        
+    function uploadFile($username, $login_type, $cell_id, $file_type) {        
         $dir_path = null;
-        if (strtoupper($cell_type) === "HOMEWORK") {
-            $dir_path = __DIR__ . "/../files/". $cell_type . "/" . $cell_id . "/" . $username . "/";
-        } else if (strtoupper($cell_type) === "DOCUMENT") {
-            $dir_path = __DIR__ . "/../files/". $cell_type . "/" . $cell_id . "/";
+        if (strtoupper($file_type) === "HOMEWORK") {
+            $dir_path = __DIR__ . "/../files/". $file_type . "/" . $cell_id . "/" . $username . "/";
+        } else if (strtoupper($file_type) === "DOCUMENT") {
+            $dir_path = __DIR__ . "/../files/". $file_type . "/" . $cell_id . "/";
         }
 
         if (!is_dir($dir_path)) {

@@ -2,14 +2,14 @@ import { sendRequest, sendRequestForm, getDOMFromTemplate, getCookie } from '/el
 
 let class_id = document.getElementById('class-id').value;
 
-/* Get class name */
+// Get class name
 let class_name = await sendRequest(
     '/elearning/utils/execute-request.php',
     { 'do' : 'get_class_name', 'class-id' : class_id }
 );
 document.getElementById('class-name').innerText = class_name;
 
-/** Leave button */
+// Leave button
 let leave_btn = document.getElementById('leave-button');
 leave_btn.addEventListener("click", async (e) => {
     e.preventDefault();
@@ -33,13 +33,37 @@ async function leaveCallBack() {
     }
 }
 
+// Delete button
+let delete_btn = document.getElementById('delete-button');
+delete_btn.addEventListener("click", async (e) => {
+    e.preventDefault();
+    await deleteClassCallBack();
+})
+
+async function deleteClassCallBack() {
+    let confirm = window.confirm("Do you want to delete this class?");
+    if (confirm) {
+        let response = await sendRequest(
+            '/elearning/utils/execute-request.php',
+            { 'do' : 'delete_class', 'class-id' : class_id }
+        );
+        let data = JSON.parse(response);
+        if (data['err_code'] === 0) {
+            alert("Delete successfully! Redirect to homepage.");
+            window.location.href = '/elearning/homepage/home.php';
+        } else {
+            alert("Error: Can't delete class!");
+        }
+    }
+}
+
 getInitCell();
 
 /** Class cell */
 async function getInitCell() {
     let response = await sendRequest(
         '/elearning/utils/execute-request.php', 
-        {'do' : 'get_init_cell', 'class-id' : class_id}
+        {'do' : 'get_class_cell', 'class-id' : class_id}
     );    
 
     let cells = JSON.parse(response);
@@ -110,7 +134,7 @@ async function addCellEvent(cell_id) {
     if (delete_form != null) {
         delete_form.addEventListener("submit", async (e) => {
             e.preventDefault();
-            await deleteCallBack(e.target);
+            await deleteCellCallBack(e.target);
         })
     }
 
@@ -141,9 +165,15 @@ async function addCellEvent(cell_id) {
         let delete_form = document.getElementById(`delete-form-${cell_id}`);
         delete_form.style.display = 'none';
 
+        let delete_btn = document.getElementById("delete-button");
+        if (delete_btn) { delete_btn.style.display = 'none'; }
+
     } else if (login_type === "INSTRUCTOR") {        
         let hw_file = document.getElementById(`homework-file-${cell_id}`);
         if (hw_file) { hw_file.style.display = 'none'; }
+
+        let leave_btn = document.getElementById("leave-button");
+        if (leave_btn) { leave_btn.style.display = 'none'; }
     }
 }
 
@@ -236,7 +266,7 @@ async function cancelUploadCallBack(form) {
 
 }
 
-async function deleteCallBack(form) {
+async function deleteCellCallBack(form) {
     let confirm = window.confirm("Are you sure you want to delete this cell?");
     if (confirm) {
         let response = await sendRequestForm(form, { 'do' : 'delete_cell' });
