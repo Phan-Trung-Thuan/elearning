@@ -38,7 +38,9 @@
     <div id="main-container">
         <div id="container-header">
             <label id="class-name"></label>
+            <button id="rename-button" class="button">Rename <i class="fas fa-edit"></i></button>
             <button id="leave-button" class="button">Leave <i class="fa-solid fa-right-from-bracket"></i></button>
+            <button id="delete-button" class="button">Delete <i class="fa fa-trash" aria-hidden="true"></i></button>
             <button id="open-form-button" class="button">Create Cell <i class="fa-solid fa-circle-plus"></i></button>
         </div>   
         <div id="class-cell-container">
@@ -170,6 +172,7 @@
                     </div>
                 </div>            
 
+                
                 <button id="create-cell-button" class="button">Create</button>
                 <button type="button" id="close-form-button" class="button">Close</button>
             </form>

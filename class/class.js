@@ -1,22 +1,57 @@
 import { sendRequest, sendRequestForm, getDOMFromTemplate, getCookie } from '/elearning/utils/functions.js';
 
 let class_id = document.getElementById('class-id').value;
+let login_type = getCookie("type");
 
-/* Get class name */
+// Get class name
 let class_name = await sendRequest(
     '/elearning/utils/execute-request.php',
     { 'do' : 'get_class_name', 'class-id' : class_id }
 );
 document.getElementById('class-name').innerText = class_name;
 
-/** Leave button */
+//Rename button
+let rename_btn = document.getElementById('rename-button');
+rename_btn.style.display = (login_type === "INSTRUCTOR") ? 'normal' : 'none';
+rename_btn.addEventListener("click", async (e) => {
+    let new_class_name = window.prompt("Please enter new class name!", class_name);
+    if (new_class_name != null && new_class_name.length > 0) {
+        if (new_class_name === class_name) {
+            alert("No changes are made!");
+            return;
+        }
+        let confirm = window.confirm(`Do you want to change class name to "${new_class_name}"`);
+        if (confirm) {
+            await renameClassCallBack(new_class_name);
+        }
+    } else {
+        alert("Class name can't be null or empty!");
+    }
+})  
+
+async function renameClassCallBack(new_class_name) {
+    let response = await sendRequest(
+        '/elearning/utils/execute-request.php',
+        { 'do' : 'update_class_name', 'class-id': class_id, 'new-class-name' : new_class_name }
+    );
+    console.log(response);
+    let data = JSON.parse(response);
+    if (data['err_code'] === 0) {
+        alert("Rename class successfully!");
+        window.location.reload();
+    } else {
+        alert("Fail to rename class!");
+    }
+}
+
+// Leave button
 let leave_btn = document.getElementById('leave-button');
+leave_btn.style.display = (login_type === "INSTRUCTOR") ? 'none' : 'normal';
 leave_btn.addEventListener("click", async (e) => {
     e.preventDefault();
-    await leaveCallBack();
+    await leaveClassCallBack();
 });
-
-async function leaveCallBack() {
+async function leaveClassCallBack() {
     let confirm = window.confirm("Do you want to leave this class?");
     if (confirm) {
         let response = await sendRequest(
@@ -33,13 +68,40 @@ async function leaveCallBack() {
     }
 }
 
+// Delete button
+let delete_btn = document.getElementById('delete-button');
+delete_btn.style.display = (login_type === "INSTRUCTOR") ? 'normal' : 'none';
+delete_btn.addEventListener("click", async (e) => {
+    e.preventDefault();
+    await deleteClassCallBack();
+})
+
+async function deleteClassCallBack() {
+    let confirm = window.confirm("Do you want to delete this class?");
+    if (confirm) {
+        let response = await sendRequest(
+            '/elearning/utils/execute-request.php',
+            { 'do' : 'delete_class', 'class-id' : class_id }
+        );
+        let data = JSON.parse(response);
+        if (data['err_code'] === 0) {
+            alert("Delete successfully! Redirect to homepage.");
+            window.location.href = '/elearning/homepage/home.php';
+        } else {
+            alert("Error: Can't delete class!");
+        }
+    }
+}
+
+
+
 getInitCell();
 
 /** Class cell */
 async function getInitCell() {
     let response = await sendRequest(
         '/elearning/utils/execute-request.php', 
-        {'do' : 'get_init_cell', 'class-id' : class_id}
+        {'do' : 'get_class_cell', 'class-id' : class_id}
     );    
 
     let cells = JSON.parse(response);
@@ -110,7 +172,7 @@ async function addCellEvent(cell_id) {
     if (delete_form != null) {
         delete_form.addEventListener("submit", async (e) => {
             e.preventDefault();
-            await deleteCallBack(e.target);
+            await deleteCellCallBack(e.target);
         })
     }
 
@@ -144,6 +206,9 @@ async function addCellEvent(cell_id) {
     } else if (login_type === "INSTRUCTOR") {        
         let hw_file = document.getElementById(`homework-file-${cell_id}`);
         if (hw_file) { hw_file.style.display = 'none'; }
+
+        let leave_btn = document.getElementById("leave-button");
+        if (leave_btn) { leave_btn.style.display = 'none'; }
     }
 }
 
@@ -236,7 +301,7 @@ async function cancelUploadCallBack(form) {
 
 }
 
-async function deleteCallBack(form) {
+async function deleteCellCallBack(form) {
     let confirm = window.confirm("Are you sure you want to delete this cell?");
     if (confirm) {
         let response = await sendRequestForm(form, { 'do' : 'delete_cell' });

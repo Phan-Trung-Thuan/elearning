@@ -49,9 +49,9 @@
                 return;
             }
 
-            if ($data['do'] === 'get_init_cell') {
+            if ($data['do'] === 'get_class_cell') {
                 $class_id = $data['class-id'];
-                $data = getInitCell($class_id);               
+                $data = getClassCell($class_id);               
                 echo json_encode($data);
                 return;
             }
@@ -109,7 +109,7 @@
                 $login_type = $_COOKIE['type'];
                 $cell_id = $data['cell-id'];
                 $cell_type = $data['cell-type'];
-                $data = cancelUploadFile($username, $login_type, $cell_id, $cell_type);
+                $data = cancelUploadFile($cell_id, $cell_type, $username, $login_type);
                 echo json_encode($data);
                 return;
             }
@@ -157,8 +157,29 @@
                 echo json_encode($data);
                 return;
             }
-           
 
+            if ($data['do'] === 'delete_class') {
+                $class_id = $data['class-id'];
+                $data = deleteClass($class_id);
+                echo json_encode($data);
+                return;
+            }
+           
+            if ($data['do'] === 'create_class') {
+                $class_name = $data['class-name'];
+                $instructor_id = $_COOKIE['username'];
+                $data = createClass($class_name, $instructor_id);
+                echo json_encode($data);
+                return;
+            }
+
+            if ($data['do'] === 'update_class_name') {
+                $class_id = $data['class-id'];
+                $new_class_name = $data['new-class-name'];
+                $data = updateClassName($class_id, $new_class_name);
+                echo json_encode($data);
+                return;
+            }
         } else {
             echo "ERROR: Can't identify which function to execute at /elearning/utils/functions.php";
         }    
