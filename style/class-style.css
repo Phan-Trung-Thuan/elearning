@@ -6,7 +6,8 @@
     justify-content: flex-end;
 }
 
-#leave-button {
+#container-header > button {
+    margin-left: 10px;
     font-weight: bold;
 }
 
@@ -54,29 +55,34 @@
     font-weight: bold;
 }
 
-#open-form-button {
-    position: fixed;
-    right: 30px;
-    bottom: 30px;
-}
-
 #create-cell-form-container {
     display: none;
 }
 
 #create-cell-form {
     position: fixed;
-    right: 30px;
-    bottom: 0;
+    right: 0px;
+    bottom: 0px;
     z-index: 9;
-    border: 3px solid black;
+    border: 3px solid rgb(255, 183, 0);
+    border-radius: 20px 0px 0px 0px;
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.2);
     max-width: 300px;
-    padding: 30px;
-    background-color: white;
+    padding: 20px;
+    background-color: rgb(255, 251, 241);
 }
 
 hr {
     border-top: 1px solid orange;
+}
+
+h2 {
+    color: #ff9e28;
+    margin-block: 0px;
+}
+
+label {
+    color: #ff9e28;
 }
 
 .button {
@@ -94,7 +100,7 @@ hr {
     border: 1px dashed orange;
 }
 
-.upload-button {
+/* .upload-button {
 
 }
 
@@ -107,7 +113,26 @@ hr {
 }
 
 .check-homework-button {
-    
+
+} */
+
+input {
+    color: orange;
+}
+
+.document-file-upload::-webkit-file-upload-button {
+    padding: 3px;
+    font-size: 14px;
+    color: white;
+    background-color: #ff9e28;
+    border: none;
+    border-radius: 5px;
+}
+
+.document-file-upload::-webkit-file-upload-button:hover {
+    color: #ff9e28;
+    background-color: white;
+    border: 1px dashed orange;
 }
 
 textarea {

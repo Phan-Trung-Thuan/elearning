@@ -6,6 +6,7 @@
     <title>Class</title>
     <link rel="stylesheet" href="/elearning/style/main-style.css">
     <link rel="stylesheet" href="/elearning/style/class-style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 </head>
 <body>
     <?php
@@ -54,7 +55,7 @@
                             <input type="hidden" name="cell-id" value="${cell_id}">
                             <input type="hidden" name="cell-type" value="document">
                             <input type="file" name="file[]" class="document-file-upload" multiple>                   
-                            <button class="upload-button button">Upload</button>
+                            <button class="upload-button button">Upload <i class="fa-solid fa-cloud-arrow-up"></i></button>
                         </form>
 
                         <form class="document-output-form file-output-form" id="document-output-form-${cell_id}" method="POST" action="/elearning/utils/execute-request.php">
@@ -71,7 +72,7 @@
                     
                     <form class="delete-form" id="delete-form-${cell_id}" method="POST" action="/elearning/utils/execute-request.php">
                         <input type="hidden" name="cell-id" value="${cell_id}">
-                        <button class="delete-button button">Delete</button>
+                        <button class="delete-button button">Delete <i class="fa-solid fa-trash"></i></button>
                     </form>
                 </div>
             </template>
@@ -89,7 +90,7 @@
                             <input type="hidden" name="cell-id" value="${cell_id}">
                             <input type="hidden" name="cell-type" value="document">
                             <input type="file" name="file[]" class="document-file-upload" multiple>                   
-                            <button class="upload-button button">Upload</button>
+                            <button class="upload-button button">Upload <i class="fa-solid fa-cloud-arrow-up"></i></button>
                         </form>
 
                         <form class="document-output-form file-output-form" id="document-output-form-${cell_id}" method="POST" action="/elearning/utils/execute-request.php">
@@ -110,7 +111,7 @@
                             <input type="hidden" name="cell-id" value="${cell_id}">
                             <input type="hidden" name="cell-type" value="homework">
                             <input type="file" name="file[]" class="homework-file-upload" multiple>                   
-                            <button class="upload-button button">Upload</button>
+                            <button class="upload-button button">Upload <i class="fa-solid fa-cloud-arrow-up"></i></button>
                         </form>
 
                         <form class="homework-output-form file-output-form" id="homework-output-form-${cell_id}" method="POST" action="/elearning/utils/execute-request.php">
@@ -136,7 +137,7 @@
                     
                     <form class="delete-form" id="delete-form-${cell_id}" method="POST" action="/elearning/utils/execute-request.php">
                         <input type="hidden" name="cell-id" value="${cell_id}">
-                        <button class="delete-button button">Delete</button>
+                        <button class="delete-button button">Delete <i class="fa-solid fa-trash"></i></button>
                     </form>
                 </div>
             </template>        
