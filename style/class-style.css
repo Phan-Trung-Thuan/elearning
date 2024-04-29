@@ -124,6 +124,12 @@ label {
     color: orange;
 }
 
+#create-cell-form-container input:focus-visible,
+#create-cell-form-container textarea:focus-visible,
+#create-cell-form-container select:focus-visible {
+    outline:none;
+} 
+
 option:hover {
     background-color: orange;
     color: white;
