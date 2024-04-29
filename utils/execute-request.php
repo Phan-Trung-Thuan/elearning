@@ -165,7 +165,13 @@
                 return;
             }
            
-
+            if ($data['do'] === 'create_class') {
+                $class_name = $data['class-name'];
+                $instructor_id = $_COOKIE['username'];
+                $data = createClass($class_name, $instructor_id);
+                echo json_encode($data);
+                return;
+            }
         } else {
             echo "ERROR: Can't identify which function to execute at /elearning/utils/functions.php";
         }    

@@ -1,6 +1,7 @@
 import { sendRequest, sendRequestForm, getDOMFromTemplate, getCookie } from '/elearning/utils/functions.js';
 
 let class_id = document.getElementById('class-id').value;
+let login_type = getCookie("type");
 
 // Get class name
 let class_name = await sendRequest(
@@ -11,11 +12,11 @@ document.getElementById('class-name').innerText = class_name;
 
 // Leave button
 let leave_btn = document.getElementById('leave-button');
+leave_btn.style.display = (login_type === "INSTRUCTOR") ? 'none' : 'normal';
 leave_btn.addEventListener("click", async (e) => {
     e.preventDefault();
     await leaveCallBack();
 });
-
 async function leaveCallBack() {
     let confirm = window.confirm("Do you want to leave this class?");
     if (confirm) {
@@ -35,6 +36,7 @@ async function leaveCallBack() {
 
 // Delete button
 let delete_btn = document.getElementById('delete-button');
+delete_btn.style.display = (login_type === "INSTRUCTOR") ? 'normal' : 'none';
 delete_btn.addEventListener("click", async (e) => {
     e.preventDefault();
     await deleteClassCallBack();
@@ -56,6 +58,8 @@ async function deleteClassCallBack() {
         }
     }
 }
+
+
 
 getInitCell();
 
@@ -164,9 +168,6 @@ async function addCellEvent(cell_id) {
 
         let delete_form = document.getElementById(`delete-form-${cell_id}`);
         delete_form.style.display = 'none';
-
-        let delete_btn = document.getElementById("delete-button");
-        if (delete_btn) { delete_btn.style.display = 'none'; }
 
     } else if (login_type === "INSTRUCTOR") {        
         let hw_file = document.getElementById(`homework-file-${cell_id}`);

@@ -20,13 +20,17 @@
     <div id="topnav">
         <div class="left-div">
             <div id="home-link">
-                <a href="/elearning/homepage/home.php"><i class="fa-solid fa-house"></i> <strong>Home</strong></a> 
+                <a href="/elearning/homepage/home.php"><i class="fa-solid fa-house"></i>&nbsp;<strong>Home</strong></a> 
             </div>   
             <div id="my-class" class="dropdown" >
-                <button class="dropbtn"><i class="fa-solid fa-chalkboard-user"></i> <strong>My Classroom</strong></button>
+                <button class="dropbtn"><i class="fa-solid fa-chalkboard-user"></i>&nbsp;<strong>My Classroom</strong></button>
                 <div class="dropdown-content" id="dropdown-content-class">
                 </div>
             </div>
+
+            <div id="create-class">
+                <i class="fa-solid fa-plus"></i>&nbsp;<strong>New Class</strong> 
+            </div>  
         </div>
         
         <div class="right-div" id="searching-container">

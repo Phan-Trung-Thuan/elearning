@@ -3,8 +3,38 @@ import { sendRequest } from '/elearning/utils/functions.js'
 let login_type = document.querySelector("input[type=hidden][name=type]").value;
 if (login_type === "STUDENT") {
     getEnrollClasses();
+    let create_class = document.getElementById("create-class");
+    if (create_class) { create_class.style.display = 'none'; }
+
 } else if (login_type === "INSTRUCTOR") {
     getInstructorClasses();
+}
+
+let create_class = document.getElementById("create-class");
+create_class.addEventListener("click", async (e) => {
+    let class_name = window.prompt("Please enter class name");
+    let confirm = window.confirm(`Do you want to create the class "${class_name}"`);
+    if (confirm) {
+        await createClass(class_name);
+    }
+});
+
+async function createClass(class_name) {
+    let response = await sendRequest(
+        '/elearning/utils/execute-request.php',
+        { 'do' : 'create_class', 'class-name' : class_name }
+    );
+
+    let data = JSON.parse(response);
+    if (data) {
+        let class_id = data['class_id'];
+        let confirm = window.confirm("Create class successfully! Move to new class now?");
+        if (confirm) {
+            window.location.href = `http://localhost/elearning/class/class.php?class_id=${class_id}`;
+        }
+    } else {
+        alert("Fail to create class!")
+    }
 }
 
 async function getEnrollClasses() {

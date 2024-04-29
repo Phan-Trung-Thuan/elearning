@@ -81,7 +81,7 @@
     display: flex;
 }
 
-#home-link, #my-class, #searching-container{
+#home-link, #my-class, #searching-container, #create-class{
     height: inherit;
     display: flex;
     background-color: orange;
@@ -99,16 +99,21 @@
     float: left;
 }
 
+#create-class {
+    width: 120px;
+    cursor: pointer;
+}
+
 #searching-container {
     width: 233.4px;
 }
 
-#home-link > a {
+#home-link > a, #create-class > * {
     color: white;
     text-decoration: none;
 }
 
-#home-link:hover, #my-class:hover {
+#home-link:hover, #my-class:hover, #create-class:hover {
     background-color: rgb(255, 182, 47);
 }
 
