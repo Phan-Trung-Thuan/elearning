@@ -36,7 +36,8 @@
 
     <div id="main-container">
         <div id="container-header">
-            <button id="leave-button">Leave</button>
+            <button id="leave-button" class="button">Leave</button>
+            <button id="open-form-button" class="button">Create Cell</button>
         </div>      
         <div id="class-cell-container">
             <template id="notification-cell-template">
@@ -48,19 +49,19 @@
                     
                     <div class="document-file" id="document-file-${cell_id}">
                     <hr>
-                        <div>DOCUMENT</div>
+                        <div class="small-title">DOCUMENT</div>
                         <form class="document-input-form file-input-form" id="document-input-form-${cell_id}" method="POST" enctype="multipart/form-data" action="/elearning/utils/execute-request.php">
                             <input type="hidden" name="cell-id" value="${cell_id}">
                             <input type="hidden" name="cell-type" value="document">
                             <input type="file" name="file[]" class="document-file-upload" multiple>                   
-                            <button class="upload-button">Upload</button>
+                            <button class="upload-button button">Upload</button>
                         </form>
 
                         <form class="document-output-form file-output-form" id="document-output-form-${cell_id}" method="POST" action="/elearning/utils/execute-request.php">
                             <input type="hidden" name="cell-id" value="${cell_id}">
                             <input type="hidden" name="cell-type" value="document">
                             <ul class="homework-list" id="homework-list-${cell_id}"></ul>
-                            <button class="cancel-button">Cancel</button>
+                            <button class="cancel-button button">Cancel</button>
                         </form>
                     <hr>
                     </div>
@@ -70,7 +71,7 @@
                     
                     <form class="delete-form" id="delete-form-${cell_id}" method="POST" action="/elearning/utils/execute-request.php">
                         <input type="hidden" name="cell-id" value="${cell_id}">
-                        <button class="delete-button">Delete</button>
+                        <button class="delete-button button">Delete</button>
                     </form>
                 </div>
             </template>
@@ -83,19 +84,19 @@
                     
                     <div class="document-file" id="document-file-${cell_id}">
                     <hr>
-                        <div>DOCUMENT</div>
+                        <div class="small-title">DOCUMENT</div>
                         <form class="document-input-form file-input-form" id="document-input-form-${cell_id}" method="POST" enctype="multipart/form-data" action="/elearning/utils/execute-request.php">
                             <input type="hidden" name="cell-id" value="${cell_id}">
                             <input type="hidden" name="cell-type" value="document">
                             <input type="file" name="file[]" class="document-file-upload" multiple>                   
-                            <button class="upload-button">Upload</button>
+                            <button class="upload-button button">Upload</button>
                         </form>
 
                         <form class="document-output-form file-output-form" id="document-output-form-${cell_id}" method="POST" action="/elearning/utils/execute-request.php">
                             <input type="hidden" name="cell-id" value="${cell_id}">
                             <input type="hidden" name="cell-type" value="document">
                             <ul class="homework-list" id="homework-list-${cell_id}"></ul>
-                            <button class="cancel-button">Cancel</button>
+                            <button class="cancel-button button">Cancel</button>
                         </form>
                     <hr>
                     </div>
@@ -104,19 +105,19 @@
                     
                     <div class="homework-file" id="homework-file-${cell_id}">
                     <hr>
-                        <div>HOMEWORK</div>
+                        <div class="small-title">HOMEWORK</div>
                         <form class="homework-input-form file-input-form" id="homework-input-form-${cell_id}" method="POST" enctype="multipart/form-data" action="/elearning/utils/execute-request.php">
                             <input type="hidden" name="cell-id" value="${cell_id}">
                             <input type="hidden" name="cell-type" value="homework">
                             <input type="file" name="file[]" class="homework-file-upload" multiple>                   
-                            <button class="upload-button">Upload</button>
+                            <button class="upload-button button">Upload</button>
                         </form>
 
                         <form class="homework-output-form file-output-form" id="homework-output-form-${cell_id}" method="POST" action="/elearning/utils/execute-request.php">
                             <input type="hidden" name="cell-id" value="${cell_id}">
                             <input type="hidden" name="cell-type" value="homework">
                             <ul class="homework-list" id="homework-list-${cell_id}"></ul>
-                            <button class="cancel-button">Cancel</button>
+                            <button class="cancel-button button">Cancel</button>
                         </form>
                         <div class="homework-cell-expiration-date">Expiration date: ${homework_expirationdate}</div>
                     <hr>                        
@@ -124,10 +125,10 @@
                                        
                     <div class="homework-progress" id="homework-progress-${cell_id}">
                     <hr>
-                        <div>HOMEWORK PROGRESS <i>instructor only</i></div>
+                        <div class="small-title">HOMEWORK PROGRESS <i>instructor only</i></div>
                         <form class="homework-progress-form" id="homwork-progress-form-${cell_id}" method="POST" action="">
                             <input type="hidden" name="cell-id" value="${cell_id}">
-                            <button>Check Homework</button>
+                            <button class="check-homework-button button">Check Homework</button>
                         </form>
                     <hr>
                     </div>
@@ -135,13 +136,12 @@
                     
                     <form class="delete-form" id="delete-form-${cell_id}" method="POST" action="/elearning/utils/execute-request.php">
                         <input type="hidden" name="cell-id" value="${cell_id}">
-                        <button class="delete-button">Delete</button>
+                        <button class="delete-button button">Delete</button>
                     </form>
                 </div>
             </template>        
         </div>
 
-        <button id="open-form-button">Create Cell</button>
         <div id="create-cell-form-container">
             <form action="/elearning/utils/execute-request.php" method="POST" id="create-cell-form">
                 <h2>Create Cell</h2>
@@ -174,8 +174,8 @@
                     </div>
                 </div>            
 
-                <button id="create-cell-button">Create</button>
-                <button type="button" id="close-form-button">Close</button>
+                <button id="create-cell-button" class="button">Create</button>
+                <button type="button" id="close-form-button" class="button">Close</button>
             </form>
         </div>
     </div>

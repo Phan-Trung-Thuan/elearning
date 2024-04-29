@@ -30,6 +30,12 @@
     border-radius: 5px 5px 0px 0px;
 }
 
+.small-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: orange;
+}
+
 .desc {
     font-size: 16px;
     color: rgb(231, 150, 0);
@@ -67,6 +73,41 @@
     max-width: 300px;
     padding: 30px;
     background-color: white;
+}
+
+hr {
+    border-top: 1px solid orange;
+}
+
+.button {
+    padding: 3px;
+    font-size: 14px;
+    color: white;
+    background-color: #ff9e28;
+    border: none;
+    border-radius: 5px;
+}
+
+.button:hover {
+    color: #ff9e28;
+    background-color: white;
+    border: 1px dashed orange;
+}
+
+.upload-button {
+
+}
+
+.cancel-button {
+
+}
+
+.delete-button {
+
+}
+
+.check-homework-button {
+    
 }
 
 textarea {
