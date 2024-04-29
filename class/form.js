@@ -2,25 +2,38 @@ import { sendRequestForm, getCookie } from '/elearning/utils/functions.js';
 import { addCell } from '/elearning/class/class.js';
 
 let class_id = document.getElementById('class-id').value;
+let form = document.getElementById("create-cell-form");
+let form_container = document.getElementById("create-cell-form-container");
 
-let form = document.getElementById("create-cell-form-container");
 //Open button
 let open_form_btn = document.getElementById("open-form-button");
-
+open_form_btn.addEventListener("click", () => {
+    form_container.style.display = 'block';
+});
 //Hide open_form_btn from STUDENT
 let login_type = getCookie("type");
 if (login_type === "STUDENT") {
     open_form_btn.style.display = 'none';
 }
 
-open_form_btn.addEventListener("click", () => {
-    form.style.display = 'block';
-});
-let close_form_btn = document.getElementById("close-form-button");
 //Close button
+let close_form_btn = document.getElementById("close-form-button");
 close_form_btn.addEventListener("click", () => {
-    form.style.display = 'none';
+    form_container.style.display = 'none';
 });
+
+//Reset button
+let reset_btn = document.getElementById("reset-form-button");
+reset_btn.addEventListener("click", () => {
+    //Default reset
+    form.reset();
+
+    //Hide all options
+    let options = form.querySelectorAll(".cell-type-option");
+    for (let option of options) {
+        option.style.display = 'none';
+    }
+})
 
 let cell_type_selection = document.getElementById("cell-type");
 let option_length = document.getElementById("option-container").childElementCount;
@@ -35,7 +48,7 @@ for (let i = 0; i < option_length; i++) {
 //Selection
 cell_type_selection.addEventListener("change", () => {
     let option_no = parseInt(cell_type_selection.value);
-    form.querySelector("[type=hidden][name=option-no]").value = option_no;
+    form_container.querySelector("[type=hidden][name=option-no]").value = option_no;
 
     for (let i = 0; i < option_length; i++) {
         let node = document.getElementById(`cell-type-option-${i}`);
@@ -59,10 +72,9 @@ cell_type_selection.addEventListener("change", () => {
 });
 
 //Create form
-let create_form = document.getElementById("create-cell-form");
-create_form.addEventListener("submit", async (e) => {
+form.addEventListener("submit", async (e) => {
     e.preventDefault();
-    await createCellCallBack(create_form);
+    await createCellCallBack(form);
 });
 
 async function createCellCallBack(form) {

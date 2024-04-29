@@ -130,6 +130,7 @@
                             <input type="hidden" name="cell-id" value="${cell_id}">
                             <button class="check-homework-button button">Check Homework</button>
                         </form>
+                        <div class="homework-cell-expiration-date">Expiration date: ${homework_expirationdate}</div>
                     <hr>
                     </div>
                     
@@ -162,8 +163,7 @@
                 <div id="option-container">
                     <div class="cell-type-option" id="cell-type-option-0">
                         <label for="notification-note">Note</label>
-                        <textarea type="text" name="notification-note" id="notification-note" row="3" cols="35">
-                        </textarea>
+                        <textarea type="text" name="notification-note" id="notification-note" placeholder="Enter note" row="3" cols="35"></textarea>
                     </div>
                     
                     <div class="cell-type-option" id="cell-type-option-1">
@@ -174,6 +174,7 @@
 
                 
                 <button id="create-cell-button" class="button">Create</button>
+                <button type="button" id="reset-form-button" class="button">Reset</button>
                 <button type="button" id="close-form-button" class="button">Close</button>
             </form>
         </div>

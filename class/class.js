@@ -15,7 +15,7 @@ let rename_btn = document.getElementById('rename-button');
 rename_btn.style.display = (login_type === "INSTRUCTOR") ? 'normal' : 'none';
 rename_btn.addEventListener("click", async (e) => {
     let new_class_name = window.prompt("Please enter new class name!", class_name);
-    if (new_class_name != null && new_class_name.length > 0) {
+    if (new_class_name && new_class_name.length > 0) {
         if (new_class_name === class_name) {
             alert("No changes are made!");
             return;
@@ -25,7 +25,7 @@ rename_btn.addEventListener("click", async (e) => {
             await renameClassCallBack(new_class_name);
         }
     } else {
-        alert("Class name can't be null or empty!");
+        alert("Class name can't be empty!");
     }
 })  
 
