@@ -44,6 +44,22 @@
         return $data;
     }
 
+    function getClassName($class_id) {
+        include __DIR__ . "/config.php";
+        
+        $conn = @new mysqli($servername, $username, $password, $database) or die($conn->connect_error);
+        $conn->set_charset($charset);
+        
+        $stmt = $conn->prepare('SELECT CLASS_NAME FROM class WHERE class_id = ?');
+        $stmt->bind_param('s', $class_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+
+        $conn->close();
+        return $row['CLASS_NAME'];
+    }
+
     function leaveClass($student_id, $class_id) {
         include __DIR__ . "/../utils/config.php";
 
@@ -248,7 +264,7 @@
                 $stmt_insert->execute();
                 $stmt_insert->close();
             }                    
-        }                
+        }
         $conn->close();
     }
 

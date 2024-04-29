@@ -37,16 +37,16 @@
 
     <div id="main-container">
         <div id="container-header">
+            <label id="class-name"></label>
             <button id="leave-button" class="button">Leave <i class="fa-solid fa-right-from-bracket"></i></button>
             <button id="open-form-button" class="button">Create Cell <i class="fa-solid fa-circle-plus"></i></button>
-        </div>      
+        </div>   
         <div id="class-cell-container">
             <template id="notification-cell-template">
                 <div class="notification-cell cell" id="${cell_id}">
                     <div class="notification-cell-title title">${cell_title}</div>
 
                     <div class="notification-cell-desc desc">${cell_description}</div>
-
                     
                     <div class="document-file" id="document-file-${cell_id}">
                     <hr>
@@ -66,7 +66,6 @@
                         </form>
                     <hr>
                     </div>
-                    
 
                     <div class="notification-cell-note note" id="notification-cell-note-${cell_id}">${notification_note}</div>
                     
@@ -131,7 +130,6 @@
                         </form>
                     <hr>
                     </div>
-                    
                     
                     <form class="delete-form" id="delete-form-${cell_id}" method="POST" action="/elearning/utils/execute-request.php">
                         <input type="hidden" name="cell-id" value="${cell_id}">

@@ -2,6 +2,13 @@ import { sendRequest, sendRequestForm, getDOMFromTemplate, getCookie } from '/el
 
 let class_id = document.getElementById('class-id').value;
 
+/* Get class name */
+let class_name = await sendRequest(
+    '/elearning/utils/execute-request.php',
+    { 'do' : 'get_class_name', 'class-id' : class_id }
+);
+document.getElementById('class-name').innerText = class_name;
+
 /** Leave button */
 let leave_btn = document.getElementById('leave-button');
 leave_btn.addEventListener("click", async (e) => {

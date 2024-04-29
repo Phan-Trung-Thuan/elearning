@@ -11,6 +11,12 @@
     font-weight: bold;
 }
 
+#container-header > #class-name {
+    margin-right: auto;
+    padding-left: 10px;
+    font-weight: bold;
+}
+
 .cell {
     font-family: inherit;
     border-radius: 8px;

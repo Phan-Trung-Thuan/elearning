@@ -35,6 +35,12 @@
                 return;
             }
 
+            if ($data['do'] === 'get_class_name') {
+                $class_id = $data['class-id'];
+                echo getClassName($class_id);
+                return;
+            }
+
             if ($data['do'] === 'join_class') {
                 $class_id = $data['class-id'];
                 $username = $_COOKIE['username'];                
