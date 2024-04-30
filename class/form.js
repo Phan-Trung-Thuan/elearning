@@ -33,6 +33,13 @@ reset_btn.addEventListener("click", () => {
     for (let option of options) {
         option.style.display = 'none';
     }
+
+    //Reset characters count
+    let count_fields = form.querySelectorAll("[maxlength]");
+    let event = new Event('input');
+    for (let field of count_fields) {
+        field.dispatchEvent(event);
+    }
 })
 
 let cell_type_selection = document.getElementById("cell-type");
@@ -81,8 +88,27 @@ async function createCellCallBack(form) {
     console.log(form.getElementsByTagName("textarea")[0].value);
     let response = await sendRequestForm(form, { 'do': 'create_cell', 'class-id': class_id });
     let data = JSON.parse(response);
-    let result = await addCell(data['cell_id']);
-    if (result) {
+    if (data) {
         alert("Create cell successfully!");
+        await addCell(data['cell_id']);
     }
+}
+
+//Character count
+let count_fields = form.querySelectorAll("[maxlength]");
+for (let field of count_fields) {   
+    field.addEventListener("input", (e) => {
+        const target = e.currentTarget;
+        const max_length = target.getAttribute("maxlength");
+        const curr_length = target.value.length;
+
+        let char_count = document.getElementById(`char-count-${field.id}`);
+        char_count.querySelector(".char-curr").innerText = curr_length;
+
+        if (curr_length == max_length) {
+            char_count.style.fontWeight = 'bold';
+        } else {
+            char_count.style.fontWeight = 'normal';
+        }
+    });
 }

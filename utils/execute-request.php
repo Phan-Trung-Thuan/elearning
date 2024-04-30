@@ -180,6 +180,14 @@
                 echo json_encode($data);
                 return;
             }
+
+            if ($data['do'] === 'get_hw_report') {
+                $cell_id = $data['cell-id'];
+                $data = getHWReport($cell_id);
+                echo json_encode($data);
+                return;
+            }
+
         } else {
             echo "ERROR: Can't identify which function to execute at /elearning/utils/functions.php";
         }    
