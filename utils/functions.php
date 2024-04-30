@@ -38,18 +38,17 @@
             $student_id = $student['student_id'];
 
             $hw_dir_path = __DIR__ . "/../files/homework/" . $cell_id . "/" .  $student_id . "/";
-            $data[$index]['path'] = $hw_dir_path;
 
             //If the directory exists and have files
             if (is_dir($hw_dir_path) and (new FilesystemIterator($hw_dir_path))->valid()) {
-                $data[$index]['upload'] = array();
+                $data[$index]['file'] = array();
                 $files = scandir($hw_dir_path);    
                 $files_length = count($files);
                 for ($i = 2; $i < $files_length; $i++) {
-                    array_push($data[$index]['upload'], $files[$i]);
+                    array_push($data[$index]['file'], $files[$i]);
                 }
             } else {
-                $data[$index]['upload'] = null;
+                $data[$index]['file'] = null;
             }
             $index++;
         }

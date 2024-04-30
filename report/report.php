@@ -33,23 +33,32 @@
             Expiration date: <span id=hw-expirationdate></span>
         </div>
         <hr>
-        <div>Total student: <span id="total-student">1</span></div>
-        <div>The number of submitted: <span id="no-submitted">1</span></div>
-        <div>Completion rate: <span id="completion-rate">10%</span></div>
+        <div>Total students: <span id="total-student"></span></div>
+        <div>The number of submitted: <span id="no-submitted"></span></div>
+        <div>Submitted rate: <span id="submitted-rate"></span></div>
         <hr>
-        <table>
-            <tr>
-                <th>Student no.</th>
-                <th>Full name</th>
-                <th>Date of birth</th>
-                <th>Completion status</th>
-                <th>Download</th>
-            </tr>
+        <table id="homework-detail">
+            <thead>
+                <tr>
+                    <th>Student no.</th>
+                    <th>Full name</th>
+                    <th>Date of birth</th>
+                    <th>Completion status</th>
+                    <th>File</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
         </table>
     </div>
     
     <input type="hidden" name="cell-id" id="cell-id" value="<?php echo $_POST['cell-id'] ?>">
     <script type="module" src="/elearning/report/report.js"></script>
+
+    <script src="/elearning/utils/third-party/jszip.js"></script>
+    <script src="/elearning/utils/third-party/file-saver.js"></script>
+
     <!-- <script src="/elearning/homepage/check_session.js"></script> -->
 </body>
 </html>
