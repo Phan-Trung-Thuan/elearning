@@ -1,4 +1,4 @@
-import { sendRequestForm } from '/elearning/utils/functions.js';
+import { sendRequestForm, warning } from '/elearning/utils/functions.js';
 
 let login_form = document.getElementById("login-form");
 
@@ -18,10 +18,12 @@ async function callBack() {
         }
     } else if (data['login_status'] === "FAIL") {
         // Show warning message
-        let warning_message = document.querySelector(".warning-message");
+        // let warning_message = document.querySelector(".warning-message");
 
-        warning_message.classList.remove('hidden');
-        setTimeout(() => { warning_message.classList.add('hidden'); }, 3000);
+        // warning_message.classList.remove('hidden');
+        // setTimeout(() => { warning_message.classList.add('hidden'); }, 3000);
+
+        warning('Wrong username or password. Please try again.');
     } else {
         console.log("Error: Fail to read login status!");
         return;

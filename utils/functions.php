@@ -678,7 +678,3 @@
 
         return $err_list;
     }
-    
-
-
-    

@@ -1,4 +1,4 @@
-import { sendRequestForm, getCookie } from '/elearning/utils/functions.js';
+import { sendRequestForm, getCookie, warning } from '/elearning/utils/functions.js';
 import { addCell } from '/elearning/class/class.js';
 
 let class_id = document.getElementById('class-id').value;
@@ -88,27 +88,10 @@ async function createCellCallBack(form) {
     console.log(form.getElementsByTagName("textarea")[0].value);
     let response = await sendRequestForm(form, { 'do': 'create_cell', 'class-id': class_id });
     let data = JSON.parse(response);
-    if (data) {
-        alert("Create cell successfully!");
-        await addCell(data['cell_id']);
+    let result = await addCell(data['cell_id']);
+    if (result) {
+        // alert("Create cell successfully!");
+
+        warning('Create cell successfully!');
     }
-}
-
-//Character count
-let count_fields = form.querySelectorAll("[maxlength]");
-for (let field of count_fields) {   
-    field.addEventListener("input", (e) => {
-        const target = e.currentTarget;
-        const max_length = target.getAttribute("maxlength");
-        const curr_length = target.value.length;
-
-        let char_count = document.getElementById(`char-count-${field.id}`);
-        char_count.querySelector(".char-curr").innerText = curr_length;
-
-        if (curr_length == max_length) {
-            char_count.style.fontWeight = 'bold';
-        } else {
-            char_count.style.fontWeight = 'normal';
-        }
-    });
 }
