@@ -1,4 +1,4 @@
-import { sendRequestForm, getCookie } from '/elearning/utils/functions.js';
+import { sendRequestForm, getCookie, warning } from '/elearning/utils/functions.js';
 import { addCell } from '/elearning/class/class.js';
 
 let class_id = document.getElementById('class-id').value;
@@ -71,6 +71,8 @@ async function createCellCallBack(form) {
     let data = JSON.parse(response);
     let result = await addCell(data['cell_id']);
     if (result) {
-        alert("Create cell successfully!");
+        // alert("Create cell successfully!");
+
+        warning('Create cell successfully!');
     }
 }

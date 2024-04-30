@@ -32,7 +32,7 @@
         }
         
         include __DIR__ . '/../topnav/topnav.php';
-                        
+        include __DIR__ . '/../utils/warning-box.html';
     ?>
 
     <div id="main-container">
@@ -162,8 +162,7 @@
                 <div id="option-container">
                     <div class="cell-type-option" id="cell-type-option-0">
                         <label for="notification-note">Note</label>
-                        <textarea type="text" name="notification-note" id="notification-note" row="3" cols="35">
-                        </textarea>
+                        <textarea type="text" name="notification-note" id="notification-note" row="3" cols="35"></textarea>
                     </div>
                     
                     <div class="cell-type-option" id="cell-type-option-1">

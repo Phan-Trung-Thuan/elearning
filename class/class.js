@@ -1,4 +1,4 @@
-import { sendRequest, sendRequestForm, getDOMFromTemplate, getCookie } from '/elearning/utils/functions.js';
+import { sendRequest, sendRequestForm, getDOMFromTemplate, getCookie, warning } from '/elearning/utils/functions.js';
 
 let class_id = document.getElementById('class-id').value;
 let login_type = getCookie("type");
@@ -17,7 +17,9 @@ rename_btn.addEventListener("click", async (e) => {
     let new_class_name = window.prompt("Please enter new class name!", class_name);
     if (new_class_name != null && new_class_name.length > 0) {
         if (new_class_name === class_name) {
-            alert("No changes are made!");
+            // alert("No changes are made!");
+
+            warning('No changes are made!');
             return;
         }
         let confirm = window.confirm(`Do you want to change class name to "${new_class_name}"`);
@@ -25,7 +27,9 @@ rename_btn.addEventListener("click", async (e) => {
             await renameClassCallBack(new_class_name);
         }
     } else {
-        alert("Class name can't be null or empty!");
+        // alert("Class name can't be null or empty!");
+
+        warning('Class name can\'t be null or empty!');
     }
 })  
 
@@ -37,10 +41,15 @@ async function renameClassCallBack(new_class_name) {
     console.log(response);
     let data = JSON.parse(response);
     if (data['err_code'] === 0) {
-        alert("Rename class successfully!");
-        window.location.reload();
+        // alert("Rename class successfully!");
+        // window.location.reload();
+
+        let class_name_element = document.getElementById('class-name');
+        class_name_element.innerText = new_class_name;
     } else {
-        alert("Fail to rename class!");
+        // alert("Fail to rename class!");
+
+        warning('Fail to rename class!');
     }
 }
 
@@ -60,10 +69,14 @@ async function leaveClassCallBack() {
         );
         let data = JSON.parse(response);
         if (data['err_code'] === 0) {
-            alert("Leave now! Redirect to homepage.");
+            // alert("Leave now! Redirect to homepage.");
+
+            warning('Leave now! Redirect to homepage.');
             window.location.href = '/elearning/homepage/home.php';
         } else {
-            alert("Error: Can't leave class!");
+            // alert("Error: Can't leave class!");
+
+            warning('Error: Can\'t leave class!');
         }
     }
 }
@@ -85,10 +98,14 @@ async function deleteClassCallBack() {
         );
         let data = JSON.parse(response);
         if (data['err_code'] === 0) {
-            alert("Delete successfully! Redirect to homepage.");
+            // alert("Delete successfully! Redirect to homepage.");
+
+            warning('Delete successfully! Redirect to homepage.');
             window.location.href = '/elearning/homepage/home.php';
         } else {
-            alert("Error: Can't delete class!");
+            // alert("Error: Can't delete class!");
+
+            warning('Error: Can\'t delete class!');
         }
     }
 }
@@ -215,16 +232,22 @@ async function addCellEvent(cell_id) {
 async function uploadCallBack(form) {
     let file = form.querySelector("[type=file]").files;
     if (file.length == 0) {
-        alert("No file to upload");
+        // alert("No file to upload");
+
+        warning('No file to upload');
         return;
     }
 
     let response = await sendRequestForm(form, { 'do' : 'upload_file' });
     let data = JSON.stringify(response);
     if (data != null) {
-        alert("Upload file successfully!");
-    } else {      
-        alert("Error when trying to upload file!");
+        // alert("Upload file successfully!");
+
+        warning('Upload file successfully!');
+    } else {
+        // alert("Error when trying to upload file!");
+
+        warning('Error when trying to upload file!');
         return;
     }   
     
@@ -291,10 +314,14 @@ async function cancelUploadCallBack(form) {
         let data = JSON.parse(response);
 
         if (data['error_code'] == 1) {
-            alert("Directory did not exist before deletion!");
+            // alert("Directory did not exist before deletion!");
+
+            warning('Directory did not exist before deletion!')
             return;
         } else {
-            alert("File removed successfully");
+            // alert("File removed successfully");
+
+            warning('File removed successfully');
             await updateFileDisplay(form);
         }        
     }
@@ -307,13 +334,17 @@ async function deleteCellCallBack(form) {
         let response = await sendRequestForm(form, { 'do' : 'delete_cell' });
         let data = JSON.parse(response);
         if (data['err_code'] == 1) {
-            alert("Delete error: Unknow cell type!");
+            // alert("Delete error: Unknow cell type!");
+
+            warning('Delete error: Unknow cell type!');
             return;
         } else {
             let cell = document.getElementById(data['cell_id']);
             cell.remove();
         }
 
-        alert("Delete cell successfully!");
+        // alert("Delete cell successfully!");
+
+        warning('Delete cell successfully!');
     }   
 }
