@@ -123,5 +123,5 @@ export const warning = async function (message) {
     let warning_box = document.getElementById('warning-box');
     warning_box.innerText = message;
     warning_box.classList.remove('hidden');
-    setTimeout(() => { warning_message.classList.add('hidden'); }, 3000);
+    setTimeout(() => { warning_box.classList.add('hidden'); }, 3000);
 }

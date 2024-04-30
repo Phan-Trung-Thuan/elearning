@@ -46,6 +46,7 @@ async function renameClassCallBack(new_class_name) {
 
         let class_name_element = document.getElementById('class-name');
         class_name_element.innerText = new_class_name;
+        warning('Rename class successfully!');
     } else {
         // alert("Fail to rename class!");
 
