@@ -1,3 +1,55 @@
+.title {
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background-color: orange;
+    padding: 3px 20px;
+    margin-bottom: 3px;
+    width: fit-content;
+    border-radius: 5px 5px 0px 0px;
+}
+
+.paragraph {
+    color: rgb(196, 127, 0);
+}
+
+.paragraph > span {
+    font-weight: bold;
+}
+
+hr {
+    border-top: 1px solid orange;
+}
+
+table {
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
 table, th, td {
-    border:1px solid black;
+    color: rgb(230, 149, 0);
+    border-color: orange rgb(196, 127, 0) rgb(196, 127, 0) orange;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 4px;
+}
+
+.even-row {
+    background-color: rgb(245, 240, 232);
+}
+
+.download-button.disabled {
+    border: none;
+    background-color: unset;
+    color: #ffead0;
+}
+
+.download-button:not(.disabled) {
+    border: none;
+    background-color: unset;
+    color: #ff9e28;
+}
+
+.download-button:not(.disabled):hover {
+    background-color: orange;
+    color: white;
 }
