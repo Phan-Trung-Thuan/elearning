@@ -126,10 +126,11 @@
                     <div class="homework-progress" id="homework-progress-${cell_id}">
                     <hr>
                         <div class="small-title">HOMEWORK PROGRESS <i>instructor only</i></div>
-                        <form class="homework-progress-form" id="homwork-progress-form-${cell_id}" method="POST" action="">
+                        <form class="homework-progress-form" id="homwork-progress-form-${cell_id}" method="POST" action="/elearning/report/report.php">
                             <input type="hidden" name="cell-id" value="${cell_id}">
                             <button class="check-homework-button button">Check Homework</button>
                         </form>
+                        <div class="homework-cell-expiration-date">Expiration date: ${homework_expirationdate}</div>
                     <hr>
                     </div>
                     
@@ -146,10 +147,13 @@
                 <h2>Create Cell</h2>
 
                 <label for="cell-title">Title(*)</label>
-                <input type="text" name="cell-title" id="cell-title" placeholder="Enter Title" required>
+                <span class="char-count" id="char-count-cell-title">(<span class="char-curr">0</span>/<span class="char-max">50</span>)</span>
+                <input type="text" name="cell-title" id="cell-title" placeholder="Enter Title" maxlength="50" required>
+                
 
                 <label for="cell-description">Description(*)</label>
-                <textarea type="text" name="cell-description" id="cell-description" placeholder="Enter description" rows="10" cols="35" required></textarea>
+                <span class="char-count" id="char-count-cell-description">(<span class="char-curr">0</span>/<span class="char-max">500</span>)</span>
+                <textarea type="text" name="cell-description" id="cell-description" placeholder="Enter description" rows="10" cols="35" maxlength="500" required></textarea>
 
                 <label for="cell-type">Choose Type(*)</label>
                 <select name="cell-type" id="cell-type" required>
@@ -162,7 +166,8 @@
                 <div id="option-container">
                     <div class="cell-type-option" id="cell-type-option-0">
                         <label for="notification-note">Note</label>
-                        <textarea type="text" name="notification-note" id="notification-note" row="3" cols="35"></textarea>
+                        <span class="char-count" id="char-count-notification-note">(<span class="char-curr">0</span>/<span class="char-max">200</span>)</span>
+                        <textarea type="text" name="notification-note" id="notification-note" placeholder="Enter note" row="3" cols="35" maxlength="200"></textarea>
                     </div>
                     
                     <div class="cell-type-option" id="cell-type-option-1">
@@ -173,6 +178,7 @@
 
                 
                 <button id="create-cell-button" class="button">Create</button>
+                <button type="button" id="reset-form-button" class="button">Reset</button>
                 <button type="button" id="close-form-button" class="button">Close</button>
             </form>
         </div>

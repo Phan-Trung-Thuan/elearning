@@ -54,7 +54,6 @@ async function getInstructorClasses() {
     );
     // console.log(response);
     let data = JSON.parse(response);
-    console.log(data);
 
     addClass(data);
 }

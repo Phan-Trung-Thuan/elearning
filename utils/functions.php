@@ -21,18 +21,39 @@
         }
     }
 
-    function getHWProgress($cell_id) {
+    function getHWReport($cell_id) {
         //Check cell type first
-        $cell_data = getCellData($cell_id);        
-        if ($cell_data['cell_type'] !== 'HOMEWORK') {
-            return "Invalid cell type when trying to get homework progress";
+        $cell_data = getCellData($cell_id);
+        if (!$cell_data || $cell_data['cell_type'] !== 'HOMEWORK') {
+            return "Invalid cell type (null or not recognize) when trying to get homework progress";
         }
 
         $class_id = $cell_data['class_id'];
         $class_data = getClassData($class_id);
-        // foreach ($class_data['enrollment'] as $student) {
-            
-        // }
+
+        $data = array();
+        $index = 0;
+        foreach ($class_data['enrollment'] as $student) {
+            $data[$index]['info'] = $student;
+            $student_id = $student['student_id'];
+
+            $hw_dir_path = __DIR__ . "/../files/homework/" . $cell_id . "/" .  $student_id . "/";
+
+            //If the directory exists and have files
+            if (is_dir($hw_dir_path) and (new FilesystemIterator($hw_dir_path))->valid()) {
+                $data[$index]['file'] = array();
+                $files = scandir($hw_dir_path);    
+                $files_length = count($files);
+                for ($i = 2; $i < $files_length; $i++) {
+                    array_push($data[$index]['file'], $files[$i]);
+                }
+            } else {
+                $data[$index]['file'] = null;
+            }
+            $index++;
+        }
+
+        return $data;
     }
 
     /**
@@ -75,6 +96,7 @@
         $result_2 = $stmt_2->get_result();
 
         while ($row = $result_2->fetch_assoc()) {
+            $row['instructor_dateofbirth'] = changeDateTimeFormat($row['instructor_dateofbirth'], "d-m-Y");
             $data['instructor'] = $row;
         }
         $stmt_2->close();
@@ -86,6 +108,7 @@
 
         $data['enrollment'] = array();
         while ($row = $result_3->fetch_assoc()) {
+            $row['student_dateofbirth'] = changeDateTimeFormat($row['student_dateofbirth'], "d-m-Y");
             array_push($data['enrollment'], $row);
         }
         $stmt_3->close();
