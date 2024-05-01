@@ -42,7 +42,7 @@ CREATE TABLE `cell` (
 
 LOCK TABLES `cell` WRITE;
 /*!40000 ALTER TABLE `cell` DISABLE KEYS */;
-INSERT INTO `cell` VALUES ('100001','10001','Thông tin học phần CL001','Chào mừng đến với lớp lập trình căn bản! Lớp này là một bước đầu tuyệt vời để khám phá và nắm vững những kiến thức cơ bản về lập trình. \nTrong khoá học này, chúng tôi sẽ khám phá các nguyên tắc căn bản của lập trình và hướng dẫn bạn cách sử dụng ngôn ngữ lập trình phổ biến \nnhư Python, Java hoặc C++. Bạn sẽ học cách viết mã, đặt tên biến, sử dụng các cấu trúc điều khiển như rẽ nhánh và vòng lặp, \nvà tổ chức mã của mình để tạo ra các chương trình hoạt động một cách logic và hiệu quả.','2024-04-17 10:04:06'),('100002','10001','Nộp bài tập nhóm đợt 1','Sinh viên vui lòng nộp bài tập nhóm đã được giao ở tuần 7 tại đây','2024-04-17 10:04:06'),('100003','10001','Về lịch học','Thứ 2: 13h30 hàng tuần tại phòng 210/DI','2024-04-17 10:04:06'),('100004','10002','Đây là ô mới','         A - Nội dung giảng dạy \n\nPhần 1: Các thành phần cơ bản của ngôn ngữ lập trình Java (2 buổi)\n\n  - Giới thiệu ngôn  ngữ Java\n  - Từ khóa, kiểu dữ liệu (cơ bản và mở rộng/tham chiếu) , biến - hằng, các phép toán - biểu thức, khối lệnh và phạm vi biến, các cấu trúc điều khiễn, phương thức/hàm, tái định nghĩa, Mảng và chuỗi, ....\n\nPhần 2: Lý thuyết lập trình hướng đối tượng (1 buổi)       ','2024-04-19 10:32:57'),('100005','10002','Nộp bài tập','Nộp bài tập TH Buổi 5 - Nhóm CLC M04 - C5                ','2024-04-19 10:38:45'),('100006','10010','HK2 Bai tap nhom','Bai tap tuan 9','2024-04-29 19:02:45');
+INSERT INTO `cell` VALUES ('100001','10001','Thông tin học phần CL001','Chào mừng đến với lớp lập trình căn bản! Lớp này là một bước đầu tuyệt vời để khám phá và nắm vững những kiến thức cơ bản về lập trình. \nTrong khoá học này, chúng tôi sẽ khám phá các nguyên tắc căn bản của lập trình và hướng dẫn bạn cách sử dụng ngôn ngữ lập trình phổ biến \nnhư Python, Java hoặc C++. Bạn sẽ học cách viết mã, đặt tên biến, sử dụng các cấu trúc điều khiển như rẽ nhánh và vòng lặp, \nvà tổ chức mã của mình để tạo ra các chương trình hoạt động một cách logic và hiệu quả.','2024-04-17 10:04:06'),('100002','10001','Nộp bài tập nhóm đợt 1','Sinh viên vui lòng nộp bài tập nhóm đã được giao ở tuần 7 tại đây','2024-04-17 10:04:06'),('100003','10001','Về lịch học','Thứ 2: 13h30 hàng tuần tại phòng 210/DI','2024-04-17 10:04:06'),('100004','10002','Đây là ô mới','         A - Nội dung giảng dạy \n\nPhần 1: Các thành phần cơ bản của ngôn ngữ lập trình Java (2 buổi)\n\n  - Giới thiệu ngôn  ngữ Java\n  - Từ khóa, kiểu dữ liệu (cơ bản và mở rộng/tham chiếu) , biến - hằng, các phép toán - biểu thức, khối lệnh và phạm vi biến, các cấu trúc điều khiễn, phương thức/hàm, tái định nghĩa, Mảng và chuỗi, ....\n\nPhần 2: Lý thuyết lập trình hướng đối tượng (1 buổi)       ','2024-04-19 10:32:57'),('100005','10002','Nộp bài tập','Nộp bài tập TH Buổi 5 - Nhóm CLC M04 - C5                ','2024-04-19 10:38:45'),('100006','10010','Bài tập tuần 9','bla bla bla','2024-05-01 09:02:40');
 /*!40000 ALTER TABLE `cell` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -121,7 +121,7 @@ CREATE TABLE `homework` (
 
 LOCK TABLES `homework` WRITE;
 /*!40000 ALTER TABLE `homework` DISABLE KEYS */;
-INSERT INTO `homework` VALUES ('100002','2024-05-10 10:00:00'),('100005','2024-04-24 10:38:00'),('100006','2024-05-08 19:02:00');
+INSERT INTO `homework` VALUES ('100002','2024-05-10 10:00:00'),('100005','2024-04-24 10:38:00'),('100006','2024-05-03 09:02:00');
 /*!40000 ALTER TABLE `homework` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -135,12 +135,9 @@ DROP TABLE IF EXISTS `homework_detail`;
 CREATE TABLE `homework_detail` (
   `CELL_ID` char(6) NOT NULL,
   `STUDENT_ID` char(8) NOT NULL,
-  `HWDETAIL_SUBMITDATE` date NOT NULL,
-  `HWDETAIL_GRADE` float DEFAULT NULL,
-  PRIMARY KEY (`CELL_ID`,`STUDENT_ID`),
-  KEY `FK_HOMEWORK_RELATIONS_STUDENT` (`STUDENT_ID`),
-  CONSTRAINT `FK_HOMEWORK_RELATIONS_HOMEWORK` FOREIGN KEY (`CELL_ID`) REFERENCES `homework` (`CELL_ID`),
-  CONSTRAINT `FK_HOMEWORK_RELATIONS_STUDENT` FOREIGN KEY (`STUDENT_ID`) REFERENCES `student` (`STUDENT_ID`)
+  `HWDETAIL_SUBMITDATE` datetime NOT NULL,
+  `hwdetail_grade` int(11) DEFAULT NULL,
+  PRIMARY KEY (`CELL_ID`,`STUDENT_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -247,4 +244,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-04-30 22:36:20
+-- Dump completed on 2024-05-01 17:08:05
