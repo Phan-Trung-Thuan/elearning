@@ -21,6 +21,50 @@
         }
     }
 
+    function getHWGrade($cell_id, $student_id) {
+        include __DIR__ . "/../utils/config.php";
+
+        $conn = @new mysqli($servername, $user, $password, $database) or die 
+        ('connection failed: ' . $conn->connect_error);   
+        mysqli_set_charset($conn,"utf8mb4");
+
+        $stmt = $conn->prepare("SELECT hwdetail_grade FROM homework_detail WHERE cell_id = ? AND student_id = ?");
+        $stmt->bind_param('ss', $cell_id, $student_id);
+        $stmt->execute();
+        $data = null;
+        $result = $stmt->get_result();
+        while ($row = $result->fetch_assoc()) {
+            $data = $row;
+        }
+
+        $stmt->close();
+        $conn->close();
+
+        return $data;
+    }
+
+    function updateHWGrade($cell_id, $grades) {
+        include __DIR__ . "/../utils/config.php";
+
+        $conn = @new mysqli($servername, $user, $password, $database) or die 
+        ('connection failed: ' . $conn->connect_error);   
+        mysqli_set_charset($conn,"utf8mb4");
+
+        $stmt = $conn->prepare("UPDATE homework_detail SET hwdetail_grade = ? WHERE cell_id = ? AND student_id = ?");
+        $stmt->bind_param('sss', $grade, $cell_id, $student_id);
+
+        foreach ($grades as $student_id => $grade) {
+            $stmt->execute();
+        }
+
+        $stmt->close();
+        $conn->close();
+
+        $data['err_code'] = 0;
+
+        return $data;
+    }
+
     function getHWReport($cell_id) {
         //Check cell type first
         $cell_data = getCellData($cell_id);
@@ -30,6 +74,15 @@
 
         $class_id = $cell_data['class_id'];
         $class_data = getClassData($class_id);
+
+        include __DIR__ . "/../utils/config.php";
+
+        $conn = @new mysqli($servername, $user, $password, $database) or die 
+        ('connection failed: ' . $conn->connect_error);   
+        mysqli_set_charset($conn,"utf8mb4");
+
+        $stmt = $conn->prepare("SELECT hwdetail_submitdate, hwdetail_grade FROM homework_detail WHERE cell_id = ? AND student_id = ?");
+        $stmt->bind_param('ss', $cell_id, $student_id);
 
         $data = array();
         $index = 0;
@@ -50,8 +103,23 @@
             } else {
                 $data[$index]['file'] = null;
             }
+
+            //Get date and grade
+            $data[$index]['submit_date'] = null;
+            $data[$index]['grade'] = null;
+            $stmt->execute();
+            $result = $stmt->get_result();
+            while ($row = $result->fetch_assoc()) {
+                $row['hwdetail_submitdate'] = changeDateTimeFormat($row['hwdetail_submitdate'], "d-m-Y H:i:s");
+                $data[$index]['submit_date'] = $row['hwdetail_submitdate'];
+                $data[$index]['grade'] = $row['hwdetail_grade'];
+            }
+
             $index++;
-        }
+        }       
+
+        $stmt->close();
+        $conn->close();
 
         return $data;
     }
@@ -704,7 +772,7 @@
             $conn = @new mysqli($servername, $user, $password, $database) or die('connection failed: ' . $conn->connect_error);   
             mysqli_set_charset($conn,"utf8mb4");
             $stmt = $conn->prepare("INSERT INTO homework_detail VALUES (?, ?, ?, null)");
-            $submit_date = date('Y-m-d');
+            $submit_date = date('Y-m-d H:i:s');
             $stmt->bind_param('sss', $cell_id, $username, $submit_date);
             $stmt->execute();
 

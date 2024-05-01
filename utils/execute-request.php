@@ -188,6 +188,22 @@
                 return;
             }
 
+            if ($data['do'] === 'update_hw_grade') {
+                $cell_id = $data['cell-id'];
+                $grades = $data['grades'];
+                $data = updateHWGrade($cell_id, $grades);
+                echo json_encode($data);
+                return;
+            }
+
+            if ($data['do'] === 'get_hw_grade') {
+                $cell_id = $data['cell-id'];
+                $student_id = $data['student-id'];
+                $data = getHWGrade($cell_id, $student_id);
+                echo json_encode($data);
+                return;
+            }
+
         } else {
             echo "ERROR: Can't identify which function to execute at /elearning/utils/functions.php";
         }    

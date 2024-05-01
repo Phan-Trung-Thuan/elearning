@@ -118,6 +118,7 @@
                             <input type="hidden" name="cell-type" value="homework">
                             <ul class="homework-list" id="homework-list-${cell_id}"></ul>
                             <button class="cancel-button button">Cancel</button>
+                            <div class="grade">Grade:&nbsp;<span id="grade-${cell_id}">${hwdetail_grade}</span></div>
                         </form>
                         <div class="homework-cell-expiration-date">Expiration date: ${homework_expirationdate}</div>
                     <hr>                        

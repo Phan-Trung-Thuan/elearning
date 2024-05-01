@@ -33,23 +33,52 @@ table, th, td {
     border-radius: 4px;
 }
 
-.even-row {
-    background-color: rgb(245, 240, 232);
+/* tr.even-row must appear before tr.late */
+tr.even-row {
+    background-color: rgb(223, 221, 215);
+}
+
+/* tr.late must appear after tr.even-row */
+tr.late {
+    background-color: rgba(255, 0, 0, 0.759);
 }
 
 .download-button.disabled {
-    border: none;
-    background-color: unset;
-    color: #ffead0;
+    display: none;
 }
 
 .download-button:not(.disabled) {
     border: none;
     background-color: unset;
     color: #ff9e28;
+    cursor: pointer;
 }
 
 .download-button:not(.disabled):hover {
     background-color: orange;
     color: white;
+}
+
+.grade-input {
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    width: 30px;
+    text-align: right;
+    padding: 0;
+}
+
+.grade-input:disabled {
+    border: none;
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    background-color: unset;
+    color: inherit;
+    padding: 0;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }

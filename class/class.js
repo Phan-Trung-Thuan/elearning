@@ -1,6 +1,7 @@
 import { sendRequest, sendRequestForm, getDOMFromTemplate, getCookie, warning } from '/elearning/utils/functions.js';
 
 let class_id = document.getElementById('class-id').value;
+let username = getCookie("username");
 let login_type = getCookie("type");
 
 // Get class name
@@ -113,10 +114,10 @@ async function deleteClassCallBack() {
 
 
 
-getInitCell();
+getClassCell();
 
 /** Class cell */
-async function getInitCell() {
+async function getClassCell() {
     let response = await sendRequest(
         '/elearning/utils/execute-request.php', 
         {'do' : 'get_class_cell', 'class-id' : class_id}
@@ -125,7 +126,7 @@ async function getInitCell() {
     let cells = JSON.parse(response);
 
     for (let cell of cells) {
-        let result = await addCell(cell['cell_id']);
+        await addCell(cell['cell_id']);
     }
 }
 
@@ -139,12 +140,28 @@ export async function addCell(cell_id) {
         { 'do' : 'get_cell_data', 'cell-id' : cell_id }
     );
     let data = JSON.parse(response);
-    
+
     let template_clone = null;  
     if (data['notification_note'] != null) {
         template_clone = notification_template.cloneNode(true);
     } else if (data['homework_expirationdate'] != null) {
         template_clone = homework_template.cloneNode(true);
+        data['hwdetail_grade'] = null;
+
+        if (login_type === "STUDENT") {
+            let response2 = await sendRequest(
+                '/elearning/utils/execute-request.php',
+                { 'do' : 'get_hw_grade', 'cell-id' : cell_id, 'student-id' : username}
+            );
+            let data2 = JSON.parse(response2);
+
+            if (data2 && data2['hwdetail_grade']) {
+                data['hwdetail_grade'] = data2['hwdetail_grade'];
+            } else {
+                data['hwdetail_grade'] = "No grade yet";
+            }
+        }
+
     } else {
         console.log("ERROR: Can't identify class cell type!");
         return;
