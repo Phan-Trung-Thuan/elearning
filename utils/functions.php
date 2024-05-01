@@ -21,6 +21,50 @@
         }
     }
 
+    function getHWGrade($cell_id, $student_id) {
+        include __DIR__ . "/../utils/config.php";
+
+        $conn = @new mysqli($servername, $user, $password, $database) or die 
+        ('connection failed: ' . $conn->connect_error);   
+        mysqli_set_charset($conn,"utf8mb4");
+
+        $stmt = $conn->prepare("SELECT hwdetail_grade FROM homework_detail WHERE cell_id = ? AND student_id = ?");
+        $stmt->bind_param('ss', $cell_id, $student_id);
+        $stmt->execute();
+        $data = null;
+        $result = $stmt->get_result();
+        while ($row = $result->fetch_assoc()) {
+            $data = $row;
+        }
+
+        $stmt->close();
+        $conn->close();
+
+        return $data;
+    }
+
+    function updateHWGrade($cell_id, $grades) {
+        include __DIR__ . "/../utils/config.php";
+
+        $conn = @new mysqli($servername, $user, $password, $database) or die 
+        ('connection failed: ' . $conn->connect_error);   
+        mysqli_set_charset($conn,"utf8mb4");
+
+        $stmt = $conn->prepare("UPDATE homework_detail SET hwdetail_grade = ? WHERE cell_id = ? AND student_id = ?");
+        $stmt->bind_param('sss', $grade, $cell_id, $student_id);
+
+        foreach ($grades as $student_id => $grade) {
+            $stmt->execute();
+        }
+
+        $stmt->close();
+        $conn->close();
+
+        $data['err_code'] = 0;
+
+        return $data;
+    }
+
     function getHWReport($cell_id) {
         //Check cell type first
         $cell_data = getCellData($cell_id);
@@ -30,6 +74,15 @@
 
         $class_id = $cell_data['class_id'];
         $class_data = getClassData($class_id);
+
+        include __DIR__ . "/../utils/config.php";
+
+        $conn = @new mysqli($servername, $user, $password, $database) or die 
+        ('connection failed: ' . $conn->connect_error);   
+        mysqli_set_charset($conn,"utf8mb4");
+
+        $stmt = $conn->prepare("SELECT hwdetail_submitdate, hwdetail_grade FROM homework_detail WHERE cell_id = ? AND student_id = ?");
+        $stmt->bind_param('ss', $cell_id, $student_id);
 
         $data = array();
         $index = 0;
@@ -50,8 +103,23 @@
             } else {
                 $data[$index]['file'] = null;
             }
+
+            //Get date and grade
+            $data[$index]['submit_date'] = null;
+            $data[$index]['grade'] = null;
+            $stmt->execute();
+            $result = $stmt->get_result();
+            while ($row = $result->fetch_assoc()) {
+                $row['hwdetail_submitdate'] = changeDateTimeFormat($row['hwdetail_submitdate'], "d-m-Y H:i:s");
+                $data[$index]['submit_date'] = $row['hwdetail_submitdate'];
+                $data[$index]['grade'] = $row['hwdetail_grade'];
+            }
+
             $index++;
-        }
+        }       
+
+        $stmt->close();
+        $conn->close();
 
         return $data;
     }
@@ -68,7 +136,7 @@
     function getClassData($class_id) {
         include __DIR__ . "/../utils/config.php";
 
-        $conn = @new mysqli($servername, $username, $password, $database) or die 
+        $conn = @new mysqli($servername, $user, $password, $database) or die 
         ('connection failed: ' . $conn->connect_error);   
         mysqli_set_charset($conn,"utf8mb4");
 
@@ -128,7 +196,7 @@
 
         include __DIR__ . "/../utils/config.php";
 
-        $conn = @new mysqli($servername, $username, $password, $database) or die 
+        $conn = @new mysqli($servername, $user, $password, $database) or die 
         ('connection failed: ' . $conn->connect_error);   
         mysqli_set_charset($conn,"utf8mb4");
 
@@ -153,7 +221,7 @@
     function updateClassName($class_id, $new_class_name) {
         include __DIR__ . "/../utils/config.php";
 
-        $conn = @new mysqli($servername, $username, $password, $database) or die 
+        $conn = @new mysqli($servername, $user, $password, $database) or die 
         ('connection failed: ' . $conn->connect_error);   
         mysqli_set_charset($conn,"utf8mb4");
 
@@ -172,7 +240,7 @@
     function createClass($class_name, $instructor_id) {
         include __DIR__ . "/../utils/config.php";
 
-        $conn = @new mysqli($servername, $username, $password, $database) or die 
+        $conn = @new mysqli($servername, $user, $password, $database) or die 
         ('connection failed: ' . $conn->connect_error);   
         mysqli_set_charset($conn,"utf8mb4");
 
@@ -198,7 +266,7 @@
     function getInstructorClass($instructor_id) {
         include __DIR__ . "/../utils/config.php";
 
-        $conn = @new mysqli($servername, $username, $password, $database) or die 
+        $conn = @new mysqli($servername, $user, $password, $database) or die 
         ('connection failed: ' . $conn->connect_error);   
         mysqli_set_charset($conn,"utf8mb4");
 
@@ -221,7 +289,7 @@
     function getClassName($class_id) {
         include __DIR__ . "/config.php";
         
-        $conn = @new mysqli($servername, $username, $password, $database) or die($conn->connect_error);
+        $conn = @new mysqli($servername, $user, $password, $database) or die($conn->connect_error);
         $conn->set_charset($charset);
         
         $stmt = $conn->prepare('SELECT CLASS_NAME FROM class WHERE class_id = ?');
@@ -235,9 +303,11 @@
     }
 
     function leaveClass($student_id, $class_id) {
+        
+
         include __DIR__ . "/../utils/config.php";
 
-        $conn = @new mysqli($servername, $username, $password, $database) or die 
+        $conn = @new mysqli($servername, $user, $password, $database) or die 
         ('connection failed: ' . $conn->connect_error);   
         mysqli_set_charset($conn,"utf8mb4");
 
@@ -257,7 +327,7 @@
         
         include __DIR__ . "/../utils/config.php";  
         
-        $conn = @new mysqli($servername, $username, $password, $database) or die 
+        $conn = @new mysqli($servername, $user, $password, $database) or die 
         ('connection failed: ' . $conn->connect_error);   
         mysqli_set_charset($conn,"utf8mb4");
 
@@ -301,7 +371,7 @@
     function createCell($input_data) {
         include __DIR__ . "/../utils/config.php";  
         
-        $conn = @new mysqli($servername, $username, $password, $database) or die 
+        $conn = @new mysqli($servername, $user, $password, $database) or die 
         ('connection failed: ' . $conn->connect_error);   
         mysqli_set_charset($conn,"utf8mb4");
 
@@ -360,13 +430,31 @@
             $dir_path = $hw_dir_path;
             if (is_dir($dir_path)) {
                 remove_dir($dir_path);
-            } 
+            }            
+
         } else if (strtoupper($file_type) === "DOCUMENT") {
             $dir_path = $doc_dir_path;
             if (is_dir($dir_path)) {
                 remove_dir($dir_path);
             } 
         }
+
+        //Remove the submittion record(s) in database
+        include __DIR__ . '/config.php';
+        $conn = @new mysqli($servername, $user, $password, $database) or die($conn->connect_error);
+        $conn->set_charset($charset);
+
+        if ($username) {
+            $stmt = $conn->prepare("DELETE FROM homework_detail WHERE cell_id = ? AND student_id = ?");
+            $stmt->bind_param('ss', $cell_id, $username);
+        } else {
+            $stmt = $conn->prepare("DELETE FROM homework_detail WHERE cell_id = ?");
+            $stmt->bind_param('s', $cell_id);
+        }
+        $stmt->execute();
+
+        $stmt->close();
+        $conn->close();
 
         // $data["error_code"] = 0;
         return $data;
@@ -406,7 +494,7 @@
     function getEnrollClass($student_id=null) {
         include __DIR__ . "/../utils/config.php";  
         
-        $conn = @new mysqli($servername, $username, $password, $database) or die 
+        $conn = @new mysqli($servername, $user, $password, $database) or die 
         ('connection failed: ' . $conn->connect_error);   
         mysqli_set_charset($conn,"utf8mb4");
         
@@ -432,7 +520,7 @@
     function joinClass($student_id, $class_id) {
         include __DIR__ . "/config.php";
         
-        $conn = @new mysqli($servername, $username, $password, $database) or die($conn->connect_error);
+        $conn = @new mysqli($servername, $user, $password, $database) or die($conn->connect_error);
         $conn->set_charset($charset);
         
         $stmt = $conn->prepare('SELECT count(*) FROM enrollment WHERE class_id = ? AND student_id = ?');
@@ -454,7 +542,7 @@
     function checkLogin($login_username, $login_password) {
         include __DIR__ . "/config.php";
         
-        $conn = @new mysqli($servername, $username, $password, $database);
+        $conn = @new mysqli($servername, $user, $password, $database);
         //check connection
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
@@ -536,7 +624,7 @@
     function getCellData($cell_id) {
         include __DIR__ . "/config.php";
         
-        $conn = @new mysqli($servername, $username, $password, $database) or die($conn->connect_error);
+        $conn = @new mysqli($servername, $user, $password, $database) or die($conn->connect_error);
         $conn->set_charset($charset);
 
         $stmt = $conn->prepare("SELECT C.cell_id, class_id, cell_title, cell_description, cell_createddate, notification_note, homework_expirationdate FROM CELL C LEFT JOIN NOTIFICATION N on C.cell_id = N.cell_id LEFT JOIN HOMEWORK H on C.cell_id = H.cell_id WHERE C.cell_id = ?");
@@ -573,7 +661,7 @@
     function getClassCell($class_id) {
         include __DIR__ . "/config.php";
         
-        $conn = @new mysqli($servername, $username, $password, $database) or die($conn->connect_error);
+        $conn = @new mysqli($servername, $user, $password, $database) or die($conn->connect_error);
         $conn->set_charset($charset);
         
         $stmt = $conn->prepare("SELECT C.cell_id as cell_id FROM CELL C LEFT JOIN NOTIFICATION N on C.cell_id = N.cell_id LEFT JOIN HOMEWORK H on C.cell_id = H.cell_id WHERE class_id = ? ORDER BY cell_createddate");       
@@ -599,7 +687,7 @@
 
         $record_per_page = $record_ppage;
 
-        $conn = @new mysqli($servername, $username, $password, $database) or die 
+        $conn = @new mysqli($servername, $user, $password, $database) or die 
         ('connection failed: ' . $conn->connect_error);
         $conn->set_charset($charset);
         // mysqli_set_charset($conn,"utf8mb4");        
@@ -621,7 +709,7 @@
         require __DIR__ . "/../utils/config.php";
         $record_per_page = $record_ppage;
 
-        $conn = @new mysqli($servername, $username, $password, $database) or die 
+        $conn = @new mysqli($servername, $user, $password, $database) or die 
         ('connection failed: ' . $conn->connect_error);        
         mysqli_set_charset($conn,"utf8mb4");
 
@@ -673,6 +761,23 @@
             } else {
                 $err_list[$_FILES["file"]["name"][$i]] = $_FILES["file"]["error"][$i];
             }
+        }
+        
+
+        //If file type is homework, write a record of submittion to database
+        if (strtoupper($file_type) === "HOMEWORK") {
+
+            include __DIR__ . "/../utils/config.php";            
+
+            $conn = @new mysqli($servername, $user, $password, $database) or die('connection failed: ' . $conn->connect_error);   
+            mysqli_set_charset($conn,"utf8mb4");
+            $stmt = $conn->prepare("INSERT INTO homework_detail VALUES (?, ?, ?, null)");
+            $submit_date = date('Y-m-d H:i:s');
+            $stmt->bind_param('sss', $cell_id, $username, $submit_date);
+            $stmt->execute();
+
+            $stmt->close();
+            $conn->close();
         }
 
         return $err_list;

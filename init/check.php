@@ -1,6 +1,6 @@
 <?php
     include __DIR__ . "/../utils/config.php";
-    $conn = @new mysqli($servername, $username, $password, $database) or die ('connection failed: ' . $conn->connect_error);   
+    $conn = @new mysqli($servername, $user, $password, $database) or die ('connection failed: ' . $conn->connect_error);   
     mysqli_set_charset($conn,"utf8mb4");
     $stmt = $conn->prepare("SELECT password from TEMP where student_id = ?");
     $s_id = "B2111001";

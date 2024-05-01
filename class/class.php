@@ -118,6 +118,7 @@
                             <input type="hidden" name="cell-type" value="homework">
                             <ul class="homework-list" id="homework-list-${cell_id}"></ul>
                             <button class="cancel-button button">Cancel</button>
+                            <div class="grade">Grade:&nbsp;<span id="grade-${cell_id}">${hwdetail_grade}</span></div>
                         </form>
                         <div class="homework-cell-expiration-date">Expiration date: ${homework_expirationdate}</div>
                     <hr>                        
@@ -200,7 +201,7 @@
         $student_id = $_COOKIE['username'];
         $is_join = null;
 
-        $conn = @new mysqli($servername, $username, $password, $database) or die($conn->connect_error);
+        $conn = @new mysqli($servername, $user, $password, $database) or die($conn->connect_error);
         $conn->set_charset($charset);
         
         $stmt = $conn->prepare('SELECT count(*) FROM enrollment WHERE class_id = ? AND student_id = ?');
@@ -228,7 +229,7 @@
         $instructor_id = $_COOKIE['username'];
         $is_belong = null;
 
-        $conn = @new mysqli($servername, $username, $password, $database) or die($conn->connect_error);
+        $conn = @new mysqli($servername, $user, $password, $database) or die($conn->connect_error);
         $conn->set_charset($charset);
         
         $stmt = $conn->prepare('SELECT count(*) FROM class WHERE class_id = ? AND instructor_id = ?');

@@ -125,3 +125,27 @@ export const warning = async function (message) {
     warning_box.classList.remove('hidden');
     setTimeout(() => { warning_box.classList.add('hidden'); }, 3000);
 }
+
+/**
+ * Construct date from string representation (format: DD-MM-YYYY HH:mm:ss)
+ * @param {string} datetime 
+ * @returns {Date}
+ */
+const constructDateHelper = function (datetime) {
+    let [date, time] = datetime.split(" ");
+    let date_parts = date.split("-");
+    let time_parts = time.split(":");
+    // return date_parts;
+    return new Date(date_parts[2], date_parts[1]-1, date_parts[0], time_parts[0], time_parts[1], time_parts[2]);
+}
+
+/**
+ * Compare 2 date represented by string (format: DD-MM-YYYY HH:mm:ss)
+ * @param {string} datetime1    //String representation of datetime 1
+ * @param {string} datetime2    //String representation of datetime 2
+ * 
+ * @returns {boolean}           //Return true if datetime1 < datetime2
+ */
+export const compareCustomDate = function (datetime1, datetime2) { 
+    return constructDateHelper(datetime1) < constructDateHelper(datetime2);
+}

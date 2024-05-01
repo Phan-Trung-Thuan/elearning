@@ -55,7 +55,7 @@
     padding-top: 5px;
 }
 
-.homework-cell-expiration-date {
+.homework-cell-expiration-date,.grade {
     font-size: 15px;
     color: rgb(232, 158, 0);
     font-weight: bold;

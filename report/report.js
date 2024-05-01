@@ -1,10 +1,45 @@
-import { sendRequest } from '/elearning/utils/functions.js';
-
+import { sendRequest, getDOMFromTemplate, warning, compareCustomDate } from '/elearning/utils/functions.js';
 
 let cell_id = document.getElementById("cell-id").value;
+let expiration_date = null;
 
-loadHomeworkInfo();
-getHomeworkReport();
+//Edit button
+let edit_btn = document.getElementById("edit-button");
+//Update button
+let update_btn = document.getElementById("update-button");
+//Cancel button
+let cancel_btn = document.getElementById("cancel-button");
+//Array to store previous values
+let tmp_values = {};
+
+edit_btn.addEventListener("click", () => {
+    let inputs = document.getElementsByClassName("grade-input");
+    for (let input of inputs) {
+        tmp_values[input.id] = input.value
+    }
+    changeEditState(true);
+});
+
+update_btn.addEventListener("click", async (e) => {
+    e.preventDefault();
+    await updateGradeCallBack()
+    changeEditState(false);
+    calcAvgGrade();
+})
+
+cancel_btn.addEventListener("click", () => {
+    let inputs = document.getElementsByClassName("grade-input");
+    for (let input of inputs) {
+        input.value = tmp_values[input.id];
+    }
+    changeEditState(false);
+    calcAvgGrade();
+})
+
+await loadHomeworkInfo();
+await getHomeworkReport();
+calcAvgGrade();
+changeEditState(false);
 
 async function loadHomeworkInfo() {
     let response = await sendRequest(
@@ -17,6 +52,7 @@ async function loadHomeworkInfo() {
     document.getElementById("hw-title").innerText = data['cell_title'];
     document.getElementById("hw-createddate").innerText = data['cell_createddate'];
     document.getElementById("hw-expirationdate").innerText = data['homework_expirationdate'];
+    expiration_date = data['homework_expirationdate'];
 }
 
 async function getHomeworkReport() {
@@ -31,6 +67,8 @@ async function getHomeworkReport() {
     let total = data.length;
     let table = document.getElementById("homework-detail");
 
+    let grade_template = document.getElementById("grade-template");
+
     for (let i = 0; i < total; i++) {
         let is_submitted = false;
         if (data[i]['file']) {
@@ -44,7 +82,18 @@ async function getHomeworkReport() {
         row.insertCell(2).innerText = data[i]['info']['student_dateofbirth'];
         row.insertCell(3).innerText = (is_submitted) ? "Done" : "X";
 
-        if (i % 2 === 0) {
+        let submit_date = data[i]['submit_date'];
+        let col4 = row.insertCell(4);
+        if (submit_date) {
+            col4.innerText = submit_date;
+            if (compareCustomDate(expiration_date, submit_date)) {
+                row.classList.add("late");
+            }
+        } else {
+            col4.innerText = "X";
+        }
+
+        if ((i+1) % 2 === 0) {
             row.classList.add('even-row');
         }
 
@@ -64,14 +113,25 @@ async function getHomeworkReport() {
             let student_id = e.target.value;
             downloadCallBack(student_id, data[i]['file']);
         })
-        row.insertCell(4).appendChild(download_btn);
+        row.insertCell(5).appendChild(download_btn);
+
+
+        if (is_submitted) {
+            let grade_template_clone = grade_template.cloneNode(true);
+            let node = getDOMFromTemplate(grade_template_clone, {student_id : data[i]['info']['student_id']});
+
+            //display grade from database
+            node.querySelector(".grade-input").value = data[i]['grade'];
+            row.insertCell(6).appendChild(node);
+        } else {
+            row.insertCell(6).innerText = "X";
+        }
     }
 
     document.getElementById("total-student").innerText = total;
     document.getElementById("no-submitted").innerText = no_submitted;
     document.getElementById("submitted-rate").innerText = `${(no_submitted/total * 100).toFixed(2)}%`;
 }; 
-
 
 async function downloadCallBack(student_id, file_names) {
     const dir_path = `../files/homework/${cell_id}/${student_id}/`;
@@ -89,20 +149,74 @@ async function downloadCallBack(student_id, file_names) {
         .then(
             () => zip.generateAsync({ type: "blob" })
                 .then(
-                    (content) => saveAs(content, "example.zip")
+                    (content) => saveAs(content, `${cell_id}_${student_id}`)
                 )
         );
 }
 
-// var zip = new JSZip();
-// const name = 'bank.png';
-// fetch('../files/homework/100006/B2111002/' + name)
-//     .then(res => res.arrayBuffer())
-//     .then(ab => {
-//         zip.file(name, ab);
-//         zip.generateAsync({ type: "blob" })
-//         .then(function (content) {
-//             // see FileSaver.js
-//             saveAs(content, "example.zip");
-//         });
-//     });
+function changeEditState(edit_state) {
+    let inputs = document.getElementsByClassName("grade-input");
+    
+    if (edit_state) {
+        edit_btn.style.display = 'none'
+        update_btn.style.display = 'inline';
+        cancel_btn.style.display = 'inline';
+
+        for (let input of inputs) {
+            input.disabled = false;
+        }
+
+    } else {
+        edit_btn.style.display = 'inline'
+        update_btn.style.display = 'none';
+        cancel_btn.style.display = 'none';
+
+        for (let input of inputs) {
+            input.disabled = true;
+        }
+    }
+}
+
+async function updateGradeCallBack() {
+    let inputs = document.getElementsByClassName("grade-input");
+    let grades = {};
+    for (let input of inputs) {        
+        let student_id = input.id.split("-")[1];
+
+        if (!input.value) {
+            continue;
+        }  else if (input.value < 0 || input.value > 100) {
+            warning(`Invalid grade value of student ${student_id}`);
+            for (let input of inputs) {
+                input.value = tmp_values[input.id];
+            }
+            return;
+        }
+
+        grades[student_id] = input.value;
+    }
+    let response = await sendRequest(
+        '/elearning/utils/execute-request.php',
+        { 'do' : 'update_hw_grade', 'cell-id' : cell_id, grades}
+    );
+    let data = JSON.parse(response);
+    if (data['err_code'] === 0) {
+        warning('Update grade successfully!');
+    } else {
+        warning('Fail to update grade!');
+    }
+}
+
+function calcAvgGrade() {
+    let inputs = document.getElementsByClassName("grade-input");
+    let no_students = 0, total = 0;
+    for (let input of inputs) {
+        if (input.value) {
+            total += Number(input.value);
+            no_students++;
+        }
+    }
+
+    let avg = (total / no_students).toFixed(2);
+    document.getElementById('avg-grade').innerText = avg;
+}
