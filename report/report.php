@@ -34,10 +34,16 @@
             Expiration date: <span id=hw-expirationdate></span>
         </div>
         <hr>
-        <div class="paragraph">Total students: <span id="total-student"></span></div>
-        <div class="paragraph">The number of submitted: <span id="no-submitted"></span></div>
-        <div class="paragraph">Submitted rate: <span id="submitted-rate"></span></div>
-        <div class="paragraph">Average grade: <span id="avg-grade"></span></div>
+        <div class="paragraph">
+            Total students: <span id="total-student"></span>
+            &nbsp;|&nbsp;
+            The number of submitted: <span id="no-submitted"></span>
+        </div>
+        <div class="paragraph">
+            Submitted rate: <span id="submitted-rate"></span>
+            &nbsp;|&nbsp;
+            Average grade: <span id="avg-grade"></span>
+        </div>
         <hr>
         <table id="homework-detail">
             <thead>
@@ -55,9 +61,9 @@
 
             </tbody>
         </table>
-        <button id="edit-button">Edit</button>
-        <button id="update-button">Update</button>
-        <button id="cancel-button">Cancel</button>
+        <button class="button" id="edit-button">Edit</button>
+        <button class="button" id="update-button">Update</button>
+        <button class="button" id="cancel-button">Cancel</button>
 
         <template id="grade-template">
             <div>

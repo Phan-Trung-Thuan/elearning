@@ -4,7 +4,7 @@
     color: white;
     background-color: orange;
     padding: 3px 20px;
-    margin-bottom: 3px;
+    margin-bottom: 6px;
     width: fit-content;
     border-radius: 5px 5px 0px 0px;
 }
@@ -35,12 +35,28 @@ table, th, td {
 
 /* tr.even-row must appear before tr.late */
 tr.even-row {
-    background-color: rgb(223, 221, 215);
+    background-color: rgb(251, 250, 247);
 }
 
 /* tr.late must appear after tr.even-row */
 tr.late {
     background-color: rgba(255, 0, 0, 0.759);
+}
+
+.button {
+    margin-top: 5px;
+    padding: 3px;
+    font-size: 14px;
+    color: white;
+    background-color: #ff9e28;
+    border: none;
+    border-radius: 5px;
+}
+
+.button:hover {
+    color: #ff9e28;
+    background-color: white;
+    border: 1px dashed orange;
 }
 
 .download-button.disabled {
@@ -81,4 +97,17 @@ input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+.grade-input {
+    border: none;
+    background-color: unset;
+    outline: none;
+    color: rgb(230, 149, 0);
+    font-weight: bold;
+}
+
+.grade-input:focus {
+    border: 2px solid orange;
+    border-radius: 5px;
 }
