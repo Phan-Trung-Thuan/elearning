@@ -200,7 +200,7 @@
         $student_id = $_COOKIE['username'];
         $is_join = null;
 
-        $conn = @new mysqli($servername, $username, $password, $database) or die($conn->connect_error);
+        $conn = @new mysqli($servername, $user, $password, $database) or die($conn->connect_error);
         $conn->set_charset($charset);
         
         $stmt = $conn->prepare('SELECT count(*) FROM enrollment WHERE class_id = ? AND student_id = ?');
@@ -228,7 +228,7 @@
         $instructor_id = $_COOKIE['username'];
         $is_belong = null;
 
-        $conn = @new mysqli($servername, $username, $password, $database) or die($conn->connect_error);
+        $conn = @new mysqli($servername, $user, $password, $database) or die($conn->connect_error);
         $conn->set_charset($charset);
         
         $stmt = $conn->prepare('SELECT count(*) FROM class WHERE class_id = ? AND instructor_id = ?');

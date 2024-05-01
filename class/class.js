@@ -241,6 +241,7 @@ async function uploadCallBack(form) {
 
     let response = await sendRequestForm(form, { 'do' : 'upload_file' });
     let data = JSON.stringify(response);
+    console.log(data);
     if (data != null) {
         // alert("Upload file successfully!");
 
