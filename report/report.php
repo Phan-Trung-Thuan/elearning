@@ -21,30 +21,30 @@
     ?>
 
     <div id="main-container">
-        <h2>HOMEWORK REPORT</h2>
-        <div>
+        <div class="title">HOMEWORK REPORT</div>
+        <div class="paragraph">
             Class: <span id="hw-class"></span>
             &nbsp;|&nbsp;
             Title: <span id=hw-title></span>
         </div>
-        <div>
+        <div class="paragraph">
             Created date: <span id="hw-createddate"></span>
             &nbsp;|&nbsp;
             Expiration date: <span id=hw-expirationdate></span>
         </div>
         <hr>
-        <div>Total students: <span id="total-student"></span></div>
-        <div>The number of submitted: <span id="no-submitted"></span></div>
-        <div>Submitted rate: <span id="submitted-rate"></span></div>
+        <div class="paragraph">Total students: <span id="total-student"></span></div>
+        <div class="paragraph">The number of submitted: <span id="no-submitted"></span></div>
+        <div class="paragraph">Submitted rate: <span id="submitted-rate"></span></div>
         <hr>
         <table id="homework-detail">
             <thead>
                 <tr>
-                    <th>Student no.</th>
-                    <th>Full name</th>
-                    <th>Date of birth</th>
-                    <th>Completion status</th>
-                    <th>File</th>
+                    <th id="th1">Student no.</th>
+                    <th id="th2">Full name</th>
+                    <th id="th3">Date of birth</th>
+                    <th id="th4">Completion status</th>
+                    <th id="th5">File</th>
                 </tr>
             </thead>
             <tbody>

@@ -44,12 +44,21 @@ async function getHomeworkReport() {
         row.insertCell(2).innerText = data[i]['info']['student_dateofbirth'];
         row.insertCell(3).innerText = (is_submitted) ? "Done" : "X";
 
+        if (i % 2 === 0) {
+            row.classList.add('even-row');
+        }
+
         let download_btn = document.createElement('button');
         download_btn.className = "download-button";
         download_btn.id = `download-button-${data[i]['info']['student_id']}`;
         download_btn.innerText = "Download";
         download_btn.value = `${data[i]['info']['student_id']}`;
         download_btn.disabled = !is_submitted;
+
+        if (download_btn.disabled) {
+            download_btn.classList.add("disabled");
+        }
+
         download_btn.addEventListener("click", async (e) => {
             e.preventDefault();
             let student_id = e.target.value;
