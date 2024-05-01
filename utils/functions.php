@@ -362,13 +362,31 @@
             $dir_path = $hw_dir_path;
             if (is_dir($dir_path)) {
                 remove_dir($dir_path);
-            } 
+            }            
+
         } else if (strtoupper($file_type) === "DOCUMENT") {
             $dir_path = $doc_dir_path;
             if (is_dir($dir_path)) {
                 remove_dir($dir_path);
             } 
         }
+
+        //Remove the submittion record(s) in database
+        include __DIR__ . '/config.php';
+        $conn = @new mysqli($servername, $user, $password, $database) or die($conn->connect_error);
+        $conn->set_charset($charset);
+
+        if ($username) {
+            $stmt = $conn->prepare("DELETE FROM homework_detail WHERE cell_id = ? AND student_id = ?");
+            $stmt->bind_param('ss', $cell_id, $username);
+        } else {
+            $stmt = $conn->prepare("DELETE FROM homework_detail WHERE cell_id = ?");
+            $stmt->bind_param('s', $cell_id);
+        }
+        $stmt->execute();
+
+        $stmt->close();
+        $conn->close();
 
         // $data["error_code"] = 0;
         return $data;

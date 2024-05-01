@@ -89,7 +89,7 @@ async function downloadCallBack(student_id, file_names) {
         .then(
             () => zip.generateAsync({ type: "blob" })
                 .then(
-                    (content) => saveAs(content, "example.zip")
+                    (content) => saveAs(content, `${cell_id}_${student_id}`)
                 )
         );
 }
