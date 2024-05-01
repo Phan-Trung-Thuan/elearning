@@ -42,7 +42,7 @@ CREATE TABLE `cell` (
 
 LOCK TABLES `cell` WRITE;
 /*!40000 ALTER TABLE `cell` DISABLE KEYS */;
-INSERT INTO `cell` VALUES ('100001','10001','Thông tin học phần CL001','Chào mừng đến với lớp lập trình căn bản! Lớp này là một bước đầu tuyệt vời để khám phá và nắm vững những kiến thức cơ bản về lập trình. \nTrong khoá học này, chúng tôi sẽ khám phá các nguyên tắc căn bản của lập trình và hướng dẫn bạn cách sử dụng ngôn ngữ lập trình phổ biến \nnhư Python, Java hoặc C++. Bạn sẽ học cách viết mã, đặt tên biến, sử dụng các cấu trúc điều khiển như rẽ nhánh và vòng lặp, \nvà tổ chức mã của mình để tạo ra các chương trình hoạt động một cách logic và hiệu quả.','2024-04-17 10:04:06'),('100002','10001','Nộp bài tập nhóm đợt 1','Sinh viên vui lòng nộp bài tập nhóm đã được giao ở tuần 7 tại đây','2024-04-17 10:04:06'),('100003','10001','Về lịch học','Thứ 2: 13h30 hàng tuần tại phòng 210/DI','2024-04-17 10:04:06'),('100004','10002','Đây là ô mới','         A - Nội dung giảng dạy \n\nPhần 1: Các thành phần cơ bản của ngôn ngữ lập trình Java (2 buổi)\n\n  - Giới thiệu ngôn  ngữ Java\n  - Từ khóa, kiểu dữ liệu (cơ bản và mở rộng/tham chiếu) , biến - hằng, các phép toán - biểu thức, khối lệnh và phạm vi biến, các cấu trúc điều khiễn, phương thức/hàm, tái định nghĩa, Mảng và chuỗi, ....\n\nPhần 2: Lý thuyết lập trình hướng đối tượng (1 buổi)       ','2024-04-19 10:32:57'),('100005','10002','Nộp bài tập','Nộp bài tập TH Buổi 5 - Nhóm CLC M04 - C5                ','2024-04-19 10:38:45');
+INSERT INTO `cell` VALUES ('100001','10001','Thông tin học phần CL001','Chào mừng đến với lớp lập trình căn bản! Lớp này là một bước đầu tuyệt vời để khám phá và nắm vững những kiến thức cơ bản về lập trình. \nTrong khoá học này, chúng tôi sẽ khám phá các nguyên tắc căn bản của lập trình và hướng dẫn bạn cách sử dụng ngôn ngữ lập trình phổ biến \nnhư Python, Java hoặc C++. Bạn sẽ học cách viết mã, đặt tên biến, sử dụng các cấu trúc điều khiển như rẽ nhánh và vòng lặp, \nvà tổ chức mã của mình để tạo ra các chương trình hoạt động một cách logic và hiệu quả.','2024-04-17 10:04:06'),('100002','10001','Nộp bài tập nhóm đợt 1','Sinh viên vui lòng nộp bài tập nhóm đã được giao ở tuần 7 tại đây','2024-04-17 10:04:06'),('100003','10001','Về lịch học','Thứ 2: 13h30 hàng tuần tại phòng 210/DI','2024-04-17 10:04:06'),('100004','10002','Đây là ô mới','         A - Nội dung giảng dạy \n\nPhần 1: Các thành phần cơ bản của ngôn ngữ lập trình Java (2 buổi)\n\n  - Giới thiệu ngôn  ngữ Java\n  - Từ khóa, kiểu dữ liệu (cơ bản và mở rộng/tham chiếu) , biến - hằng, các phép toán - biểu thức, khối lệnh và phạm vi biến, các cấu trúc điều khiễn, phương thức/hàm, tái định nghĩa, Mảng và chuỗi, ....\n\nPhần 2: Lý thuyết lập trình hướng đối tượng (1 buổi)       ','2024-04-19 10:32:57'),('100005','10002','Nộp bài tập','Nộp bài tập TH Buổi 5 - Nhóm CLC M04 - C5                ','2024-04-19 10:38:45'),('100006','10010','HK2 Bai tap nhom','Bai tap tuan 9','2024-04-29 19:02:45');
 /*!40000 ALTER TABLE `cell` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -69,7 +69,7 @@ CREATE TABLE `class` (
 
 LOCK TABLES `class` WRITE;
 /*!40000 ALTER TABLE `class` DISABLE KEYS */;
-INSERT INTO `class` VALUES ('10001','GV001','CL001 - Lớp lập trình căn bản (HK1, năm 2023-2024)'),('10002','GV001','CL002 - Lớp lập trình hướng đối tượng (HK2, năm 2022-2023)'),('10003','GV002','CL003 - Lớp lập trình nâng cao (HK1, năm 2023-2023)'),('10004','GV002','CL004 - Lớp hệ quản trị cơ sở dữ liệu (HK2, năm 2023-2024)'),('10005','GV003','CL005 - Lớp phân tích và thiết kế hệ thống (HK1, năm 2024-2025)'),('10006','GV001','CL006 - Lớp phân tích và thiết kế thuật toán (HK2, năm 2024-2025)'),('10007','GV002','CL007 - Lớp mạng máy tính (HK1, năm 2022-2023)'),('10008','GV003','CL008 - Lớp mạng máy tính (HK1, năm 2023-2024)'),('10009','GV001','CL009 - Lớp lập trình web (HK2, năm 2023-2024)');
+INSERT INTO `class` VALUES ('10001','GV001','CL001 - Lớp lập trình căn bản (HK1, năm 2023-2024)'),('10002','GV001','CL002 - Lớp lập trình hướng đối tượng (HK2, năm 2022-2023)'),('10003','GV002','CL003 - Lớp lập trình nâng cao (HK1, năm 2023-2023)'),('10004','GV002','CL004 - Lớp hệ quản trị cơ sở dữ liệu (HK2, năm 2023-2024)'),('10005','GV003','CL005 - Lớp phân tích và thiết kế hệ thống (HK1, năm 2024-2025)'),('10006','GV001','CL006 - Lớp phân tích và thiết kế thuật toán (HK2, năm 2024-2025)'),('10007','GV002','CL007 - Lớp mạng máy tính (HK1, năm 2022-2023)'),('10008','GV003','CL008 - Lớp mạng máy tính (HK1, năm 2023-2024)'),('10009','GV001','CL009 - Lớp lập trình web (HK2, năm 2023-2024)'),('10010','GV001','CT203H QTDA HK1');
 /*!40000 ALTER TABLE `class` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -96,7 +96,7 @@ CREATE TABLE `enrollment` (
 
 LOCK TABLES `enrollment` WRITE;
 /*!40000 ALTER TABLE `enrollment` DISABLE KEYS */;
-INSERT INTO `enrollment` VALUES ('10001','B2111001'),('10001','B2111002'),('10001','B2111003'),('10002','B2111001'),('10002','B2111002'),('10002','B2111003'),('10003','B2111001');
+INSERT INTO `enrollment` VALUES ('10001','B2111001'),('10001','B2111002'),('10001','B2111003'),('10002','B2111001'),('10002','B2111002'),('10002','B2111003'),('10003','B2111001'),('10010','B2111001'),('10010','B2111002'),('10010','B2111003');
 /*!40000 ALTER TABLE `enrollment` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -121,8 +121,36 @@ CREATE TABLE `homework` (
 
 LOCK TABLES `homework` WRITE;
 /*!40000 ALTER TABLE `homework` DISABLE KEYS */;
-INSERT INTO `homework` VALUES ('100002','2024-05-10 10:00:00'),('100005','2024-04-24 10:38:00');
+INSERT INTO `homework` VALUES ('100002','2024-05-10 10:00:00'),('100005','2024-04-24 10:38:00'),('100006','2024-05-08 19:02:00');
 /*!40000 ALTER TABLE `homework` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `homework_detail`
+--
+
+DROP TABLE IF EXISTS `homework_detail`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `homework_detail` (
+  `CELL_ID` char(6) NOT NULL,
+  `STUDENT_ID` char(8) NOT NULL,
+  `HWDETAIL_SUBMITDATE` date NOT NULL,
+  `HWDETAIL_GRADE` float DEFAULT NULL,
+  PRIMARY KEY (`CELL_ID`,`STUDENT_ID`),
+  KEY `FK_HOMEWORK_RELATIONS_STUDENT` (`STUDENT_ID`),
+  CONSTRAINT `FK_HOMEWORK_RELATIONS_HOMEWORK` FOREIGN KEY (`CELL_ID`) REFERENCES `homework` (`CELL_ID`),
+  CONSTRAINT `FK_HOMEWORK_RELATIONS_STUDENT` FOREIGN KEY (`STUDENT_ID`) REFERENCES `student` (`STUDENT_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `homework_detail`
+--
+
+LOCK TABLES `homework_detail` WRITE;
+/*!40000 ALTER TABLE `homework_detail` DISABLE KEYS */;
+/*!40000 ALTER TABLE `homework_detail` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -219,4 +247,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-04-19 10:41:15
+-- Dump completed on 2024-04-30 22:36:20
