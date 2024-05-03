@@ -59,6 +59,7 @@
     font-size: 15px;
     color: rgb(232, 158, 0);
     font-weight: bold;
+    display: inline;
 }
 
 #create-cell-form-container {
@@ -178,5 +179,9 @@ textarea {
 }
 
 .cell-type-option {
+    display: none;
+}
+
+.edit-expiration-date-form{
     display: none;
 }

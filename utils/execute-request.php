@@ -204,6 +204,14 @@
                 return;
             }
 
+            if ($data['do'] === 'update_hw_exd') {
+                $cell_id = $data['cell-id'];
+                $new_exd = $data['expiration-date'];
+                $data = updateHWExd($cell_id, $new_exd);
+                echo json_encode($data);
+                return;
+            }
+
         } else {
             echo "ERROR: Can't identify which function to execute at /elearning/utils/functions.php";
         }    

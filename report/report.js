@@ -3,6 +3,9 @@ import { sendRequest, getDOMFromTemplate, warning, compareCustomDate } from '/el
 let cell_id = document.getElementById("cell-id").value;
 let expiration_date = null;
 
+
+//Download All button
+let download_all_btn = document.getElementById("download-all-button");
 //Edit button
 let edit_btn = document.getElementById("edit-button");
 //Update button
@@ -68,12 +71,14 @@ async function getHomeworkReport() {
     let table = document.getElementById("homework-detail");
 
     let grade_template = document.getElementById("grade-template");
+    let download_list = {};
 
     for (let i = 0; i < total; i++) {
         let is_submitted = false;
         if (data[i]['file']) {
             no_submitted++;
             is_submitted = true;
+            download_list[data[i]['info']['student_id']] = data[i]['file'];
         }
 
         let row = table.insertRow(-1);
@@ -111,7 +116,7 @@ async function getHomeworkReport() {
         download_btn.addEventListener("click", async (e) => {
             e.preventDefault();
             let student_id = e.target.value;
-            downloadCallBack(student_id, data[i]['file']);
+            await downloadCallBack(student_id, data[i]['file']);
         })
         row.insertCell(5).appendChild(download_btn);
 
@@ -131,12 +136,20 @@ async function getHomeworkReport() {
     document.getElementById("total-student").innerText = total;
     document.getElementById("no-submitted").innerText = no_submitted;
     document.getElementById("submitted-rate").innerText = `${(no_submitted/total * 100).toFixed(2)}%`;
+
+
+    //Events
+    download_all_btn.addEventListener("click", async (e) => {
+        e.preventDefault();        
+        await downloadAllCallBack(download_list);
+    })
 }; 
 
 async function downloadCallBack(student_id, file_names) {
+    var zip = new JSZip();
+    
     const dir_path = `../files/homework/${cell_id}/${student_id}/`;
 
-    var zip = new JSZip();
     let promise_arr = [];
     for (let i = 0; i < file_names.length; i++) {
         promise_arr.push(
@@ -150,6 +163,33 @@ async function downloadCallBack(student_id, file_names) {
             () => zip.generateAsync({ type: "blob" })
                 .then(
                     (content) => saveAs(content, `${cell_id}_${student_id}`)
+                )
+        );
+}
+
+/**
+ * 
+ * @param {Object} download_list  //Format: {student_id : array of file names}
+ */
+async function downloadAllCallBack(download_list) {
+    var zip = new JSZip();
+    let promise_arr = [];
+    for (const [student_id, file_names] of Object.entries(download_list)) {
+        const dir_path = `../files/homework/${cell_id}/${student_id}/`;
+        for (let i = 0; i < file_names.length; i++) {
+            promise_arr.push(
+                fetch(dir_path + file_names[i])
+                    .then(res => res.arrayBuffer())
+                    .then(ab => zip.file(`${student_id}/${file_names[i]}`, ab))
+            )
+        }
+    }
+
+    Promise.all(promise_arr)
+        .then(
+            () => zip.generateAsync({ type: "blob" })
+                .then(
+                    (content) => saveAs(content, `${cell_id}_all`)
                 )
         );
 }
