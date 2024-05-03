@@ -61,6 +61,7 @@
 
             </tbody>
         </table>
+        <button class="button" id="download-all-button">Download All</button>
         <button class="button" id="edit-button">Edit</button>
         <button class="button" id="update-button">Update</button>
         <button class="button" id="cancel-button">Cancel</button>
