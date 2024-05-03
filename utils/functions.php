@@ -21,6 +21,26 @@
         }
     }
 
+    function updateHWExd($cell_id, $new_exd) {
+        include __DIR__ . "/../utils/config.php";
+
+        $conn = @new mysqli($servername, $user, $password, $database) or die 
+        ('connection failed: ' . $conn->connect_error);   
+        mysqli_set_charset($conn,"utf8mb4");
+
+        $stmt = $conn->prepare("UPDATE homework SET homework_expirationdate = ? WHERE cell_id = ?");
+        $stmt->bind_param('ss', $new_exd, $cell_id);
+        $stmt->execute();
+        
+        $data = array();
+        $data['expiration-date'] = changeDateTimeFormat($new_exd, "d-m-Y H:i:s");
+        
+        $stmt->close();
+        $conn->close();
+
+        return $data;
+    }
+
     function getHWGrade($cell_id, $student_id) {
         include __DIR__ . "/../utils/config.php";
 

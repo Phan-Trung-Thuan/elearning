@@ -112,9 +112,7 @@ async function deleteClassCallBack() {
     }
 }
 
-
-
-getClassCell();
+await getClassCell();
 
 /** Class cell */
 async function getClassCell() {
@@ -210,6 +208,23 @@ async function addCellEvent(cell_id) {
             await deleteCellCallBack(e.target);
         })
     }
+
+    let edit_expirationdate_btn = cell.querySelector(".edit-expiration-date-button");
+    if (edit_expirationdate_btn != null) {
+        edit_expirationdate_btn.addEventListener("click", (e) => {
+            let cell_id = e.currentTarget.value;
+            let form = document.getElementById(`edit-expiration-date-form-${cell_id}`);
+            form.reset();
+            let form_style = getComputedStyle(form).display;
+            form.style.display = (form_style == 'none') ? 'block' : 'none';
+        });
+    }
+
+    let edit_expirationdate_form = cell.querySelector(".edit-expiration-date-form");
+    edit_expirationdate_form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        await updateExDateCallBack(e.target);
+    })
 
     //Hide some display based on privileges
     if (login_type === "STUDENT") {
@@ -365,4 +380,18 @@ async function deleteCellCallBack(form) {
 
         warning('Delete cell successfully!');
     }   
+}
+
+async function updateExDateCallBack(form) {
+    let cell_id = form.querySelector("[name=cell-id]").value;
+    let response = await sendRequestForm(form, { 'do' : 'update_hw_exd' });
+    let data = JSON.parse(response);
+    let new_date_str = `Expiration date: ${data['expiration-date']}`;
+    let hw_1 = document.getElementById(`homework-output-expiration-date-${cell_id}`);
+    let hw_2 = document.getElementById(`homework-progress-expiration-date-${cell_id}`);
+    
+    hw_1.innerText = new_date_str;
+    hw_2.innerText = new_date_str;
+    
+    warning("Change expiration date successfully!");
 }
