@@ -117,17 +117,13 @@ label {
     color: #ff9e28;
 }
 
-#create-cell-form-container input, 
-#create-cell-form-container textarea, 
-#create-cell-form-container select {
+input, textarea, select {
     border: 1px solid rgb(232, 151, 0);
-    border-radius: 3px;
+    border-radius: 7px;
     color: rgb(230, 150, 0);
 }
 
-#create-cell-form-container input:focus-visible,
-#create-cell-form-container textarea:focus-visible,
-#create-cell-form-container select:focus-visible {
+input:focus-visible, textarea:focus-visible, select:focus-visible {
     outline:none;
 }
 
@@ -136,14 +132,11 @@ option:hover {
     color: white;
 }
 
-#create-cell-form-container input:hover, 
-#create-cell-form-container textarea:hover, 
-#create-cell-form-container select:hover {
+input:hover, textarea:hover, select:hover {
     border: 2px solid rgb(232, 151, 0);
 }
 
-#create-cell-form-container input::placeholder, 
-#create-cell-form-container textarea::placeholder {
+input::placeholder, textarea::placeholder {
     font-size: 14px;
     color: rgb(210, 137, 0);
 }
@@ -186,6 +179,15 @@ textarea {
     display: none;
 }
 
-#char-count-cell-title, #char-count-cell-description {
+.char-count {
     color: rgb(210, 137, 0);
 }
+
+/* .datetime::-webkit-calendar-picker-indicator {
+    color: orange;
+    background-color: orange;
+}
+
+.datetime + ::-webkit-calendar-picker-indicator {
+    border-color: orange;
+} */

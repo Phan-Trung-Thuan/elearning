@@ -182,7 +182,7 @@
                     
                     <div class="cell-type-option" id="cell-type-option-1">
                         <label for="homework-expireddate">Expiration DateTime(*)</label>
-                        <input type="datetime-local" name="homework-expireddate" id="homework-expireddate" required>
+                        <input type="datetime-local" class="datetime" name="homework-expireddate" id="homework-expireddate" required>
                     </div>
                 </div>            
 
