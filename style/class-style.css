@@ -122,14 +122,14 @@ label {
 #create-cell-form-container select {
     border: 1px solid rgb(232, 151, 0);
     border-radius: 3px;
-    color: orange;
+    color: rgb(230, 150, 0);
 }
 
 #create-cell-form-container input:focus-visible,
 #create-cell-form-container textarea:focus-visible,
 #create-cell-form-container select:focus-visible {
     outline:none;
-} 
+}
 
 option:hover {
     background-color: orange;
@@ -184,4 +184,8 @@ textarea {
 
 .edit-expiration-date-form{
     display: none;
+}
+
+#char-count-cell-title, #char-count-cell-description {
+    color: rgb(210, 137, 0);
 }
