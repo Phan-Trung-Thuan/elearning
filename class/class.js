@@ -219,12 +219,14 @@ async function addCellEvent(cell_id) {
             form.style.display = (form_style == 'none') ? 'block' : 'none';
         });
     }
-
+    
     let edit_expirationdate_form = cell.querySelector(".edit-expiration-date-form");
-    edit_expirationdate_form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        await updateExDateCallBack(e.target);
-    })
+    if (edit_expirationdate_form != null) {
+            edit_expirationdate_form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            await updateExDateCallBack(e.target);
+        })
+    }
 
     //Hide some display based on privileges
     if (login_type === "STUDENT") {

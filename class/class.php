@@ -133,7 +133,7 @@
                         </form>
                         <div class="homework-cell-expiration-date" id="homework-progress-expiration-date-${cell_id}">Expiration date: ${homework_expirationdate}</div>
                         <button class="edit-expiration-date-button button" id="edit-expiration-date-button-${cell_id}" value="${cell_id}" type="button" id=""><i class="fas fa-edit"></i></button>
-                        <form action="/elearning/utils/execute-request.php" class= "edit-expiration-date-form" id="edit-expiration-date-form-${cell_id}">
+                        <form action="/elearning/utils/execute-request.php" class="edit-expiration-date-form" id="edit-expiration-date-form-${cell_id}">
                             <input type="hidden" name="cell-id" value=${cell_id}>
                             <label for="expiration-date">Please select new datetime:</label>&nbsp;
                             <input type="datetime-local" name="expiration-date" id="expiration-date-${cell_id}" required>
