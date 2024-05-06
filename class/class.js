@@ -326,17 +326,34 @@ async function updateFileDisplay(form) {
             ul.appendChild(li);           
         }
         
-        changeDisplayHelper(input_form, output_form, false);
+        await changeDisplayHelper(input_form, output_form, false);
     }
 }
 
-function changeDisplayHelper(input_form, output_form, is_display_input) {
+async function changeDisplayHelper(input_form, output_form, is_display_input) {
     if (is_display_input == true) {
         input_form.style.display = "block";
         output_form.style.display = "none";
     } else {
         input_form.style.display = "none";
         output_form.style.display = "block";
+
+        //Get grade again
+        let cell_id = output_form.querySelector("[name=cell-id]").value;
+        let response = await sendRequest(
+            '/elearning/utils/execute-request.php',
+            { 'do' : 'get_hw_grade', 'cell-id' : cell_id, 'student-id' : username}
+        );
+        let data = JSON.parse(response);
+        if (data) {
+            let grade = output_form.querySelector(`#grade-${cell_id}`);
+            console.log(grade); 
+            if (data['hwdetail_grade'] != null) {
+                grade.innerText = data['hwdetail_grade'];
+            } else {
+                grade.innerText = "No grade yet";
+            }
+        }
     }
 }
 
