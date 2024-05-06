@@ -13,8 +13,10 @@
         include __DIR__ . '/../utils/functions.php';
 
         $result = null;
-        if (!(isset($_COOKIE["username"]) && isset($_COOKIE["password"]) && isset($_COOKIE["type"]) 
-                                        && checkLogin($_COOKIE["username"], $_COOKIE["password"]))) {
+        if (!(isset($_COOKIE["username"]) 
+        && isset($_COOKIE["password"]) 
+        && isset($_COOKIE["type"])
+        && checkLogin($_COOKIE["username"], $_COOKIE["password"]))) {
             header("Location: /elearning/login/index.php");
         }
 
@@ -118,7 +120,7 @@
                             <input type="hidden" name="cell-type" value="homework">
                             <ul class="homework-list" id="homework-list-${cell_id}"></ul>
                             <button class="cancel-button button">Cancel</button>
-                            <div class="grade">Grade:&nbsp;<span id="grade-${cell_id}">${hwdetail_grade}/100</span></div>
+                            <div class="grade">Grade:&nbsp;<span id="grade-${cell_id}">${hwdetail_grade}</span>/100</div>
                         </form>
                         <div class="homework-cell-expiration-date" id="homework-output-expiration-date-${cell_id}">Expiration date: ${homework_expirationdate}</div>
                     <hr>                        
@@ -197,6 +199,7 @@
     <input type="hidden" id="class-id" name="class-id" value="<?php echo $_REQUEST['class_id']?>">
     <script type="module" src="/elearning/class/class.js"></script>
     <script type="module" src="/elearning/class/form.js"></script>
+    <script type="module" src="/elearning/topnav/topnav.js"></script>
 </body>
 </html>
 
