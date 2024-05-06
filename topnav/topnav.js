@@ -13,9 +13,11 @@ if (login_type === "STUDENT") {
 let create_class = document.getElementById("create-class");
 create_class.addEventListener("click", async (e) => {
     let class_name = window.prompt("Please enter class name");
-    let confirm = window.confirm(`Do you want to create the class "${class_name}"`);
-    if (confirm) {
-        await createClass(class_name);
+    if (class_name != null && class_name != "") {
+        let confirm = window.confirm(`Do you want to create the class "${class_name}"`);
+        if (confirm) {
+            await createClass(class_name);
+        }
     }
 });
 
