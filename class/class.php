@@ -13,8 +13,10 @@
         include __DIR__ . '/../utils/functions.php';
 
         $result = null;
-        if (!(isset($_COOKIE["username"]) && isset($_COOKIE["password"]) && isset($_COOKIE["type"]) 
-                                        && checkLogin($_COOKIE["username"], $_COOKIE["password"]))) {
+        if (!(isset($_COOKIE["username"]) 
+        && isset($_COOKIE["password"]) 
+        && isset($_COOKIE["type"])
+        && checkLogin($_COOKIE["username"], $_COOKIE["password"]))) {
             header("Location: /elearning/login/index.php");
         }
 
