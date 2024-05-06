@@ -1,4 +1,4 @@
-import { sendRequest, getDOMFromTemplate, warning, compareCustomDate } from '/elearning/utils/functions.js';
+import { sendRequest, getDOMFromTemplate, warning, compareCustomDate, getCurrentDate } from '/elearning/utils/functions.js';
 
 let cell_id = document.getElementById("cell-id").value;
 let expiration_date = null;
@@ -64,7 +64,7 @@ async function getHomeworkReport() {
         { 'do' : 'get_hw_report', 'cell-id' : cell_id }
     );
     let data = JSON.parse(response);
-    console.log(data);
+    // console.log(data);
 
     let no_submitted = 0;
     let total = data.length;
@@ -96,7 +96,11 @@ async function getHomeworkReport() {
             }
         } else {
             col4.innerText = "X";
+            if (compareCustomDate(expiration_date, getCurrentDate())) {
+                row.classList.add("late");
+            }
         }
+
 
         if ((i+1) % 2 === 0) {
             row.classList.add('even-row');
@@ -258,5 +262,10 @@ function calcAvgGrade() {
     }
 
     let avg = (total / no_students).toFixed(2);
-    document.getElementById('avg-grade').innerText = avg;
+    if (isNaN(avg)) {
+        document.getElementById('avg-grade').innerText = 0;
+    }
+    else {
+        document.getElementById('avg-grade').innerText = avg;
+    }
 }

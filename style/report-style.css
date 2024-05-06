@@ -40,7 +40,11 @@ tr.even-row {
 
 /* tr.late must appear after tr.even-row */
 tr.late {
-    background-color: rgba(255, 0, 0, 0.759);
+    background-color: rgba(255, 72, 0, 0.759);
+}
+
+tr.late > td {    
+    color: white;
 }
 
 .button {

@@ -149,3 +149,29 @@ const constructDateHelper = function (datetime) {
 export const compareCustomDate = function (datetime1, datetime2) { 
     return constructDateHelper(datetime1) < constructDateHelper(datetime2);
 }
+
+/**
+ * 
+ * @returns {string}            //Return a string as current date (format: DD-MM-YYYY HH:mm:ss)
+ */
+export const getCurrentDate = function() {
+    // Get current date and time
+    var currentDate = new Date();
+
+    // Extract individual date components
+    var day = currentDate.getDate();
+    var month = currentDate.getMonth() + 1; // Months are zero indexed, so add 1
+    var year = currentDate.getFullYear();
+    var hours = currentDate.getHours();
+    var minutes = currentDate.getMinutes();
+    var seconds = currentDate.getSeconds();
+
+    // Function to pad single digits with a leading zero
+    function padZero(num) {
+        return (num < 10 ? '0' : '') + num;
+    }
+
+    // Format date and time
+    var formattedDate = padZero(day) + '-' + padZero(month) + '-' + year + ' ' + padZero(hours) + ':' + padZero(minutes) + ':' + padZero(seconds);
+    return formattedDate;
+}
