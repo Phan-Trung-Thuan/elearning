@@ -1,5 +1,7 @@
 import { sendRequest, sendRequestForm, getDOMFromTemplate, getCookie, warning } from '/elearning/utils/functions.js';
 
+import { getInstructorClasses } from '/elearning/topnav/topnav.js';
+
 let class_id = document.getElementById('class-id').value;
 let username = getCookie("username");
 let login_type = getCookie("type");
@@ -26,6 +28,9 @@ rename_btn.addEventListener("click", async (e) => {
         let confirm = window.confirm(`Do you want to change class name to "${new_class_name}"`);
         if (confirm) {
             await renameClassCallBack(new_class_name);
+
+            //Update dropdown list from topnav
+            getInstructorClasses();
         }
     } else {
         // alert("Class name can't be null or empty!");

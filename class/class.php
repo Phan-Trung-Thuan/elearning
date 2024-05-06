@@ -199,6 +199,7 @@
     <input type="hidden" id="class-id" name="class-id" value="<?php echo $_REQUEST['class_id']?>">
     <script type="module" src="/elearning/class/class.js"></script>
     <script type="module" src="/elearning/class/form.js"></script>
+    <script type="module" src="/elearning/topnav/topnav.js"></script>
 </body>
 </html>
 

@@ -46,27 +46,36 @@ async function getEnrollClasses() {
     );
     
     let data = JSON.parse(response);
-    addClass(data);
+    addDropdownClass(data);
 }
 
-async function getInstructorClasses() {
+export async function getInstructorClasses() {
     let response = await sendRequest(
         'http://localhost/elearning/utils/execute-request.php',
         { 'do' : 'get_instructor_class' }
     );
-    // console.log(response);
     let data = JSON.parse(response);
 
-    addClass(data);
+    addDropdownClass(data);
 }
 
-function addClass(data) {
+function addDropdownClass(data) {
+    //Remove any class before adding
+    removeDropdownClass();
+    
     let dropdown = document.getElementById("dropdown-content-class");
     for (let enroll_class of data) {
         let element = document.createElement("a");
         element.setAttribute("href", `/elearning/class/class.php?class_id=${enroll_class["class_id"]}`);
         element.innerHTML = '<strong>' + enroll_class["class_name"] + '</strong>';
         dropdown.append(element);
+    }
+}
+
+function removeDropdownClass() {
+    let dropdown = document.getElementById("dropdown-content-class");
+    while (dropdown.firstChild) {
+        dropdown.removeChild(dropdown.firstChild);
     }
 }
 
