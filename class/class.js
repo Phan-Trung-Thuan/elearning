@@ -18,25 +18,21 @@ let rename_btn = document.getElementById('rename-button');
 rename_btn.style.display = (login_type === "INSTRUCTOR") ? 'normal' : 'none';
 rename_btn.addEventListener("click", async (e) => {
     let new_class_name = window.prompt("Please enter new class name!", class_name);
-    if (new_class_name && new_class_name.length > 0) {
-        if (new_class_name === class_name) {
-            // alert("No changes are made!");
-
-            warning('No changes are made!');
-            return;
+    if (new_class_name != null) {
+        if (new_class_name != "") {
+            if (new_class_name === class_name) {                
+                warning('No changes are made!');
+                return;
+            }
+            let confirm = window.confirm(`Do you want to change class name to "${new_class_name}"`);
+            if (confirm) {
+                await renameClassCallBack(new_class_name);
+            }
         }
-        let confirm = window.confirm(`Do you want to change class name to "${new_class_name}"`);
-        if (confirm) {
-            await renameClassCallBack(new_class_name);
-
-            //Update dropdown list from topnav
-            getInstructorClasses();
+        else {
+            warning('Class name can\'t be empty!');
         }
-    } else {
-        // alert("Class name can't be null or empty!");
-
-        warning('Class name can\'t be null or empty!');
-    }
+    } 
 })  
 
 async function renameClassCallBack(new_class_name) {
@@ -47,15 +43,16 @@ async function renameClassCallBack(new_class_name) {
     console.log(response);
     let data = JSON.parse(response);
     if (data['err_code'] === 0) {
-        // alert("Rename class successfully!");
-        // window.location.reload();
-
         let class_name_element = document.getElementById('class-name');
         class_name_element.innerText = new_class_name;
+        
+        //Update class_name global var
+        class_name = new_class_name;
+
+        //Update dropdown list from topnav
+        getInstructorClasses();
         warning('Rename class successfully!');
     } else {
-        // alert("Fail to rename class!");
-
         warning('Fail to rename class!');
     }
 }
